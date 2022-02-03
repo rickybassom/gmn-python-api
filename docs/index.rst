@@ -13,4 +13,4 @@
    contributing
    Code of Conduct <codeofconduct>
    License <license>
-   Changelog <https://github.com/rickybassom/gmn-python-api/releases>
+   Changelog <https://github.com/gmn-data-platform/gmn-python-api/releases>

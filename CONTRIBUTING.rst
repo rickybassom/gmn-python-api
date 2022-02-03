@@ -13,9 +13,9 @@ Here is a list of important resources for contributors:
 - `Code of Conduct`_
 
 .. _MIT license: https://opensource.org/licenses/MIT
-.. _Source Code: https://github.com/rickybassom/gmn-python-api
+.. _Source Code: https://github.com/gmn-data-platform/gmn-python-api
 .. _Documentation: https://gmn-python-api.readthedocs.io/
-.. _Issue Tracker: https://github.com/rickybassom/gmn-python-api/issues
+.. _Issue Tracker: https://github.com/gmn-data-platform/gmn-python-api/issues
 
 How to report a bug
 -------------------
@@ -118,6 +118,6 @@ To run linting and code formatting checks before committing your change, you can
 It is recommended to open an issue before starting work on anything.
 This will allow a chance to talk it over with the owners and validate your approach.
 
-.. _pull request: https://github.com/rickybassom/gmn-python-api/pulls
+.. _pull request: https://github.com/gmn-data-platform/gmn-python-api/pulls
 .. github-only
 .. _Code of Conduct: CODE_OF_CONDUCT.rst

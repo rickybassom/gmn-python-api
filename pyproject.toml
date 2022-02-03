@@ -5,15 +5,15 @@ description = "GMN Python API"
 authors = ["Ricky Bassom <rickybas12@gmail.com>"]
 license = "MIT"
 readme = "README.rst"
-homepage = "https://github.com/rickybassom/gmn-python-api"
-repository = "https://github.com/rickybassom/gmn-python-api"
+homepage = "https://github.com/gmn-data-platform/gmn-python-api"
+repository = "https://github.com/gmn-data-platform/gmn-python-api"
 documentation = "https://gmn-python-api.readthedocs.io"
 classifiers = [
     "Development Status :: 1 - Planning",
 ]
 
 [tool.poetry.urls]
-Changelog = "https://github.com/rickybassom/gmn-python-api/releases"
+Changelog = "https://github.com/gmn-data-platform/gmn-python-api/releases"
 
 [tool.poetry.dependencies]
 python = "^3.7"

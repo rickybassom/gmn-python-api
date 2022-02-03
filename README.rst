@@ -22,8 +22,8 @@ GMN Python API
 .. |Read the Docs| image:: https://img.shields.io/readthedocs/gmn-python-api/latest.svg?label=Read%20the%20Docs
    :target: https://gmn-python-api.readthedocs.io/
    :alt: Read the documentation at https://gmn-python-api.readthedocs.io/
-.. |Tests| image:: https://github.com/rickybassom/gmn-python-api/workflows/Tests/badge.svg
-   :target: https://github.com/rickybassom/gmn-python-api/actions?workflow=Tests
+.. |Tests| image:: https://github.com/gmn-data-platform/gmn-python-api/workflows/Tests/badge.svg
+   :target: https://github.com/gmn-data-platform/gmn-python-api/actions?workflow=Tests
    :alt: Tests
 .. |Codecov| image:: https://codecov.io/gh/rickybassom/gmn-python-api/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/rickybassom/gmn-python-api
@@ -95,7 +95,7 @@ This project was generated from `@cjolowicz`_'s `Hypermodern Python Cookiecutter
 .. _MIT license: https://opensource.org/licenses/MIT
 .. _PyPI: https://pypi.org/
 .. _Hypermodern Python Cookiecutter: https://github.com/cjolowicz/cookiecutter-hypermodern-python
-.. _file an issue: https://github.com/rickybassom/gmn-python-api/issues
+.. _file an issue: https://github.com/gmn-data-platform/gmn-python-api/issues
 .. _pip: https://pip.pypa.io/
 .. github-only
 .. _Contributor Guide: CONTRIBUTING.rst
