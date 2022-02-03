@@ -25,7 +25,7 @@ GMN Python API
 .. |Tests| image:: https://github.com/gmn-data-platform/gmn-python-api/workflows/Tests/badge.svg
    :target: https://github.com/gmn-data-platform/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain
    :alt: Tests
-.. |Codecov| image:: https://codecov.io/gh/rickybassom/gmn-python-api/branch/main/graph/badge.svg
+.. |Codecov| image:: https://codecov.io/gh/gmn-data-platform/gmn-python-api/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/gmn-data-platform/gmn-python-api
    :alt: Codecov
 .. |pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
