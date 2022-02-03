@@ -16,17 +16,17 @@ GMN Python API
 .. |Python Version| image:: https://img.shields.io/pypi/pyversions/gmn-python-api
    :target: https://pypi.org/project/gmn-python-api
    :alt: Python Version
-.. |License| image:: https://img.shields.io/pypi/l/gmn-python-api
+.. |License| image:: https://img.shields.io/github/license/gmn-data-platform/gmn-python-api
    :target: https://opensource.org/licenses/MIT
    :alt: License
 .. |Read the Docs| image:: https://img.shields.io/readthedocs/gmn-python-api/latest.svg?label=Read%20the%20Docs
    :target: https://gmn-python-api.readthedocs.io/
    :alt: Read the documentation at https://gmn-python-api.readthedocs.io/
 .. |Tests| image:: https://github.com/gmn-data-platform/gmn-python-api/workflows/Tests/badge.svg
-   :target: https://github.com/gmn-data-platform/gmn-python-api/actions?workflow=Tests
+   :target: https://github.com/gmn-data-platform/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain
    :alt: Tests
 .. |Codecov| image:: https://codecov.io/gh/rickybassom/gmn-python-api/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/rickybassom/gmn-python-api
+   :target: https://codecov.io/gh/gmn-data-platform/gmn-python-api
    :alt: Codecov
 .. |pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
    :target: https://github.com/pre-commit/pre-commit
