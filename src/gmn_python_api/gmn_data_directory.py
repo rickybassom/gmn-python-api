@@ -1,14 +1,17 @@
 """This module contains the code to read from the GMN data directory."""
 from datetime import datetime
 from typing import List
+from typing import Optional
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # type: ignore
 
-GMN_DATA_DIRECTORY_BASE_URL = "https://globalmeteornetwork.org/data/traj_summary_data/"
-GMN_DATA_START_DATE = datetime(2018, 1, 9)
-SUMMARY_YESTERDAY_FILENAME = "traj_summary_yesterday.txt"
-SUMMARY_TODAY_FILENAME = "traj_summary_latest_daily.txt"
+GMN_DATA_DIRECTORY_BASE_URL: str = (
+    "https://globalmeteornetwork.org/data/traj_summary_data/"
+)
+GMN_DATA_START_DATE: datetime = datetime(2018, 1, 9)
+SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
+SUMMARY_TODAY_FILENAME: str = "traj_summary_latest_daily.txt"
 
 
 class GmnDataDirectory:
@@ -16,11 +19,11 @@ class GmnDataDirectory:
 
     def __init__(self, base_url: str = GMN_DATA_DIRECTORY_BASE_URL):
         """
-        :param base_url: (optional str) The base URL of the GMN data directory. Defaults to GMN_DATA_DIRECTORY_BASE_URL.
+        :param base_url: (Optional str) The base URL of the GMN data directory. Defaults to GMN_DATA_DIRECTORY_BASE_URL.
         """
-        self.base_url = base_url
-        self.summary_yesterday_filename = SUMMARY_YESTERDAY_FILENAME
-        self.summary_today_filename = SUMMARY_TODAY_FILENAME
+        self.base_url: str = base_url
+        self.summary_yesterday_filename: str = SUMMARY_YESTERDAY_FILENAME
+        self.summary_today_filename: str = SUMMARY_TODAY_FILENAME
 
     def get_all_daily_file_urls(self) -> List[str]:
         """
@@ -39,12 +42,12 @@ class GmnDataDirectory:
         return _get_url_paths(self.base_url + "monthly/", "txt")
 
     def get_daily_file_url_by_date(
-        self, date: datetime, current_date: datetime = None
+        self, date: datetime, current_date: Optional[datetime] = None
     ) -> str:
         """
         Get the URL of the daily file for a given date.
         :param date: (datetime) The date to get the daily file for.
-        :param current_date: (optional datetime) The current date. Defaults to datetime.now().
+        :param current_date: (Optional datetime) The current date. Defaults to datetime.now().
         :return: (str) The URL of the daily file.
         :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
         """
@@ -77,7 +80,7 @@ class GmnDataDirectory:
         return files_containing_date[0]
 
     def get_daily_file_content_by_date(
-        self, date: datetime, current_date: datetime = None
+        self, date: datetime, current_date: Optional[datetime] = None
     ) -> str:
         """
         Get the content of the daily trajectory summary file for a given date.
@@ -90,9 +93,10 @@ class GmnDataDirectory:
 
         response = requests.get(file_url)
         if response.ok:
-            return response.text
+            return str(response.text)
         else:
-            raise response.raise_for_status()
+            response.raise_for_status()
+            return ""
 
     def get_monthly_file_content_by_date(self, date: datetime) -> str:
         """
@@ -105,24 +109,26 @@ class GmnDataDirectory:
 
         response = requests.get(file_url)
         if response.ok:
-            return response.text
+            return str(response.text)
         else:
-            raise response.raise_for_status()
+            response.raise_for_status()
+            return ""
 
 
 def _get_url_paths(url: str, ext: str = "") -> List[str]:
     """
     Get all paths from a directory listing URL.
     :param url: (str) The URL to get the paths from.
-    :param ext: (optional str) The extension to filter by.
+    :param ext: (Optional str) The extension to filter by.
     :return: (List[str]) A list of all paths.
     :raises: (requests.HTTPError) If the URL doesn't return a 200 response.
     """
     response = requests.get(url)
     if response.ok:
-        response_text = response.text
+        response_text = str(response.text)
     else:
-        raise response.raise_for_status()
+        response.raise_for_status()
+        return []
     soup = BeautifulSoup(response_text, "html.parser")
     parent = [
         url + node.get("href")
