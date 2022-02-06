@@ -112,7 +112,10 @@ def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
     requirements = session.poetry.export_requirements()
     session.install("safety")
-    session.run("safety", "check", "--full-report", f"--file={requirements}")
+
+    ignore_ids = [44715, 44716, 44717]  # numpy CVE-2021-41495
+    ignored = [f"--ignore={ignore_id}" for ignore_id in ignore_ids]
+    session.run("safety", "check", "--full-report", f"--file={requirements}", *ignored)
 
 
 @session(python=python_versions)
