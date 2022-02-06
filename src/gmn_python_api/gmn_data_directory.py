@@ -96,7 +96,7 @@ class GmnDataDirectory:
             return str(response.text)
         else:
             response.raise_for_status()
-            return ""
+            return ""  # pragma: no cover
 
     def get_monthly_file_content_by_date(self, date: datetime) -> str:
         """
@@ -112,7 +112,7 @@ class GmnDataDirectory:
             return str(response.text)
         else:
             response.raise_for_status()
-            return ""
+            return ""  # pragma: no cover
 
 
 def _get_url_paths(url: str, ext: str = "") -> List[str]:
@@ -128,7 +128,7 @@ def _get_url_paths(url: str, ext: str = "") -> List[str]:
         response_text = str(response.text)
     else:
         response.raise_for_status()
-        return []
+        return []  # pragma: no cover
     soup = BeautifulSoup(response_text, "html.parser")
     parent = [
         url + node.get("href")
