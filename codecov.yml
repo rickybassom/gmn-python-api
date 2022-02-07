@@ -1,4 +1,8 @@
 comment: false
+ignore:
+  - "**/test/*"
+  - "**/tests/*"
+  - "**/tests/*.py"
 coverage:
   status:
     project:
