@@ -1,4 +1,7 @@
-"""This module contains functions to read from the GMN data directory."""
+"""
+This module contains functions to read trajectory summary files from the GMN
+data directory.
+"""
 from datetime import datetime
 from typing import List
 from typing import Optional
@@ -6,48 +9,70 @@ from typing import Optional
 import requests
 from bs4 import BeautifulSoup  # type: ignore
 
+# The base URL for trajectory summary files in the GMN data directory
 BASE_URL: str = "https://globalmeteornetwork.org/data/traj_summary_data/"
+
+# The date of the earliest trajectory summary file in the GMN data directory
 DATA_START_DATE: datetime = datetime(2018, 1, 9)
-SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
+
+# The name of the directory containing daily trajectory summary files in the
+# base URL.
+DAILY_DIRECTORY: str = "daily/"
+
+# The name of the directory containing monthly trajectory summary files in
+# the base URL.
+MONTHLY_DIRECTORY: str = "monthly/"
+
+# The extension of the trajectory summary files in the GMN data directory
+SUMMARY_FILE_EXTENSION: str = "txt"
+
+# The filename of the most recent trajectory summary file
 SUMMARY_TODAY_FILENAME: str = "traj_summary_latest_daily.txt"
+
+# The filename of the trajectory summary file from yesterday
+SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
 
 
 def get_all_daily_file_urls() -> List[str]:
     """
-    Get all daily file urls from the GMN data directory.
-    :return: (List[str]) A list of all daily filenames.
-    :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
+    Get all daily trajectory summary file urls from the GMN data directory.
+    :return: (List[str]) A list of all daily file urls.
+    :raises: (requests.HTTPError) If the data directory url doesn't return a
+    200 response.
     """
-    return _get_url_paths(BASE_URL + "daily/", "txt")
+    return _get_url_paths(BASE_URL + DAILY_DIRECTORY, SUMMARY_FILE_EXTENSION)
 
 
 def get_all_monthly_file_urls() -> List[str]:
     """
-    Get all monthly file urls from the GMN data directory.
-    :return: (List[str]) A list of all monthly filenames.
-    :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
+    Get all monthly trajectory summary file urls from the GMN data directory.
+    :return: (List[str]) A list of all monthly file urls.
+    :raises: (requests.HTTPError) If the data directory url doesn't return a
+    200 response.
     """
-    return _get_url_paths(BASE_URL + "monthly/", "txt")
+    return _get_url_paths(BASE_URL + MONTHLY_DIRECTORY, SUMMARY_FILE_EXTENSION)
 
 
 def get_daily_file_url_by_date(
     date: datetime, current_date: Optional[datetime] = None
 ) -> str:
     """
-    Get the URL of the daily file for a given date.
-    :param date: (datetime) The date to get the daily file for.
-    :param current_date: (Optional datetime) The current date. Defaults to datetime.now().
+    Get the URL of the daily trajectory summary file for a given date.
+    :param date: (datetime) The date of the daily file.
+    :param current_date: (Optional datetime) The current date. Defaults to
+    datetime.now().
     :return: (str) The URL of the daily file.
-    :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
+    :raises: (requests.HTTPError) If the data directory url doesn't return a
+    200 response.
     """
     if not current_date:
         current_date = datetime.today()
 
     if date == current_date:
-        return BASE_URL + "daily/" + SUMMARY_TODAY_FILENAME
+        return BASE_URL + DAILY_DIRECTORY + SUMMARY_TODAY_FILENAME
 
     if date.day == current_date.day - 1:
-        return BASE_URL + "daily/" + SUMMARY_YESTERDAY_FILENAME
+        return BASE_URL + DAILY_DIRECTORY + SUMMARY_YESTERDAY_FILENAME
 
     all_daily_filenames = get_all_daily_file_urls()
     files_containing_date = [
@@ -58,10 +83,11 @@ def get_daily_file_url_by_date(
 
 def get_monthly_file_url_by_month(date: datetime) -> str:
     """
-    Get the URL of the monthly file for a given month.
-    :param date: (datetime) The date to get the monthly file for.
+    Get the URL of the monthly trajectory summary file for a given month.
+    :param date: (datetime) The date of the monthly file.
     :return: (str) The URL of the monthly file.
-    :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
+    :raises: (requests.HTTPError) If the data directory url doesn't return a
+    200 response.
     """
     all_monthly_filenames = get_all_monthly_file_urls()
     files_containing_date = [
@@ -75,10 +101,12 @@ def get_daily_file_content_by_date(
 ) -> str:
     """
     Get the content of the daily trajectory summary file for a given date.
-    :param date: (datetime) The date to get the daily file for.
-    :param current_date: (Optional datetime) The current date. Defaults to datetime.now().
+    :param date: (datetime) The date of the daily file.
+    :param current_date: (Optional datetime) The current date. Defaults to
+    datetime.now().
     :return: (str) The content of the daily file.
-    :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
+    :raises: (requests.HTTPError) If the data directory url doesn't return a
+    200 response.
     """
     file_url = get_daily_file_url_by_date(date, current_date)
 
@@ -95,7 +123,8 @@ def get_monthly_file_content_by_date(date: datetime) -> str:
     Get the content of the monthly trajectory summary file for a given date.
     :param date: (datetime) The date to get the monthly file for.
     :return: (str) The content of the monthly file.
-    :raises: (requests.HTTPError) If the data directory url doesn't return a 200 response.
+    :raises: (requests.HTTPError) If the data directory url doesn't return a
+    200 response.
     """
     file_url = get_monthly_file_url_by_month(date)
 
