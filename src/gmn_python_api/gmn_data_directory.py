@@ -96,6 +96,21 @@ def get_monthly_file_url_by_month(date: datetime) -> str:
     return files_containing_date[0]
 
 
+def get_file_content_from_url(file_url: str) -> str:
+    """
+    Get the content of a trajectory summary file from a given URL.
+    :param url: (str) The URL of the trajectory summary file.
+    :return: (str) The content of the file.
+    :raises: (requests.HTTPError) If the file url doesn't return a 200 response.
+    """
+    response = requests.get(file_url)
+    if response.ok:
+        return str(response.text)
+    else:
+        response.raise_for_status()
+        return ""  # pragma: no cover
+
+
 def get_daily_file_content_by_date(
     date: datetime, current_date: Optional[datetime] = None
 ) -> str:
@@ -109,13 +124,7 @@ def get_daily_file_content_by_date(
     response.
     """
     file_url = get_daily_file_url_by_date(date, current_date)
-
-    response = requests.get(file_url)
-    if response.ok:
-        return str(response.text)
-    else:
-        response.raise_for_status()
-        return ""  # pragma: no cover
+    return get_file_content_from_url(file_url)
 
 
 def get_monthly_file_content_by_date(date: datetime) -> str:
@@ -127,13 +136,7 @@ def get_monthly_file_content_by_date(date: datetime) -> str:
     response.
     """
     file_url = get_monthly_file_url_by_month(date)
-
-    response = requests.get(file_url)
-    if response.ok:
-        return str(response.text)
-    else:
-        response.raise_for_status()
-        return ""  # pragma: no cover
+    return get_file_content_from_url(file_url)
 
 
 def _get_url_paths(url: str, ext: str = "") -> List[str]:
@@ -144,12 +147,7 @@ def _get_url_paths(url: str, ext: str = "") -> List[str]:
     :return: (List[str]) A list of all paths.
     :raises: (requests.HTTPError) If the URL doesn't return a 200 response.
     """
-    response = requests.get(url)
-    if response.ok:
-        response_text = str(response.text)
-    else:
-        response.raise_for_status()
-        return []  # pragma: no cover
+    response_text = get_file_content_from_url(url)
     soup = BeautifulSoup(response_text, "html.parser")
     parent = [
         url + node.get("href")

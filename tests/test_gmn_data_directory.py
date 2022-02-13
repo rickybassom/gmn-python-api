@@ -142,6 +142,23 @@ class TestGmnDataDirectory(unittest.TestCase):
             )[1],
         )
 
+    @mock.patch("requests.get")
+    def test_get_file_content_from_url(self, mock_get: mock.Mock) -> None:
+        """
+        Test: That get_file_content_from_url() returns the expected file
+        content.
+        When: get_file_content_from_url() is called with an HTTP mocked
+        response.
+        """
+        expected_content = "This is the content of the file."
+        mock_get.return_value = _mock_response(status=200, text=expected_content)
+        self.assertEqual(
+            expected_content,
+            gdd.get_file_content_from_url(
+                gdd.BASE_URL + gdd.DAILY_DIRECTORY + "filename.txt"
+            ),
+        )
+
     def test_get_daily_file_url_current_date_today(self) -> None:
         """
         Test: That get_daily_file_url_by_date() returns the expected file url
