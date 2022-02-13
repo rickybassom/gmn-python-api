@@ -9,7 +9,7 @@ from unittest import mock
 
 from requests.exceptions import HTTPError
 
-from gmn_python_api import gmn_data_directory
+from gmn_python_api import gmn_data_directory as gdd
 
 
 class TestGmnDataDirectory(unittest.TestCase):
@@ -23,9 +23,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         expected_filenames = ["filename1.txt", "filename2.txt", "filename3.txt"]
         self.assertEqual(
             *self._run_get_all_method_with_mock_directory_listing(
-                gmn_data_directory.get_all_daily_file_urls,
+                gdd.get_all_daily_file_urls,
                 expected_filenames,
-                gmn_data_directory.DAILY_DIRECTORY,
+                gdd.DAILY_DIRECTORY,
             )
         )
 
@@ -39,9 +39,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         expected_filenames = ["filename1.txt", "filename2.txt", "filename3.txt"]
         self.assertEqual(
             *self._run_get_all_method_with_mock_directory_listing(
-                gmn_data_directory.get_all_monthly_file_urls,
+                gdd.get_all_monthly_file_urls,
                 expected_filenames,
-                gmn_data_directory.MONTHLY_DIRECTORY,
+                gdd.MONTHLY_DIRECTORY,
             )
         )
 
@@ -55,9 +55,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertEqual(
             [],
             self._run_get_all_method_with_mock_directory_listing(
-                gmn_data_directory.get_all_daily_file_urls,
+                gdd.get_all_daily_file_urls,
                 expected_filenames,
-                gmn_data_directory.DAILY_DIRECTORY,
+                gdd.DAILY_DIRECTORY,
             )[1],
         )
 
@@ -71,9 +71,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertEqual(
             [],
             self._run_get_all_method_with_mock_directory_listing(
-                gmn_data_directory.get_all_monthly_file_urls,
+                gdd.get_all_monthly_file_urls,
                 expected_filenames,
-                gmn_data_directory.MONTHLY_DIRECTORY,
+                gdd.MONTHLY_DIRECTORY,
             )[1],
         )
 
@@ -89,7 +89,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
         )
-        self.assertRaises(HTTPError, gmn_data_directory.get_all_daily_file_urls)
+        self.assertRaises(HTTPError, gdd.get_all_daily_file_urls)
 
     @mock.patch("requests.get")
     def test_get_all_monthly_file_urls_with_bad_response(
@@ -104,7 +104,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
         )
-        self.assertRaises(HTTPError, gmn_data_directory.get_all_monthly_file_urls)
+        self.assertRaises(HTTPError, gdd.get_all_monthly_file_urls)
 
     def test_get_daily_file_url_by_date(self) -> None:
         """
@@ -115,19 +115,11 @@ class TestGmnDataDirectory(unittest.TestCase):
         """
         expected_filename = "filename-20190101-XYZ123.txt"
         self.assertEqual(
-            [
-                gmn_data_directory.BASE_URL
-                + gmn_data_directory.DAILY_DIRECTORY
-                + expected_filename
-            ],
+            [gdd.BASE_URL + gdd.DAILY_DIRECTORY + expected_filename],
             self._run_get_all_method_with_mock_directory_listing(
-                lambda: [
-                    gmn_data_directory.get_daily_file_url_by_date(
-                        datetime.datetime(2019, 1, 1)
-                    )
-                ],
+                lambda: [gdd.get_daily_file_url_by_date(datetime.datetime(2019, 1, 1))],
                 [expected_filename, "hgahfgasjghi.txt", "filename-20190102-XYZ123.txt"],
-                gmn_data_directory.DAILY_DIRECTORY,
+                gdd.DAILY_DIRECTORY,
             )[1],
         )
 
@@ -140,19 +132,13 @@ class TestGmnDataDirectory(unittest.TestCase):
         """
         expected_filename = "filename-201901-XYZ123.txt"
         self.assertEqual(
-            [
-                gmn_data_directory.BASE_URL
-                + gmn_data_directory.MONTHLY_DIRECTORY
-                + expected_filename
-            ],
+            [gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + expected_filename],
             self._run_get_all_method_with_mock_directory_listing(
                 lambda: [
-                    gmn_data_directory.get_monthly_file_url_by_month(
-                        datetime.datetime(2019, 1, 1)
-                    )
+                    gdd.get_monthly_file_url_by_month(datetime.datetime(2019, 1, 1))
                 ],
                 [expected_filename, "hgahfgasjghi.txt", "filename-201902-XYZ123.txt"],
-                gmn_data_directory.MONTHLY_DIRECTORY,
+                gdd.MONTHLY_DIRECTORY,
             )[1],
         )
 
@@ -163,21 +149,17 @@ class TestGmnDataDirectory(unittest.TestCase):
         When: get_daily_file_url_by_date() is called with an HTTP mocked
         response.
         """
-        expected_filename = gmn_data_directory.SUMMARY_TODAY_FILENAME
+        expected_filename = gdd.SUMMARY_TODAY_FILENAME
         self.assertEqual(
-            [
-                gmn_data_directory.BASE_URL
-                + gmn_data_directory.DAILY_DIRECTORY
-                + expected_filename
-            ],
+            [gdd.BASE_URL + gdd.DAILY_DIRECTORY + expected_filename],
             self._run_get_all_method_with_mock_directory_listing(
                 lambda: [
-                    gmn_data_directory.get_daily_file_url_by_date(
+                    gdd.get_daily_file_url_by_date(
                         datetime.datetime(2019, 1, 1), datetime.datetime(2019, 1, 1)
                     )
                 ],
                 [expected_filename, "hgahfgasjghi.txt", "filename-20181204-XYZ123.txt"],
-                gmn_data_directory.DAILY_DIRECTORY,
+                gdd.DAILY_DIRECTORY,
             )[1],
         )
 
@@ -188,21 +170,17 @@ class TestGmnDataDirectory(unittest.TestCase):
         When: get_daily_file_url_by_date() is called with an HTTP mocked
         response.
         """
-        expected_filename = gmn_data_directory.SUMMARY_YESTERDAY_FILENAME
+        expected_filename = gdd.SUMMARY_YESTERDAY_FILENAME
         self.assertEqual(
-            [
-                gmn_data_directory.BASE_URL
-                + gmn_data_directory.DAILY_DIRECTORY
-                + expected_filename
-            ],
+            [gdd.BASE_URL + gdd.DAILY_DIRECTORY + expected_filename],
             self._run_get_all_method_with_mock_directory_listing(
                 lambda: [
-                    gmn_data_directory.get_daily_file_url_by_date(
+                    gdd.get_daily_file_url_by_date(
                         datetime.datetime(2019, 1, 1), datetime.datetime(2019, 1, 2)
                     )
                 ],
                 [expected_filename, "hgahfgasjghi.txt", "filename-20181204-XYZ123.txt"],
-                gmn_data_directory.DAILY_DIRECTORY,
+                gdd.DAILY_DIRECTORY,
             )[1],
         )
 
@@ -218,10 +196,10 @@ class TestGmnDataDirectory(unittest.TestCase):
         response.
         """
         mock_get_url_paths.return_value = [
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.DAILY_DIRECTORY
+            gdd.BASE_URL
+            + gdd.DAILY_DIRECTORY
             + "traj_summary_20181209_solrange_257.0-258.0.txt",
-            gmn_data_directory.BASE_URL + "daily/filename2.txt",
+            gdd.BASE_URL + "daily/filename2.txt",
         ]
         expected_content = open(
             "tests/test_data/traj_summary_20181209_solrange_257.0-258.0.txt"
@@ -229,9 +207,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,
-            gmn_data_directory.get_daily_file_content_by_date(
-                datetime.datetime(2018, 12, 9)
-            ),
+            gdd.get_daily_file_content_by_date(datetime.datetime(2018, 12, 9)),
         )
 
     @mock.patch("requests.get")
@@ -246,12 +222,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         response.
         """
         mock_get_url_paths.return_value = [
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.MONTHLY_DIRECTORY
-            + "traj_summary_monthly_201812.txt",
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.MONTHLY_DIRECTORY
-            + "filename2.txt",
+            gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "traj_summary_monthly_201812.txt",
+            gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "filename2.txt",
         ]
         expected_content = open(
             "tests/test_data/traj_summary_monthly_201812.txt"
@@ -259,9 +231,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,
-            gmn_data_directory.get_monthly_file_content_by_date(
-                datetime.datetime(2018, 12, 1)
-            ),
+            gdd.get_monthly_file_content_by_date(datetime.datetime(2018, 12, 1)),
         )
 
     @mock.patch("requests.get")
@@ -276,19 +246,17 @@ class TestGmnDataDirectory(unittest.TestCase):
         response.
         """
         mock_get_url_paths.return_value = [
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.DAILY_DIRECTORY
+            gdd.BASE_URL
+            + gdd.DAILY_DIRECTORY
             + "traj_summary_20181209_solrange_257.0-258.0.txt",
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.DAILY_DIRECTORY
-            + "filename2.txt",
+            gdd.BASE_URL + gdd.DAILY_DIRECTORY + "filename2.txt",
         ]
         mock_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
         )
         self.assertRaises(
             HTTPError,
-            gmn_data_directory.get_daily_file_content_by_date,
+            gdd.get_daily_file_content_by_date,
             datetime.datetime(2018, 12, 9),
         )
 
@@ -304,19 +272,15 @@ class TestGmnDataDirectory(unittest.TestCase):
         response.
         """
         mock_get_url_paths.return_value = [
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.MONTHLY_DIRECTORY
-            + "traj_summary_monthly_201812.txt",
-            gmn_data_directory.BASE_URL
-            + gmn_data_directory.MONTHLY_DIRECTORY
-            + "filename2.txt",
+            gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "traj_summary_monthly_201812.txt",
+            gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "filename2.txt",
         ]
         mock_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
         )
         self.assertRaises(
             HTTPError,
-            gmn_data_directory.get_monthly_file_content_by_date,
+            gdd.get_monthly_file_content_by_date,
             datetime.datetime(2018, 12, 1),
         )
 
@@ -343,7 +307,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         filenames returned by the mocked directory.
         """
         expected_file_urls = [
-            gmn_data_directory.BASE_URL + directory + filename for filename in filenames
+            gdd.BASE_URL + directory + filename for filename in filenames
         ]
         mock_get.return_value = _mock_response(
             text="<html>"
