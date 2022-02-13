@@ -1,5 +1,6 @@
 """Tests for the gmn_trajectory_summary_reader.py module."""
 import unittest
+from pathlib import Path
 from typing import Any
 
 import numpy.typing as npt
@@ -20,7 +21,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         Sets up the tests.
         """
-        self.test_file_path = "tests/test_data/test_short_traj_summary.txt"
+        self.test_file_path: Path = Path("tests/test_data/test_short_traj_summary.txt")
 
     def test_read_trajectory_summary_buffer_as_data_frame(self) -> None:
         """
