@@ -121,3 +121,8 @@ This will allow a chance to talk it over with the owners and validate your appro
 .. _pull request: https://github.com/gmn-data-platform/gmn-python-api/pulls
 .. github-only
 .. _Code of Conduct: CODE_OF_CONDUCT.rst
+
+Useful links
+------------
+
+- https://cookiecutter-hypermodern-python.readthedocs.io/en/2021.11.26/guide.html
