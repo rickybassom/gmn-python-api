@@ -1,6 +1,6 @@
 """Test cases for the __main__ module."""
 import pytest
-from click.testing import CliRunner
+from click.testing import CliRunner  # type: ignore
 
 from gmn_python_api import __main__
 
