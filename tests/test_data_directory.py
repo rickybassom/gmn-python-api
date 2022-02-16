@@ -1,4 +1,4 @@
-"""Tests for the gmn_data_directory module."""
+"""Tests for the data_directory module."""
 import datetime
 import unittest
 from typing import Callable
@@ -9,11 +9,11 @@ from unittest import mock
 
 from requests.exceptions import HTTPError
 
-from gmn_python_api import gmn_data_directory as gdd
+from gmn_python_api import data_directory as gdd
 
 
 class TestGmnDataDirectory(unittest.TestCase):
-    """Tests for the gmn_data_directory module."""
+    """Tests for the data_directory module."""
 
     def test_get_all_daily_file_urls_with_correct_file_extensions(self) -> None:
         """
@@ -135,6 +135,16 @@ class TestGmnDataDirectory(unittest.TestCase):
             )[1],
         )
 
+    def test_get_all_file_url(self) -> None:
+        """
+        Test: That get_all_file_url() returns the expected file url.
+        When: get_all_file_url() is called with an HTTP mocked response.
+        """
+        self.assertEqual(
+            gdd.BASE_URL + gdd.DAILY_DIRECTORY + gdd.SUMMARY_ALL_FILENAME,
+            gdd.get_all_file_url(),
+        )
+
     @mock.patch("requests.get")
     def test_get_file_content_from_url(self, mock_get: mock.Mock) -> None:
         """
@@ -191,7 +201,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         )
 
     @mock.patch("requests.get")
-    @mock.patch("gmn_python_api.gmn_data_directory._get_url_paths")
+    @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_daily_file_content_by_date(
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
@@ -215,7 +225,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         )
 
     @mock.patch("requests.get")
-    @mock.patch("gmn_python_api.gmn_data_directory._get_url_paths")
+    @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_monthly_file_content_by_date(
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
@@ -237,7 +247,20 @@ class TestGmnDataDirectory(unittest.TestCase):
         )
 
     @mock.patch("requests.get")
-    @mock.patch("gmn_python_api.gmn_data_directory._get_url_paths")
+    def test_get_all_file_content(self, mock_get: mock.Mock) -> None:
+        """
+        Test: That get_all_file_content() returns the expected file content.
+        When: get_all_file_content() is called with an HTTP mocked response.
+        """
+        expected_content = open("tests/test_data/traj_summary_all.txt").read()
+        mock_get.return_value = _mock_response(text=expected_content)
+        self.assertEqual(
+            expected_content,
+            gdd.get_all_file_content(),
+        )
+
+    @mock.patch("requests.get")
+    @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_daily_file_content_by_date_bad_response(
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
@@ -262,7 +285,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         )
 
     @mock.patch("requests.get")
-    @mock.patch("gmn_python_api.gmn_data_directory._get_url_paths")
+    @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_monthly_file_content_by_date_with_bad_response(
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:

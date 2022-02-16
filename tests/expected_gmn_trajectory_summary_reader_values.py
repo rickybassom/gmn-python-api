@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd  # type: ignore
 from numpy import dtype
 
-from gmn_python_api import gmn_trajectory_summary_reader as gtsr
+from gmn_python_api import trajectory_summary_reader as gtsr
 
 EXPECTED_COLUMN_NAMES = [
     "Beginning (Julian date)",

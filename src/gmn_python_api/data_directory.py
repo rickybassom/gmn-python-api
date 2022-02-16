@@ -32,6 +32,9 @@ SUMMARY_TODAY_FILENAME: str = "traj_summary_latest_daily.txt"
 SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
 """The filename of the trajectory summary file from yesterday."""
 
+SUMMARY_ALL_FILENAME: str = "traj_summary_all.txt"
+"""The filename of the trajectory summary file containing all data."""
+
 
 def get_all_daily_file_urls() -> List[str]:
     """
@@ -52,6 +55,16 @@ def get_all_monthly_file_urls() -> List[str]:
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
     return _get_url_paths(BASE_URL + MONTHLY_DIRECTORY, SUMMARY_FILE_EXTENSION)
+
+
+def get_all_file_url() -> str:
+    """
+    Get the URL of the trajectory summary file containing all data.
+
+    :return: The URL of the file containing all data.
+    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    """
+    return BASE_URL + DAILY_DIRECTORY + SUMMARY_ALL_FILENAME
 
 
 def get_daily_file_url_by_date(
@@ -141,6 +154,17 @@ def get_monthly_file_content_by_date(date: datetime) -> str:
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
     file_url = get_monthly_file_url_by_month(date)
+    return get_file_content_from_url(file_url)
+
+
+def get_all_file_content() -> str:
+    """
+    Get the content of the trajectory summary file containing all data.
+
+    :return: The content of the file containing all data.
+    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    """
+    file_url = get_all_file_url()
     return get_file_content_from_url(file_url)
 
 

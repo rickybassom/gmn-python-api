@@ -1,4 +1,4 @@
-"""Tests for the gmn_trajectory_summary_reader.py module."""
+"""Tests for the trajectory_summary_reader.py module."""
 import unittest
 from pathlib import Path
 from typing import Any
@@ -11,11 +11,11 @@ from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_DTYPES
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_MAX_VALUES
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_MIN_VALUES
 
-from gmn_python_api import gmn_trajectory_summary_reader as gtsr
+from gmn_python_api import trajectory_summary_reader as gtsr
 
 
 class TestGmnTrajectorySummaryReader(unittest.TestCase):
-    """Tests for the gmn_trajectory_summary_reader.py module."""
+    """Tests for the trajectory_summary_reader.py module."""
 
     def setUp(self) -> None:
         """

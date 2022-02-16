@@ -6,8 +6,8 @@ Simple API example:
 .. code:: python
 
    from datetime import datetime
-   from gmn_python_api.gmn_data_directory import get_daily_file_content_by_date
-   from gmn_python_api.gmn_trajectory_summary_reader import read_trajectory_summary_as_dataframe
+   from gmn_python_api.data_directory import get_daily_file_content_by_date
+   from gmn_python_api.trajectory_summary_reader import read_trajectory_summary_as_dataframe
 
    # Load the contents of a specific daily trajectory summary file into a Pandas DataFrame
    trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
