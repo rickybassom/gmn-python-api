@@ -28,8 +28,8 @@ TODO: Add more examples.
 
 Please see the API_ section for more details.
 
-Data Columns
-============
+Dataset Features
+================
 
 .. image:: GMN_orbit_data_columns_1.png
   :width: 600

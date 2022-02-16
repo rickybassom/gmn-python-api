@@ -61,17 +61,21 @@ Requirements
 Installation
 ------------
 
-You can install *GMN Python API* via pip_ from PyPI_:
+You can install *GMN Python API* via pip_ from `PyPI`_:
 
 .. code:: console
 
    $ pip install gmn-python-api
 
-Or for the latest development code, directly from GitHub_ via pip_:
+Or for the latest development code, through TestPyPI_ or directly from GitHub_ via pip_:
 
 .. code:: console
 
+   $ pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple gmn-python-api==<version>
+   Or
    $ pip install git+https://github.com/gmn-data-platform/gmn-python-api
+
+See the Troubleshooting_ section if you encounter installation issues.
 
 Usage
 -----
@@ -99,7 +103,7 @@ Simple example:
    # - 8 meteors were estimated to be part of the Perseids shower.
    # - Station #2 recorded the highest number of meteors.
 
-Please see the Usage_ and API_ section for more details.
+Please see the Usage_ and API_ section for more details. Or Troubleshooting_ for common problems.
 
 
 Contributing
@@ -130,7 +134,8 @@ Credits
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _MIT license: https://opensource.org/licenses/MIT
-.. _PyPI: https://pypi.org/
+.. _PyPI: https://pypi.org/project/gmn-python-api/
+.. _TestPyPI: https://test.pypi.org/project/gmn-python-api/
 .. _Hypermodern Python Cookiecutter: https://github.com/cjolowicz/cookiecutter-hypermodern-python
 .. _file an issue: https://github.com/gmn-data-platform/gmn-python-api/issues
 .. _pip: https://pip.pypa.io/
@@ -145,3 +150,4 @@ Credits
 .. _Pandas: https://pandas.pydata.org/
 .. _Numpy: https://numpy.org/
 .. _GitHub: https://github.com/gmn-data-platform/gmn-python-api
+.. _Troubleshooting: https://gmn-python-api.readthedocs.io/en/latest/troubleshooting.html
