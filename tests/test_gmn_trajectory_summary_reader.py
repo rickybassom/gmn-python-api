@@ -68,6 +68,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
     ) -> None:
         """
         Asserts properties about the dataframe.
+
         :param actual_dataframe: The dataframe to test.
         """
         self.assertEqual(actual_dataframe.empty, False)
@@ -86,6 +87,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
     ) -> None:
         """
         Asserts properties about the numpy array.
+
         :param actual_numpy_array: The numpy array to test.
         """
         self.assertEqual(actual_numpy_array.shape, (3, 85))

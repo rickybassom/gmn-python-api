@@ -31,10 +31,8 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     def test_get_all_monthly_file_urls_with_correct_file_extensions(self) -> None:
         """
-        Test: That get_all_monthly_file_urls() returns the expected list of
-        files.
-        When: get_all_monthly_file_urls() is called with an HTTP
-        mocked response.
+        Test: That get_all_monthly_file_urls() returns the expected list of files.
+        When: get_all_monthly_file_urls() is called with an HTTP mocked response.
         """
         expected_filenames = ["filename1.txt", "filename2.txt", "filename3.txt"]
         self.assertEqual(
@@ -48,8 +46,8 @@ class TestGmnDataDirectory(unittest.TestCase):
     def test_get_all_daily_file_urls_with_incorrect_file_extensions(self) -> None:
         """
         Test: That get_all_daily_file_urls() returns [].
-        When: get_all_daily_file_urls() is called with an HTTP mocked response
-        and file extension don't match.
+        When: get_all_daily_file_urls() is called with an HTTP mocked response and file
+        extension don't match.
         """
         expected_filenames = ["filename1.png", "filename2.jpg", "filename3.gif"]
         self.assertEqual(
@@ -64,8 +62,8 @@ class TestGmnDataDirectory(unittest.TestCase):
     def test_get_all_monthly_file_urls_with_incorrect_file_extensions(self) -> None:
         """
         Test: That get_all_daily_file_urls() returns [].
-        When: get_all_daily_file_urls() is called with an HTTP mocked response
-        and file extension don't match.
+        When: get_all_daily_file_urls() is called with an HTTP mocked response and file
+        extension don't match.
         """
         expected_filenames = ["filename1.png", "filename2.jpg", "filename3.gif"]
         self.assertEqual(
@@ -82,8 +80,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         self, mock_get: mock.Mock
     ) -> None:
         """
-        Test: That get_all_daily_file_urls() raises an exception when the
-        HTTP response is bad.
+        Test: That get_all_daily_file_urls() raises an exception when the HTTP response
+        is bad.
         When: get_all_daily_file_urls() is called with an HTTP mocked response.
         """
         mock_get.return_value = _mock_response(
@@ -96,10 +94,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         self, mock_get: mock.Mock
     ) -> None:
         """
-        Test: That get_all_monthly_file_urls() raises an exception when the
-        HTTP response is bad.
-        When: get_all_monthly_file_urls() is called with an HTTP mocked
-        response.
+        Test: That get_all_monthly_file_urls() raises an exception when the HTTP
+        response is bad.
+        When: get_all_monthly_file_urls() is called with an HTTP mocked response.
         """
         mock_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
@@ -108,10 +105,8 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     def test_get_daily_file_url_by_date(self) -> None:
         """
-        Test: That get_daily_file_url_by_date() returns the expected file
-        url.
-        When: get_daily_file_url_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_daily_file_url_by_date() returns the expected file url.
+        When: get_daily_file_url_by_date() is called with an HTTP mocked response.
         """
         expected_filename = "filename-20190101-XYZ123.txt"
         self.assertEqual(
@@ -125,10 +120,8 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     def test_get_monthly_file_url_by_date(self) -> None:
         """
-        Test: That get_monthly_file_url_by_date() returns the expected file
-        url.
-        When: get_monthly_file_url_by_date() is called with an HTTP
-        mocked response.
+        Test: That get_monthly_file_url_by_date() returns the expected file url.
+        When: get_monthly_file_url_by_date() is called with an HTTP mocked response.
         """
         expected_filename = "filename-201901-XYZ123.txt"
         self.assertEqual(
@@ -145,10 +138,8 @@ class TestGmnDataDirectory(unittest.TestCase):
     @mock.patch("requests.get")
     def test_get_file_content_from_url(self, mock_get: mock.Mock) -> None:
         """
-        Test: That get_file_content_from_url() returns the expected file
-        content.
-        When: get_file_content_from_url() is called with an HTTP mocked
-        response.
+        Test: That get_file_content_from_url() returns the expected file content.
+        When: get_file_content_from_url() is called with an HTTP mocked response.
         """
         expected_content = "This is the content of the file."
         mock_get.return_value = _mock_response(status=200, text=expected_content)
@@ -161,10 +152,9 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     def test_get_daily_file_url_current_date_today(self) -> None:
         """
-        Test: That get_daily_file_url_by_date() returns the expected file url
-        for the current day.
-        When: get_daily_file_url_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_daily_file_url_by_date() returns the expected file url for the
+        current day.
+        When: get_daily_file_url_by_date() is called with an HTTP mocked response.
         """
         expected_filename = gdd.SUMMARY_TODAY_FILENAME
         self.assertEqual(
@@ -182,10 +172,9 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     def test_get_daily_file_url_current_date_yesterday(self) -> None:
         """
-        Test: That get_daily_file_url_by_date() returns the expected file url
-        for the yesterday.
-        When: get_daily_file_url_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_daily_file_url_by_date() returns the expected file url for the
+        yesterday.
+        When: get_daily_file_url_by_date() is called with an HTTP mocked response.
         """
         expected_filename = gdd.SUMMARY_YESTERDAY_FILENAME
         self.assertEqual(
@@ -207,10 +196,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
-        Test: That get_daily_file_content_by_date() returns the expected file
-        content.
-        When: get_daily_file_content_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_daily_file_content_by_date() returns the expected file content.
+        When: get_daily_file_content_by_date() is called with an HTTP mocked response.
         """
         mock_get_url_paths.return_value = [
             gdd.BASE_URL
@@ -233,10 +220,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
-        Test: That get_monthly_file_content_by_date() returns the expected
-        file content.
-        When: get_monthly_file_content_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_monthly_file_content_by_date() returns the expected file content.
+        When: get_monthly_file_content_by_date() is called with an HTTP mocked response.
         """
         mock_get_url_paths.return_value = [
             gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "traj_summary_monthly_201812.txt",
@@ -257,10 +242,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
-        Test: That get_daily_file_content_by_date() raises an exception when
-        the HTTP response is bad.
-        When: get_daily_file_content_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_daily_file_content_by_date() raises an exception when the HTTP
+        response is bad.
+        When: get_daily_file_content_by_date() is called with an HTTP mocked response.
         """
         mock_get_url_paths.return_value = [
             gdd.BASE_URL
@@ -283,10 +267,9 @@ class TestGmnDataDirectory(unittest.TestCase):
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
-        Test: That get_monthly_file_content_by_date() raises an exception
-        when the HTTP response is bad.
-        When: get_monthly_file_content_by_date() is called with an HTTP mocked
-        response.
+        Test: That get_monthly_file_content_by_date() raises an exception when the HTTP
+        response is bad.
+        When: get_monthly_file_content_by_date() is called with an HTTP mocked response.
         """
         mock_get_url_paths.return_value = [
             gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "traj_summary_monthly_201812.txt",
@@ -310,18 +293,18 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get: mock.Mock,
     ) -> Tuple[List[str], List[str]]:
         """
-        Mock the GMN data directory response run by mocking the files
-        produced in a directory listing and return result.
-        :param func: (Callable) The function to be tested under the mocked
-        server response.
-        :param filenames: (List[str]) The expected filenames to be returned by
-        the mock directory listing.
-        :param directory: (str) The directory to be mocked (e.g. daily/ or
-        monthly/).
-        :param mock_get: (Mock) The requests.get mock object. Ignore and leave
-        blank for method calls.
-        :return: (List[str], List[str]) The expected file urls and the actual
-        filenames returned by the mocked directory.
+        Mock the GMN data directory response run by mocking the files produced in a
+        directory listing and return result.
+
+        :param func: The function to be tested under the mocked server response.
+        :param filenames: The expected filenames to be returned by the mock directory
+         listing.
+        :param directory: The directory to be mocked (e.g. daily/ or monthly/).
+        :param mock_get: The requests.get mock object. Ignore and leave blank for
+         method calls.
+
+        :return: The expected file urls and the actual filenames returned by the mocked
+         directory.
         """
         expected_file_urls = [
             gdd.BASE_URL + directory + filename for filename in filenames
@@ -339,11 +322,13 @@ def _mock_response(
 ) -> mock.Mock:
     """
     Mock a requests.Response object.
-    :param status: (int) The HTTP status code.
-    :param content: (str) The HTTP response content.
-    :param raise_for_status: (Optional Exception) The exception to be raised
-    when the HTTP status code is not 200.
-    :return: (Mock) The mock requests.Response object.
+
+    :param status: The HTTP status code.
+    :param content: The HTTP response content.
+    :param raise_for_status: The exception to be raised when the HTTP status code is
+     not 200.
+
+    :return: The mock requests.Response object.
     """
     mock_resp = mock.Mock()
     mock_resp.raise_for_status = mock.Mock()
