@@ -10,6 +10,7 @@ import numpy.typing as npt
 import pandas as pd  # type: ignore
 from pandas._typing import FilePathOrBuffer  # type: ignore
 
+"""The format of dates in trajectory summary files."""
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
@@ -18,12 +19,13 @@ def read_trajectory_summary_as_dataframe(
 ) -> pd.DataFrame:
     """
     Reads a trajectory summary file into a Pandas DataFrame.
-    :param filepath_or_buffer: (FilePathOrBuffer) Path or buffer for a trajectory
-    summary file.
-    :return: (DataFrame) Pandas DataFrame of the trajectory summary file.
+
+    :param filepath_or_buffer: Path or buffer for a trajectory summary file.
+
+    :return: Pandas DataFrame of the trajectory summary file.
     """
-    if not os.path.isfile(filepath_or_buffer):
-        filepath_or_buffer = StringIO(filepath_or_buffer)
+    if not os.path.isfile(filepath_or_buffer) and type(filepath_or_buffer) is str:
+        filepath_or_buffer = StringIO(filepath_or_buffer, newline="\r")
 
     trajectory_df = pd.read_csv(
         filepath_or_buffer,
@@ -64,9 +66,10 @@ def read_trajectory_summary_as_numpy_array(
 ) -> npt.NDArray[Any]:
     """
     Reads a trajectory summary file into a numpy array.
-    :param filepath_or_buffer: (FilePathOrBuffer) Path or buffer for a trajectory
-    summary file.
-    :return: (ndarray) Numpy array of the trajectory summary file.
+
+    :param filepath_or_buffer: Path or buffer for a trajectory summary file.
+
+    :return: Numpy array of the trajectory summary file.
     """
     data_frame = read_trajectory_summary_as_dataframe(filepath_or_buffer)
     # In the future use to_records() to convert to a numpy record array
@@ -77,9 +80,11 @@ def read_trajectory_summary_as_numpy_array(
 def _clean_header(text: str, is_unit: bool = False) -> str:
     """
     Extract header text from each raw csv file header.
-    :param text: (str) Raw csv header
-    :param is_unit: (optional bool) return text with brackets for units
-    :returns: (str) Formatted text
+
+    :param text: Raw csv header.
+    :param is_unit: return text with brackets for units.
+
+    :returns: Formatted text.
     """
     # Return an empty string if there is no header found
     if "Unnamed" in text:
