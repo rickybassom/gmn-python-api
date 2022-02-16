@@ -44,13 +44,13 @@ Meteor properties (radiants, orbits, magnitudes and masses) are produced by the 
 Features
 --------
 
-* Listing available daily and monthly csv trajectory summary files from the data directory.
+* Listing available daily and monthly csv trajectory summary files from the `GMN data directory`_.
 
 * Downloading specific daily and monthly csv trajectory summary files from the data directory.
 
 * Functions for loading the trajectory summary data into a Pandas_ DataFrame or Numpy_ array.
 
-* TODO: Function for loading data from the future GMN Data Platform REST API.
+* TODO: Functions for loading data from the future GMN Data Platform REST API.
 
 Requirements
 ------------
@@ -141,6 +141,7 @@ Credits
 .. _Global Meteor Network: https://globalmeteornetwork.org/
 .. _data: https://globalmeteornetwork.org/data/
 .. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-python-api/blob/main/global_meteor_network_data_analysis_template.ipynb
+.. _GMN data directory: https://globalmeteornetwork.org/data/traj_summary_data/
 .. _Pandas: https://pandas.pydata.org/
 .. _Numpy: https://numpy.org/
 .. _GitHub: https://github.com/gmn-data-platform/gmn-python-api
