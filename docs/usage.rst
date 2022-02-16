@@ -37,4 +37,4 @@ TODO: CLI and section
    :prog: gmn-python-api
    :nested: full
 
-.. _API: https://gmn-python-api.readthedocs.io/en/latest/gmn_python_api/gmn_python_api/index.html
+.. _API: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/index.html
