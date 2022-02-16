@@ -28,6 +28,19 @@ TODO: Add more examples.
 
 Please see the API_ section for more details.
 
+Data Columns
+============
+
+.. image:: GMN_orbit_data_columns_1.png
+  :width: 600
+  :alt: GMN Orbit Data Columns 1
+
+.. image:: GMN_orbit_data_columns_2.png
+  :width: 600
+  :alt: GMN Orbit Data Columns 2
+
+Source: https://globalmeteornetwork.org/data/media/GMN_orbit_data_columns.pdf
+
 Command Line Interface
 ======================
 
