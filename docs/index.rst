@@ -21,7 +21,7 @@
 .. _file an issue: https://github.com/gmn-data-platform/gmn-python-api/issues
 .. _pip: https://pip.pypa.io/
 .. github-only
-.. _Contributor Guide: https://github.com/gmn-data-platform/gmn-python-api/blob/main/CONTRIBUTING.rst
+.. _Contributor Guide: https://gmn-python-api.readthedocs.io/en/latest/contributing.html
 .. _Usage: https://gmn-python-api.readthedocs.io/en/latest/usage.html
 .. _API: https://gmn-python-api.readthedocs.io/en/latest/gmn_python_api/gmn_python_api/index.html
 .. _Global Meteor Network: https://globalmeteornetwork.org/
