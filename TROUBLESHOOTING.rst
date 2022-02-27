@@ -4,7 +4,19 @@ Troubleshooting
 Installation
 ------------
 
-**Pandas Typing Error**
+**Numpy typing error**
+
+.. code-block:: bash
+
+    AttributeError: module 'numpy.typing' has no attribute 'NDArray'
+
+Try installing a newer version of Numpy using:
+
+.. code-block:: bash
+
+   pip install numpy>1.20.3
+
+**Pandas typing error**
 
 .. code-block:: bash
 
