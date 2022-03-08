@@ -141,7 +141,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         When: get_all_file_url() is called with an HTTP mocked response.
         """
         self.assertEqual(
-            gdd.BASE_URL + gdd.DAILY_DIRECTORY + gdd.SUMMARY_ALL_FILENAME,
+            gdd.BASE_URL + gdd.SUMMARY_ALL_FILENAME,
             gdd.get_all_file_url(),
         )
 
