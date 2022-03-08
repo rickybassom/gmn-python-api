@@ -64,7 +64,7 @@ def get_all_file_url() -> str:
     :return: The URL of the file containing all data.
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
-    return BASE_URL + DAILY_DIRECTORY + SUMMARY_ALL_FILENAME
+    return BASE_URL + SUMMARY_ALL_FILENAME
 
 
 def get_daily_file_url_by_date(
