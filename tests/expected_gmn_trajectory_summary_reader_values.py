@@ -94,6 +94,7 @@ EXPECTED_COLUMN_NAMES = [
     "End in (FOV)",
     "Num (stat)",
     "Participating (stations)",
+    "Schema (version)",
 ]
 EXPECTED_DTYPES = [
     dtype("float64"),
@@ -180,7 +181,8 @@ EXPECTED_DTYPES = [
     dtype("bool"),
     dtype("bool"),
     dtype("int64"),
-    pd.StringDtype(),
+    dtype("O"),
+    dtype("O"),
 ]
 EXPECTED_MIN_VALUES = [
     2459527.994467242,
@@ -267,7 +269,8 @@ EXPECTED_MIN_VALUES = [
     True,
     True,
     3,
-    "US0004,US0008,US000H,USL00V",
+    ["S0004", "US0008", "US000H", "USL00"],
+    "2.0",
 ]
 
 EXPECTED_MAX_VALUES = [
@@ -355,5 +358,6 @@ EXPECTED_MAX_VALUES = [
     True,
     True,
     4,
-    "US000G,US000K,USL00V",
+    ["S000G", "US000K", "USL00"],
+    "2.0",
 ]
