@@ -7,6 +7,9 @@ import numpy.typing as npt
 import pandas as pd  # type: ignore
 from numpy.testing import assert_equal as np_assert_array_equal
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_COLUMN_NAMES
+from tests.expected_gmn_trajectory_summary_reader_values import (
+    EXPECTED_COLUMN_NAMES_CAMEL_CASE,
+)
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_DTYPES
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_MAX_VALUES
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_MIN_VALUES
@@ -51,6 +54,19 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_data_frame(
             gtsr.read_trajectory_summary_as_dataframe(self.test_file_path)
+        )
+
+    def test_read_trajectory_summary_file_as_data_frame_camel_case(self) -> None:
+        """
+        Test: That the trajectory summary file can be read as a dataframe by
+        checking properties with camel case column names.
+        When: read_trajectory_summary_file_as_dataframe is called with camel case
+        option.
+        """
+        actual = gtsr.read_trajectory_summary_as_dataframe(self.test_file_path, True)
+        self.assertEqual(
+            actual.columns.tolist(),
+            EXPECTED_COLUMN_NAMES_CAMEL_CASE,
         )
 
     def test_read_trajectory_summary_file_as_numpy_array(self) -> None:
