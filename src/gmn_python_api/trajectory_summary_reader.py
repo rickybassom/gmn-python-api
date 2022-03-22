@@ -58,6 +58,8 @@ def read_trajectory_summary_as_dataframe(
     )
     trajectory_df["End in (FOV)"] = trajectory_df["End in (FOV)"].astype("bool")
 
+    trajectory_df = trajectory_df.set_index("Unique trajectory (identifier)")
+
     return trajectory_df
 
 

@@ -73,14 +73,20 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         self.assertEqual(actual_dataframe.empty, False)
         self.assertEqual(actual_dataframe.shape, (3, 85))
-        self.assertEqual(actual_dataframe.index.tolist(), [0, 1, 2])
+        self.assertEqual(
+            actual_dataframe.index.tolist(),
+            ["20211109115201_AVEVd", "20211109115204_72E8F", "20211109115314_8Fb9W"],
+        )
         self.assertEqual(actual_dataframe.dtypes.tolist(), EXPECTED_DTYPES)
         self.assertEqual(actual_dataframe.size, 255)
 
+        print(actual_dataframe.min().to_list())
+        print(actual_dataframe.max().to_list())
         np_assert_array_equal(actual_dataframe.min().to_list(), EXPECTED_MIN_VALUES)
         np_assert_array_equal(actual_dataframe.max().to_list(), EXPECTED_MAX_VALUES)
 
         self.assertEqual(actual_dataframe.columns.tolist(), EXPECTED_COLUMN_NAMES)
+        self.assertEqual(actual_dataframe.index.name, "Unique trajectory (identifier)")
 
     def _test_read_trajectory_summary_using_numpy_array(
         self, actual_numpy_array: npt.NDArray[Any]
