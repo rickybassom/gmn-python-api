@@ -11,16 +11,20 @@ import pandas as pd  # type: ignore
 from pandas._typing import FilePathOrBuffer  # type: ignore
 
 """The format of dates in trajectory summary files."""
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+
+"""The trajectory schema version."""
+SCHEMA_VERSION = "2.0"
 
 
 def read_trajectory_summary_as_dataframe(
-    filepath_or_buffer: FilePathOrBuffer,
+    filepath_or_buffer: FilePathOrBuffer, camel_case_column_names: bool = False
 ) -> pd.DataFrame:
     """
     Reads a trajectory summary file into a Pandas DataFrame.
 
     :param filepath_or_buffer: Path or buffer for a trajectory summary file.
+    :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
 
     :return: Pandas DataFrame of the trajectory summary file.
     """
@@ -45,10 +49,6 @@ def read_trajectory_summary_as_dataframe(
         trajectory_df["Beginning (UTC Time)"], format=DATETIME_FORMAT
     )
     trajectory_df["IAU (code)"] = trajectory_df["IAU (code)"].astype("string")
-    trajectory_df["Participating (stations)"] = trajectory_df[
-        "Participating (stations)"
-    ].astype("string")
-
     trajectory_df["Beg in (FOV)"] = trajectory_df["Beg in (FOV)"].map(
         {"True": True, "False": False}
     )
@@ -57,6 +57,26 @@ def read_trajectory_summary_as_dataframe(
         {"True": True, "False": False}
     )
     trajectory_df["End in (FOV)"] = trajectory_df["End in (FOV)"].astype("bool")
+    trajectory_df["Participating (stations)"] = trajectory_df[
+        "Participating (stations)"
+    ].astype("string")
+    trajectory_df["Participating (stations)"] = trajectory_df[
+        "Participating (stations)"
+    ].apply(lambda x: x[1:-1].split(","))
+
+    trajectory_df["Schema (version)"] = SCHEMA_VERSION
+    trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
+        "unicode"
+    )
+
+    trajectory_df = trajectory_df.set_index("Unique trajectory (identifier)")
+
+    if camel_case_column_names:
+        trajectory_df.columns = trajectory_df.columns.str.replace("[^0-9a-zA-Z]+", "_")
+        trajectory_df.columns = trajectory_df.columns.str.rstrip("_")
+        trajectory_df.columns = trajectory_df.columns.str.lstrip("_")
+        trajectory_df.columns = trajectory_df.columns.str.replace("Q_AU", "q_au_")
+        trajectory_df.columns = trajectory_df.columns.str.lower()
 
     return trajectory_df
 
