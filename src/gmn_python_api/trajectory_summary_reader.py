@@ -11,7 +11,7 @@ import pandas as pd  # type: ignore
 from pandas._typing import FilePathOrBuffer  # type: ignore
 
 """The format of dates in trajectory summary files."""
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 """The trajectory schema version."""
 SCHEMA_VERSION = "2.0"
