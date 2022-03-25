@@ -270,7 +270,7 @@ EXPECTED_DTYPES = [
     dtype("bool"),
     dtype("int64"),
     dtype("O"),
-    dtype("O"),
+    pd.StringDtype(),
 ]
 EXPECTED_MIN_VALUES = [
     2459527.994467242,

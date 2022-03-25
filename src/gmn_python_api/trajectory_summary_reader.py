@@ -66,7 +66,7 @@ def read_trajectory_summary_as_dataframe(
 
     trajectory_df["Schema (version)"] = SCHEMA_VERSION
     trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
-        "unicode"
+        "string"
     )
 
     trajectory_df = trajectory_df.set_index("Unique trajectory (identifier)")
