@@ -286,6 +286,28 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
+    def test_get_daily_file_content_by_date_not_found(
+        self, mock_get_url_paths: mock.Mock, _: mock.Mock
+    ) -> None:
+        """
+        Test: That get_daily_file_content_by_date() raises an FileNotFoundError
+        exception.
+        When: get_daily_file_content_by_date() is called with an HTTP mocked response.
+        """
+        mock_get_url_paths.return_value = [
+            gdd.BASE_URL
+            + gdd.DAILY_DIRECTORY
+            + "traj_summary_20181209_solrange_257.0-258.0.txt",
+            gdd.BASE_URL + gdd.DAILY_DIRECTORY + "filename2.txt",
+        ]
+        self.assertRaises(
+            FileNotFoundError,
+            gdd.get_daily_file_content_by_date,
+            datetime.datetime(2018, 12, 10),
+        )
+
+    @mock.patch("requests.get")
+    @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_monthly_file_content_by_date_with_bad_response(
         self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
@@ -305,6 +327,26 @@ class TestGmnDataDirectory(unittest.TestCase):
             HTTPError,
             gdd.get_monthly_file_content_by_date,
             datetime.datetime(2018, 12, 1),
+        )
+
+    @mock.patch("requests.get")
+    @mock.patch("gmn_python_api.data_directory._get_url_paths")
+    def test_get_monthly_file_content_by_date_with_not_found(
+        self, mock_get_url_paths: mock.Mock, _: mock.Mock
+    ) -> None:
+        """
+        Test: That get_monthly_file_content_by_date() raises an FileNotFoundError
+        exception.
+        When: get_monthly_file_content_by_date() is called with an HTTP mocked response.
+        """
+        mock_get_url_paths.return_value = [
+            gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "traj_summary_monthly_201812.txt",
+            gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "filename2.txt",
+        ]
+        self.assertRaises(
+            FileNotFoundError,
+            gdd.get_monthly_file_content_by_date,
+            datetime.datetime(2018, 11, 1),
         )
 
     @mock.patch("requests.get")

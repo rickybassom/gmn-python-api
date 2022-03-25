@@ -61,7 +61,6 @@ def get_all_file_url() -> str:
     Get the URL of the trajectory summary file containing all data.
 
     :return: The URL of the file containing all data.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
     return BASE_URL + SUMMARY_ALL_FILENAME
 
@@ -76,7 +75,8 @@ def get_daily_file_url_by_date(
     :param current_date: The current date. Defaults to datetime.now().
 
     :return: The URL of the daily file.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :raises: FileNotFoundError if the daily file cannot be found. Or
+     requests.HTTPError is raised if the file url doesn't return a 200 response.
     """
     if not current_date:
         current_date = datetime.today()
@@ -91,6 +91,10 @@ def get_daily_file_url_by_date(
     files_containing_date = [
         f for f in all_daily_filenames if date.strftime("%Y%m%d") in f
     ]
+
+    if len(files_containing_date) == 0:
+        raise FileNotFoundError(f"Trajectory summary file not found for date {date}.")
+
     return files_containing_date[0]
 
 
@@ -101,12 +105,19 @@ def get_monthly_file_url_by_month(date: datetime) -> str:
     :param date: The date of the monthly file.
 
     :return: The URL of the monthly file.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :raises: FileNotFoundError if the monthly file cannot be found. Or
+     requests.HTTPError is raised if the file url doesn't return a 200 response.
     """
     all_monthly_filenames = get_all_monthly_file_urls()
     files_containing_date = [
         f for f in all_monthly_filenames if date.strftime("%Y%m") in f
     ]
+
+    if len(files_containing_date) == 0:
+        raise FileNotFoundError(
+            f"Trajectory summary file not found for month in date {date}."
+        )
+
     return files_containing_date[0]
 
 
