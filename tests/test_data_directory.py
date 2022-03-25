@@ -3,11 +3,11 @@ import datetime
 import unittest
 from typing import Callable
 from typing import List
-from typing import Optional
 from typing import Tuple
 from unittest import mock
 
 from requests.exceptions import HTTPError
+from tests import _mock_response
 
 from gmn_python_api import data_directory as gdd
 
@@ -338,32 +338,6 @@ class TestGmnDataDirectory(unittest.TestCase):
             "</html>"
         )
         return expected_file_urls, func()
-
-
-def _mock_response(
-    status: int = 200, text: str = "text", raise_for_status: Optional[Exception] = None
-) -> mock.Mock:
-    """
-    Mock a requests.Response object.
-
-    :param status: The HTTP status code.
-    :param content: The HTTP response content.
-    :param raise_for_status: The exception to be raised when the HTTP status code is
-     not 200.
-
-    :return: The mock requests.Response object.
-    """
-    mock_resp = mock.Mock()
-    mock_resp.raise_for_status = mock.Mock()
-    if raise_for_status:
-        mock_resp.raise_for_status.side_effect = raise_for_status
-
-    mock_resp.status_code = status
-    if status != 200:
-        mock_resp.ok = False
-
-    mock_resp.text = text
-    return mock_resp
 
 
 if __name__ == "__main__":

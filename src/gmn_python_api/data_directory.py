@@ -41,8 +41,7 @@ def get_all_daily_file_urls() -> List[str]:
     Get all daily trajectory summary file urls from the GMN data directory.
 
     :return: A list of all daily file urls.
-    :raises: If the data directory url doesn't return a 200.
-     response.
+    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
     return _get_url_paths(BASE_URL + DAILY_DIRECTORY, SUMMARY_FILE_EXTENSION)
 
