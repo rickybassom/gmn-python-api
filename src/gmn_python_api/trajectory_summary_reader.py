@@ -72,11 +72,14 @@ def read_trajectory_summary_as_dataframe(
     trajectory_df = trajectory_df.set_index("Unique trajectory (identifier)")
 
     if camel_case_column_names:
-        trajectory_df.columns = trajectory_df.columns.str.replace("[^0-9a-zA-Z]+", "_")
+        trajectory_df.columns = trajectory_df.columns.str.replace(
+            "[^0-9a-zA-Z]+", "_", regex=True
+        )
         trajectory_df.columns = trajectory_df.columns.str.rstrip("_")
         trajectory_df.columns = trajectory_df.columns.str.lstrip("_")
         trajectory_df.columns = trajectory_df.columns.str.replace("Q_AU", "q_au_")
         trajectory_df.columns = trajectory_df.columns.str.lower()
+        trajectory_df.index.name = "unique_trajectory_identifier"
 
     return trajectory_df
 
