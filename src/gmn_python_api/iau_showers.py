@@ -1,13 +1,15 @@
 """
 The module contains functions for retrieving IAU meteor shower information.
 """
+from typing import Dict
+
 import requests
 
 IAU_SHOWERS_LIST_URL = "https://www.ta3.sk/IAUC22DB/MDC2007/Etc/streamfulldata.txt"
 """The url that contains the list of IAU shower information."""
 
 
-def get_iau_showers() -> dict:
+def get_iau_showers() -> Dict[str, Dict[str, str]]:
     """
     Gets the official list of IAU shower numbers, codes and names.
     :return: A dictionary, where the key is the shower number, of dictionaries
