@@ -1,5 +1,5 @@
 """
-This module contains functions to load trajectory summary data_models into Pandas DataFrames
+This module contains functions to load trajectory summary data into Pandas DataFrames
 and numpy arrays.
 """
 import os.path
@@ -43,7 +43,7 @@ def read_trajectory_summary_as_dataframe(
         lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
     )
 
-    # Set data_models types
+    # Set data types
     trajectory_df["Beginning (UTC Time)"] = pd.to_datetime(
         trajectory_df["Beginning (UTC Time)"], format=DATETIME_FORMAT
     )

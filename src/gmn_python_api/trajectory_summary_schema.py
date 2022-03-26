@@ -1,5 +1,5 @@
 """
-This module contains functions for handling the current trajectory summary data_models schema.
+This module contains functions for handling the current trajectory summary data schema.
 """
 import json
 import os

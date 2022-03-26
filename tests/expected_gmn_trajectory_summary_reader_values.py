@@ -1,6 +1,5 @@
 """
-This module stores constant expected properties for testing
-test_data/test_short_traj_summary.txt
+This module stores constant expected properties for testing the model data file.
 """
 import pandas as pd  # type: ignore
 from numpy import dtype

@@ -95,11 +95,11 @@ jobs:
         run: |
           nox --force-color --python=${{ matrix.python }}
 
-      - name: Upload coverage data_models
+      - name: Upload coverage data
         if: always() && matrix.session == 'tests'
         uses: "actions/upload-artifact@v2.3.1"
         with:
-          name: coverage-data_models
+          name: coverage-data
           path: ".coverage.*"
 
       - name: Upload documentation
@@ -137,12 +137,12 @@ jobs:
           pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry
           nox --version
 
-      - name: Download coverage data_models
+      - name: Download coverage data
         uses: actions/download-artifact@v2.1.0
         with:
-          name: coverage-data_models
+          name: coverage-data
 
-      - name: Combine coverage data_models and display human readable report
+      - name: Combine coverage data and display human readable report
         run: |
           nox --force-color --session=coverage
 
