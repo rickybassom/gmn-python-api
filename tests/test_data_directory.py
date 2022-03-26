@@ -358,7 +358,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get: mock.Mock,
     ) -> Tuple[List[str], List[str]]:
         """
-        Mock the GMN data directory response run by mocking the files produced in a
+        Mock the GMN data_models directory response run by mocking the files produced in a
         directory listing and return result.
 
         :param func: The function to be tested under the mocked server response.

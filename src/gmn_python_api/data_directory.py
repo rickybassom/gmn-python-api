@@ -1,5 +1,5 @@
 """
-This module contains functions to read trajectory summary files from the GMN data
+This module contains functions to read trajectory summary files from the GMN data_models
 directory.
 """
 from datetime import datetime
@@ -10,10 +10,10 @@ import requests
 from bs4 import BeautifulSoup  # type: ignore
 
 BASE_URL: str = "https://globalmeteornetwork.org/data/traj_summary_data/"
-"""The base URL for trajectory summary files in the GMN data directory."""
+"""The base URL for trajectory summary files in the GMN data_models directory."""
 
 DATA_START_DATE: datetime = datetime(2018, 1, 9)
-"""The date of the earliest trajectory summary file in the GMN data directory."""
+"""The date of the earliest trajectory summary file in the GMN data_models directory."""
 
 DAILY_DIRECTORY: str = "daily/"
 """The name of the directory containing daily trajectory summary files in the
@@ -24,7 +24,7 @@ MONTHLY_DIRECTORY: str = "monthly/"
 # the base URL."""
 
 SUMMARY_FILE_EXTENSION: str = "txt"
-"""The extension of the trajectory summary files in the GMN data directory"""
+"""The extension of the trajectory summary files in the GMN data_models directory"""
 
 SUMMARY_TODAY_FILENAME: str = "traj_summary_latest_daily.txt"
 """The filename of the most recent trajectory summary file."""
@@ -33,34 +33,34 @@ SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
 """The filename of the trajectory summary file from yesterday."""
 
 SUMMARY_ALL_FILENAME: str = "traj_summary_all.txt"
-"""The filename of the trajectory summary file containing all data."""
+"""The filename of the trajectory summary file containing all data_models."""
 
 
 def get_all_daily_file_urls() -> List[str]:
     """
-    Get all daily trajectory summary file urls from the GMN data directory.
+    Get all daily trajectory summary file urls from the GMN data_models directory.
 
     :return: A list of all daily file urls.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :raises: requests.HTTPError if the data_models directory url doesn't return a 200 response.
     """
     return _get_url_paths(BASE_URL + DAILY_DIRECTORY, SUMMARY_FILE_EXTENSION)
 
 
 def get_all_monthly_file_urls() -> List[str]:
     """
-    Get all monthly trajectory summary file urls from the GMN data directory.
+    Get all monthly trajectory summary file urls from the GMN data_models directory.
 
     :return: A list of all monthly file urls.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :raises: requests.HTTPError if the data_models directory url doesn't return a 200 response.
     """
     return _get_url_paths(BASE_URL + MONTHLY_DIRECTORY, SUMMARY_FILE_EXTENSION)
 
 
 def get_all_file_url() -> str:
     """
-    Get the URL of the trajectory summary file containing all data.
+    Get the URL of the trajectory summary file containing all data_models.
 
-    :return: The URL of the file containing all data.
+    :return: The URL of the file containing all data_models.
     """
     return BASE_URL + SUMMARY_ALL_FILENAME
 
@@ -148,7 +148,7 @@ def get_daily_file_content_by_date(
     :param current_date: The current date. Defaults to datetime.now().
 
     :return: The content of the daily file.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :raises: requests.HTTPError if the data_models directory url doesn't return a 200 response.
     """
     file_url = get_daily_file_url_by_date(date, current_date)
     return get_file_content_from_url(file_url)
@@ -161,7 +161,7 @@ def get_monthly_file_content_by_date(date: datetime) -> str:
     :param date: The date to get the monthly file for.
 
     :return: The content of the monthly file.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :raises: requests.HTTPError if the data_models directory url doesn't return a 200 response.
     """
     file_url = get_monthly_file_url_by_month(date)
     return get_file_content_from_url(file_url)
@@ -169,10 +169,10 @@ def get_monthly_file_content_by_date(date: datetime) -> str:
 
 def get_all_file_content() -> str:
     """
-    Get the content of the trajectory summary file containing all data.
+    Get the content of the trajectory summary file containing all data_models.
 
-    :return: The content of the file containing all data.
-    :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
+    :return: The content of the file containing all data_models.
+    :raises: requests.HTTPError if the data_models directory url doesn't return a 200 response.
     """
     file_url = get_all_file_url()
     return get_file_content_from_url(file_url)
