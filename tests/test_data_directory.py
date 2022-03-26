@@ -10,6 +10,7 @@ from requests.exceptions import HTTPError
 from tests import _mock_response
 
 from gmn_python_api import data_directory as gdd
+from gmn_python_api.trajectory_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
 
 
 class TestGmnDataDirectory(unittest.TestCase):
@@ -215,9 +216,7 @@ class TestGmnDataDirectory(unittest.TestCase):
             + "traj_summary_20181209_solrange_257.0-258.0.txt",
             gdd.BASE_URL + "daily/filename2.txt",
         ]
-        expected_content = open(
-            "tests/test_data/traj_summary_20181209_solrange_257.0-258.0.txt"
-        ).read()
+        expected_content = open(_MODEL_TRAJECTORY_SUMMARY_FILE_PATH).read()
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,
@@ -237,9 +236,7 @@ class TestGmnDataDirectory(unittest.TestCase):
             gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "traj_summary_monthly_201812.txt",
             gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + "filename2.txt",
         ]
-        expected_content = open(
-            "tests/test_data/traj_summary_monthly_201812.txt"
-        ).read()
+        expected_content = open(_MODEL_TRAJECTORY_SUMMARY_FILE_PATH).read()
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,
@@ -252,7 +249,7 @@ class TestGmnDataDirectory(unittest.TestCase):
         Test: That get_all_file_content() returns the expected file content.
         When: get_all_file_content() is called with an HTTP mocked response.
         """
-        expected_content = open("tests/test_data/traj_summary_all.txt").read()
+        expected_content = open(_MODEL_TRAJECTORY_SUMMARY_FILE_PATH).read()
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,

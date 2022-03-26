@@ -5,16 +5,14 @@ from typing import Any
 
 import numpy.typing as npt
 import pandas as pd  # type: ignore
-from numpy.testing import assert_equal as np_assert_array_equal
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_COLUMN_NAMES
 from tests.expected_gmn_trajectory_summary_reader_values import (
     EXPECTED_COLUMN_NAMES_CAMEL_CASE,
 )
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_DTYPES
-from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_MAX_VALUES
-from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_MIN_VALUES
 
 from gmn_python_api import trajectory_summary_reader as gtsr
+from gmn_python_api.trajectory_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
 
 
 class TestGmnTrajectorySummaryReader(unittest.TestCase):
@@ -24,7 +22,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         Sets up the tests.
         """
-        self.test_file_path: Path = Path("tests/test_data/test_short_traj_summary.txt")
+        self.test_file_path: Path = Path(_MODEL_TRAJECTORY_SUMMARY_FILE_PATH)
 
     def test_read_trajectory_summary_buffer_as_data_frame(self) -> None:
         """
@@ -88,17 +86,12 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         :param actual_dataframe: The dataframe to test.
         """
         self.assertEqual(actual_dataframe.empty, False)
-        self.assertEqual(actual_dataframe.shape, (3, 86))
+        self.assertEqual(actual_dataframe.shape, (534, 86))
         self.assertEqual(
-            actual_dataframe.index.tolist(),
-            ["20211109115201_AVEVd", "20211109115204_72E8F", "20211109115314_8Fb9W"],
+            actual_dataframe.index.tolist()[:3],
+            ["20220304220741_yrPTs", "20220304221458_vpeSU", "20220304221734_ii908"],
         )
         self.assertEqual(actual_dataframe.dtypes.tolist(), EXPECTED_DTYPES)
-        self.assertEqual(actual_dataframe.size, 258)
-
-        np_assert_array_equal(actual_dataframe.min().to_list(), EXPECTED_MIN_VALUES)
-        np_assert_array_equal(actual_dataframe.max().to_list(), EXPECTED_MAX_VALUES)
-
         self.assertEqual(actual_dataframe.columns.tolist(), EXPECTED_COLUMN_NAMES)
         self.assertEqual(actual_dataframe.index.name, "Unique trajectory (identifier)")
 
@@ -110,8 +103,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
 
         :param actual_numpy_array: The numpy array to test.
         """
-        self.assertEqual(actual_numpy_array.shape, (3, 86))
-        self.assertEqual(actual_numpy_array.size, 258)
+        self.assertEqual(actual_numpy_array.shape, (534, 86))
 
 
 if __name__ == "__main__":
