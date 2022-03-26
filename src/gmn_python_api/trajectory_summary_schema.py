@@ -4,10 +4,12 @@ This module contains functions for handling the current trajectory summary data 
 import json
 import os
 import tempfile
+from typing import Any
+from typing import Dict
 
-import pandavro as pdx
-from avro.datafile import DataFileReader
-from avro.io import DatumReader
+import pandavro as pdx  # type: ignore
+from avro.datafile import DataFileReader  # type: ignore
+from avro.io import DatumReader  # type: ignore
 
 import gmn_python_api
 
@@ -31,12 +33,12 @@ _AVSC_PATH = os.path.join(
 """"""
 
 
-def get_trajectory_summary_avro_schema() -> dict:
+def get_trajectory_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     """
     Get the Avro schema (.avsc) for the current trajectory summary data format.
     :return: The Avro schema in .avsc format.
     """
-    data_frame = gmn_python_api.read_trajectory_summary_as_dataframe(
+    data_frame = gmn_python_api.read_trajectory_summary_as_dataframe(  # type: ignore
         _MODEL_TRAJECTORY_SUMMARY_FILE_PATH, camel_case_column_names=True
     )
     data_frame.reset_index(inplace=True)
@@ -53,4 +55,4 @@ def get_trajectory_summary_avro_schema() -> dict:
     reader = DataFileReader(open(_AVRO_PATH, "rb"), DatumReader())
     schema = json.loads(reader.meta["avro.schema"].decode())
 
-    return schema
+    return dict(schema)

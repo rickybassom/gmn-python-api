@@ -2,7 +2,7 @@
 import unittest
 from unittest import mock
 
-import pandas as pd
+import pandas as pd  # type: ignore
 
 from gmn_python_api import trajectory_summary_schema
 
