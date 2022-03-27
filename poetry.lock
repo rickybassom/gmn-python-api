@@ -72,7 +72,7 @@ zstandard = ["zstandard"]
 name = "avro-validator"
 version = "1.0.9"
 description = "Pure python avro schema validator"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1788,7 +1788,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "082d2963b9a12b92ff573360c3cf3bf3e9aa400a3a5fda2bc53528a03688d5e7"
+content-hash = "fec5565f64923e2d40a7dad916ca5374bcfabe860e3e7b56f6e764f97a498cdc"
 
 [metadata.files]
 alabaster = [
