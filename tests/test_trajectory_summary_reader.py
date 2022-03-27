@@ -1,10 +1,12 @@
 """Tests for the trajectory_summary_reader.py module."""
+import json
 import unittest
 from pathlib import Path
 from typing import Any
 
 import numpy.typing as npt
 import pandas as pd  # type: ignore
+from avro_validator.schema import Schema
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_COLUMN_NAMES
 from tests.expected_gmn_trajectory_summary_reader_values import (
     EXPECTED_COLUMN_NAMES_CAMEL_CASE,
@@ -13,6 +15,7 @@ from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_DTYPES
 
 from gmn_python_api import trajectory_summary_reader as gtsr
 from gmn_python_api.trajectory_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
+from gmn_python_api.trajectory_summary_schema import get_trajectory_summary_avro_schema
 
 
 class TestGmnTrajectorySummaryReader(unittest.TestCase):
@@ -61,11 +64,31 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_file_as_dataframe is called with camel case
         option.
         """
-        actual = gtsr.read_trajectory_summary_as_dataframe(self.test_file_path, True)
+        actual = gtsr.read_trajectory_summary_as_dataframe(
+            self.test_file_path, camel_case_column_names=True
+        )
         self.assertEqual(
             actual.columns.tolist(),
             EXPECTED_COLUMN_NAMES_CAMEL_CASE,
         )
+
+    def test_read_trajectory_summary_file_as_data_frame_avro_compatible(self) -> None:
+        """
+        Test: That the trajectory summary dataframe can be converted to avro format and
+         abide by the schema.
+        When: read_trajectory_summary_file_as_dataframe is called with avro_compatible
+        option.
+        """
+        data_frame = gtsr.read_trajectory_summary_as_dataframe(
+            self.test_file_path, avro_compatible=True
+        )
+        actual_rows = data_frame.to_dict(orient="records")
+
+        schema = Schema(json.dumps(get_trajectory_summary_avro_schema()))
+        parsed_schema = schema.parse()
+
+        for row in actual_rows:
+            self.assertTrue(parsed_schema.validate(row))
 
     def test_read_trajectory_summary_file_as_numpy_array(self) -> None:
         """

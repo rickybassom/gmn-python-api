@@ -69,6 +69,18 @@ snappy = ["python-snappy"]
 zstandard = ["zstandard"]
 
 [[package]]
+name = "avro-validator"
+version = "1.0.9"
+description = "Pure python avro schema validator"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["pytest", "coverage", "tox", "flake8", "hypothesis", "pytest-cov", "python-coveralls"]
+docs = ["sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
+
+[[package]]
 name = "babel"
 version = "2.9.1"
 description = "Internationalization utilities"
@@ -1776,7 +1788,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "9b862666062886eb651c6ef178534e6fb4be5423435e45bbc0a1946b085a3e74"
+content-hash = "082d2963b9a12b92ff573360c3cf3bf3e9aa400a3a5fda2bc53528a03688d5e7"
 
 [metadata.files]
 alabaster = [
@@ -1801,6 +1813,9 @@ attrs = [
 ]
 avro = [
     {file = "avro-1.11.0.tar.gz", hash = "sha256:1206365cc30ad561493f735329857dd078533459cee4e928aec2505f341ce445"},
+]
+avro-validator = [
+    {file = "avro_validator-1.0.9.tar.gz", hash = "sha256:00a439bbbdc10be95b67ab6dcb6008e90243e0c886c10d735d14c8c004467364"},
 ]
 babel = [
     {file = "Babel-2.9.1-py2.py3-none-any.whl", hash = "sha256:ab49e12b91d937cd11f0b67cb259a57ab4ad2b59ac7a3b41d6c06c0ac5b0def9"},

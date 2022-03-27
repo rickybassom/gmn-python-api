@@ -2,10 +2,12 @@
 This module contains functions to load trajectory summary data into Pandas DataFrames
 and numpy arrays.
 """
+import math
 import os.path
 from io import StringIO
 from typing import Any
 
+import numpy as np
 import numpy.typing as npt
 import pandas as pd  # type: ignore
 from pandas._typing import FilePathOrBuffer  # type: ignore
@@ -17,13 +19,17 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
 def read_trajectory_summary_as_dataframe(
-    filepath_or_buffer: FilePathOrBuffer, camel_case_column_names: bool = False
+    filepath_or_buffer: FilePathOrBuffer,
+    camel_case_column_names: bool = False,
+    avro_compatible=False,
 ) -> pd.DataFrame:
     """
     Reads a trajectory summary file into a Pandas DataFrame.
 
     :param filepath_or_buffer: Path or buffer for a trajectory summary file.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
+    :param avro_compatible: If True, the rows in the dataframe will match the avsc
+     schema with row.to_dict().
 
     :return: Pandas DataFrame of the trajectory summary file.
     """
@@ -69,6 +75,25 @@ def read_trajectory_summary_as_dataframe(
     )
 
     trajectory_df.set_index("Unique trajectory (identifier)", inplace=True)
+
+    if avro_compatible:
+        camel_case_column_names = True
+        trajectory_df.reset_index(inplace=True)
+        trajectory_df["Beginning (UTC Time)"] = trajectory_df[
+            "Beginning (UTC Time)"
+        ].astype(np.int64) / int(1e6)
+        trajectory_df["Beginning (UTC Time)"] = trajectory_df[
+            "Beginning (UTC Time)"
+        ].astype(np.int64)
+        trajectory_df["IAU (code)"] = trajectory_df["IAU (code)"].astype("unicode")
+        trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
+            "unicode"
+        )
+        trajectory_df = trajectory_df.applymap(
+            lambda x: None
+            if x == "<NA>" or (isinstance(x, float) and math.isnan(x))
+            else x
+        )
 
     if camel_case_column_names:
         trajectory_df.columns = trajectory_df.columns.str.replace(
