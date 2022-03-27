@@ -1,0 +1,93 @@
+:===========================================================================================================================================
+:IAU Meteor Data Center. List of all meteor showers.
+:===========================================================================================================================================
+: Last update: Feb 28, 10:00:00 UTC, 2022  Modified by R. Rudawska, M. Hajdukova and T.J.Jopek                        (73 comment lines)
+:
+: === Notes on proper citation of the MDC database.
+:
+:       Since its beginning (AD 2007), the IAM MDC shower database is maintained on an unpaid voluntary basis.
+:       Several colleagues have asked us what reference to the shower database they should include in a published paper?
+:       The correct references are:
+:
+:      Jenniskens, P.; Jopek, T.J.; Janches, D.; Hajdukov�. M.; Kokhirova, G.I.; Rudawska, R; 2020,
+:          Planetary and Space Science, Vol. 182, article id. 104821
+:
+:      Jopek, T.J.; Kanuchova, Z.; 2017, Planetary and Space Science, Volume 143, p. 3-6
+:
+:      Jopek, T.J.; Kanuchova, Z.; 2014, in The Meteoroids 2013, Proceedings of the Astronomical Conference held at A.M. University,
+:          Poznan, Poland, Aug. 26-30, 2013, Eds.: T.J. Jopek, F.J.M. Rietmeijer, J. Watanabe, I.P. Williams,
+:          A.M. University Press, 2014, p. 353-364
+:
+:      Jopek, T.J.; Jenniskens, P.M.; in Meteoroids: The Smallest Solar System Bodies, Proceedings of the Meteroids Conference
+:          held in Breckenridge, Colorado, USA, May 24-28, 2010. Edited by W.J. Cooke, D.E. Moser, B.F. Hardin, and D. Janches,
+:  	   NASA/CP-2011-216469., p. 7-13
+:
+:===========================================================================================================================================
+:
+:LP    - running number in the streamfulldata.txt file
+:IAUNo - IAU numeral code
+:AdNo  - for given shower - number of a set of parameters
+:Code  - IAU 3 letter code
+:shower name -  name according to meteor shower nomenclature rules
+:activity - type of activity:
+:           annual
+:           1965     - shower was active only in 1965,
+:           1989/12  - observed in Dec.,
+:           1989out  - shower outburst,
+:           variable -
+:           irr.     - irregular activity
+:s     - shower status
+:     -2 shower removed from the MDC lists, but in the future, it can return to the database
+:     -1 to be removed from the MDC lists
+:      0 single shower, working list
+:      1 single established shower, group
+:      2 to be established shower
+:      4 member of the group, working list
+:      6 member of the established group
+:     10 pro tempore status
+:
+:LaSun - ecliptic longitude of the Sun at the pick shower activity, deg,
+:Ra    - right asscention of the shower radiant (J2000, deg),
+:De    - declination of the shower radiant (J2000, deg),
+:dRa   - radiant daily motion in right asscention,
+:dDe   - radiant daily motion in declination,
+:Vg    - geocentric velocity (Km/sec),
+:a     - semimajor axis (AU),
+:q     - perihelion distance (AU),
+:e     - eccentricity,
+:peri  - argument of perihelion (J2000, deg),
+:node  - longitude of ascending node (J2000, deg),
+:incl  - inclination of the orbit (J2000, deg),
+:N     - number of members of the identified stream,
+:Group - IAU numerical code of the main complex group,
+:CG    - serial number of the member of the complex group,
+:Parent body,
+:Remarks,
+:OTe: observation technique: C-CCD, P-photo, R-radar, T-TV, V-visual,
+:Reference,
+:LT - Lookup Table file
+:SD - Submission date UTC  -  date of the data submission to MDC database, format YYYY.MM.DD
+:
+:  LP    IAUNo   AdNo  Code         shower name                        activity    s   LaSun      Ra       De        dRa       dDe       Vg          a         q          e       peri      node      inc         N    Group   CG            Parent body                                                     Remarks                                                                                                                     Ote                                              References                                                LT     SD
+:        10       20        30        40        50        60        70        80        90       100       110       120       130       140       150       160       170       180       190       200       210       220       230       240       250       260       270       280       290       300       310       320       330       340        350       360       370       380       390       400       410       420       430       440       450       460       470       480       490       500       510       520       530       540       550       560       570
++234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+"00001"|"00001"|"000"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"128.9  "|"306.6  "|"-8.2   "|"0.54   "|"0.26   "|"22.2   "|"2.618  "|"0.602  "|"       "|"266.67 "|"128.9  "|"7.68   "|"00036"|"00000"|"00"|"169P/NEAT (= 2002 EX12)                 "|"                                                                                                                                                      "|"    "|"1) <A href='http://adsabs.harvard.edu/abs/2006mspc.book.....J' target=_blank>Jenniskens, 2006</A>"|"LT"|"SD"
+"00002"|"00001"|"001"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"122.3  "|"306.7  "|"-09.3  "|"0.91   "|"0.25   "|"23.4   "|"       "|"0.550  "|"0.768  "|"273.3  "|"122.3  "|"7.7    "|"00269"|"00000"|"00"|"169P/NEAT (= 2002 EX12)                 "|"                                                                                                                                                      "|"R   "|"2) <A href='http://adsabs.harvard.edu/abs/2002dsso.conf...48G' target=_blank>Galligan and Baggaley, 2002</A>"|"LT"|"SD"
+"00003"|"00001"|"002"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"123.8  "|"303.4  "|"-10.6  "|"0.75   "|"0.28   "|"22.2   "|"2.540  "|"0.594  "|"       "|"267.6  "|"123.8  "|"7.2    "|"     "|"00000"|"00"|"169P/NEAT (= 2002 EX12)                 "|"                                                                                                                                                      "|"P   "|"3) <A href='http://adsabs.harvard.edu/abs/2001ESASP.495...55H' target=_blank>Hasegawa, 2001</A>"|"LT"|"SD"
+"00004"|"00001"|"003"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"129    "|"308.4  "|"-9.6   "|"0.9    "|"0.3    "|"22.8   "|"2.53   "|"0.59   "|"0.77   "|"269.0  "|"127.7  "|"7.0    "|"00021"|"00000"|"00"|"169P/NEAT (= 2002 EX12)                 "|"                                                                                                                                                      "|"    "|"4) <A href='http://adsabs.harvard.edu/abs/1973NASSP.319..183C' target=_blank>Cook, 1973</A>"|"LT"|"SD"
+"00005"|"00001"|"004"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"127.9  "|"307.1  "|"-8.9   "|"       "|"       "|"22.6   "|"       "|"0.586  "|"0.770  "|"268.4  "|"127.9  "|"7.4    "|"00022"|"00000"|"00"|"                                        "|"                                                                                                                                                      "|"P   "|"5) <A href='http://adsabs.harvard.edu/abs/2003MNRAS.344..665J' target=_blank>Jopek et al., 2003</A>"|"LT"|"SD"
+"00006"|"00001"|"005"|"CAP"|"alpha Capricornids                      "|"2002/06 "|" 1"|"123.5  "|"302.9  "|"-9.9   "|"0.66   "|"0.28   "|"22.2   "|"2.35   "|"0.586  "|"0.75   "|"269.2  "|"123.3  "|"7.3    "|"00145"|"00000"|"00"|"                                        "|"                                                                                                                                                      "|"R   "|"6) <A href='http://adsabs.harvard.edu/abs/2008Icar..195..317B' target=_blank>Brown et al., 2008</A>"|"LT"|"SD"
+"00007"|"00001"|"006"|"CAP"|"alpha Capricornids                      "|"2007/08 "|" 1"|"126.1  "|"305.7  "|"-9.4   "|"0.50   "|"0.26   "|"22.4   "|"       "|"0.586  "|"0.770  "|"268.4  "|"127.9  "|"7.4    "|"00122"|"00000"|"00"|"                                        "|"                                                                                                                                                      "|"T   "|"7) <A href='http://adsabs.harvard.edu/abs/2009JIMO...37...55S' target=_blank>SonotaCo, 2009</A>"|"LT"|"SD"
+"00008"|"00001"|"007"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"125    "|"305.1  "|"-10.2  "|"0.57   "|"0.27   "|"23.7   "|"       "|"       "|"       "|"       "|"       "|"       "|"02282"|"00000"|"00"|"169P/NEAT (= 2002 EX12)                 "|"                                                                                                                                                      "|"T   "|"8) <A href='http://adsabs.harvard.edu/abs/2009JIMO...37...98M' target=_blank>Molau and Rendtel, 2009</A>"|"LT"|"SD"
+"00009"|"00001"|"008"|"CAP"|"alpha Capricornids                      "|" annual "|" 1"|"127.0  "|"306.5  "|"-9.2   "|"0.97   "|"0.24   "|"23.0   "|"2.54   "|"0.578  "|"0.774  "|"268.9  "|"125.4  "|"7.5    "|"00646"|"00000"|"00"|"169P/NEAT                               "|"                                                                                                                                                      "|"T   "|"9) <A href='http://adsabs.harvard.edu/abs/2016Icar..266..331J' target=_blank> Jenniskens et al., 2016, Icarus, 266, 331 </A>"|"LT"|"SD"
+"00010"|"00002"|"000"|"STA"|"Southern Taurids                        "|" annual "|" 1"|"224    "|"49.4   "|"13     "|"0.73   "|"0.18   "|"28     "|"2.07   "|"0.352  "|"       "|"115.4  "|"37.3   "|"5.4    "|"00144"|"00247"|"02"|"2P/Encke                                "|"member of Taurid Complex (247)                                                                                                                        "|"P   "|"1) <A href='http://adsabs.harvard.edu/abs/2002ESASP.500..177P' target=_blank>Porubcan and Kornos, 2002</A>"|"LT"|"SD"
+"00011"|"00002"|"001"|"STA"|"Southern Taurids                        "|" annual "|" 1"|"207.6  "|"40.6   "|"10.3   "|"       "|"       "|"27.8   "|"       "|"0.340  "|"0.820  "|"117.9  "|"27.6   "|"6.0    "|"00036"|"00247"|"02"|"                                        "|"member of Taurid Complex (247)                                                                                                                        "|"P   "|"2) <A href='http://adsabs.harvard.edu/abs/2003MNRAS.344..665J' target=_blank>Jopek et al., 2003</A>"|"LT"|"SD"
+"00012"|"00002"|"002"|"STA"|"Southern Taurids                        "|"2002/06 "|" 1"|"196.5  "|"31.0   "|"8.0    "|"0.82   "|"0.29   "|"27.92  "|"1.67   "|"0.31   "|"0.8144 "|"122.5  "|"16.0   "|"3.0    "|"02684"|"00247"|"02"|"2P/Encke                                "|"member of Taurid Complex (247)                                                                                                                        "|"R   "|"3) <A href='http://adsabs.harvard.edu/abs/2008Icar..195..317B' target=_blank>Brown et al., 2008</A>"|"LT"|"SD"
+"00013"|"00002"|"003"|"STA"|"Southern Taurids                        "|"2007/08 "|" 1"|"219.7  "|"50.1   "|"13.4   "|"0.73   "|"0.16   "|"27.2   "|"       "|"       "|"       "|"       "|"       "|"       "|"00707"|"00247"|"02"|"2P/Encke                                "|"member of Taurid Complex (247)                                                                                                                        "|"T   "|"4) <A href='http://adsabs.harvard.edu/abs/2009JIMO...37...55S' target=_blank>SonotaCo, 2009</A>"|"LT"|"SD"
+"00014"|"00002"|"004"|"STA"|"Southern Taurids                        "|"2002/08 "|" 1"|"196    "|"30.9   "|"8.1    "|"0.817  "|"0.291  "|"28.2   "|"1.72   "|"0.3084 "|"0.820  "|"122.26 "|"16.0   "|"5.3    "|"02497"|"00247"|"02"|"2P/Encke                                "|"member of Taurid Complex (247)                                                                                                                        "|"R   "|"5) <A href='http://adsabs.harvard.edu/abs/2010Icar..207...66B' target=_blank>Brown et al., 2010</A>"|"LT"|"SD"
+"00015"|"00002"|"005"|"STA"|"Southern Taurids                        "|" annual "|" 1"|"216.0  "|"47.9   "|"12.8   "|"0.99   "|"0.26   "|"26.6   "|"1.95   "|"0.353  "|"0.798  "|"116.6  "|"34.4   "|"5.3    "|"00916"|"00247"|"02"|"2P/Encke                                "|"member of Taurid Complex (247)                                                                                                                        "|"T   "|"6) <A href='http://adsabs.harvard.edu/abs/2016Icar..266..331J' target=_blank> Jenniskens et al., 2016, Icarus, 266, 331 </A>"|"LT"|"SD"
+"00016"|"00003"|"000"|"SIA"|"Southern iota Aquariids                 "|" annual "|" 0"|"131.7  "|"334.7  "|"-14.2  "|"1.07   "|"0.18   "|"33.8   "|"2.364  "|"0.208  "|"       "|"131.8  "|"311.7  "|"6.9    "|"     "|"00298"|"03"|"                                        "|"Member of 298/IAQ Complex                                                                                                                             "|"    "|"1) <A href='http://adsabs.harvard.edu/abs/1973NASSP.319..183C' target=_blank>Cook, 1973</A>"|"LT"|"SD"
+"00017"|"00003"|"001"|"SIA"|"Southern iota Aquariids                 "|" annual "|" 0"|"131.7  "|"339.0  "|"-15.6  "|"       "|"       "|"34.8   "|"2.676  "|"0.190  "|"       "|"137.5  "|"306.9  "|"8.6    "|"     "|"00298"|"03"|"                                        "|"Member of 298/IAQ Complex                                                                                                                             "|"P   "|"2) Dutch Meteor Society 2001"|"LT"|"SD"
+"00018"|"00003"|"002"|"SIA"|"Southern iota Aquariids                 "|"2002/06 "|" 0"|"129.5  "|"332.9  "|"-14.7  "|"0.36   "|"-0.14  "|"30.5   "|"1.546  "|"0.218  "|"0.8587 "|"134.3  "|"309.1  "|"5.3    "|"00353"|"00298"|"03"|"                                        "|"Member of 298/IAQ Complex. Removed from the List of Established Showers (2015) Jenniskens et al. Trans. IAU, vol 10, issue T28 pp 120-123             "|"R   "|"3) <A href='http://adsabs.harvard.edu/abs/2008Icar..195..317B' target=_blank>Brown et al., 2008</A>"|"LT"|"SD"
+"00019"|"00004"|"000"|"GEM"|"Geminids                                "|" annual "|" 1"|"262.1  "|"113.2  "|"32.5   "|"1.02   "|"-0.15  "|"34.58  "|"1.372  "|"0.1410 "|"       "|"324.42 "|"261.49 "|"24.02  "|"00221"|"00000"|"00"|"3200 Phaethon (=1983 TB)                "|"                                                                                                                                                      "|"P   "|"1) Dutch Meteor Society 2001"|"LT"|"SD"
+"00020"|"00004"|"001"|"GEM"|"Geminids                                "|" annual "|" 1"|"261.6  "|"112.9  "|"32.3   "|"       "|"       "|"34.6   "|"       "|"0.141  "|"0.898  "|"324.2  "|"261.6  "|"23.5   "|"00051"|"00000"|"00"|"3200 Phaethon (=1983 TB)                "|"                                                                                                                                                      "|"P   "|"2) <A href='http://adsabs.harvard.edu/abs/2003MNRAS.344..665J' target=_blank>Jopek et al., 2003</A>"|"LT"|"SD"

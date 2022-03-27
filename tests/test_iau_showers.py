@@ -29,9 +29,15 @@ class TestIAUShowers(unittest.TestCase):
         Test: That get_iau_showers() returns the expected dictionary of iau information.
         When: get_iau_showers() is called with an HTTP mocked response.
         """
-        expected_content = ""
+        expected_content = open("tests/test_data/streamfulldata.txt").read()
+        expected_dict = {
+            "00001": {"id": "00001", "code": "CAP", "name": "alpha Capricornids"},
+            "00002": {"id": "00002", "code": "STA", "name": "Southern Taurids"},
+            "00003": {"id": "00003", "code": "SIA", "name": "Southern iota Aquariids"},
+            "00004": {"id": "00004", "code": "GEM", "name": "Geminids"},
+        }
         mock_get.return_value = _mock_response(status=200, text=expected_content)
-        self.assertEqual({}, iau_showers.get_iau_showers())
+        self.assertEqual(expected_dict, iau_showers.get_iau_showers())
 
 
 if __name__ == "__main__":
