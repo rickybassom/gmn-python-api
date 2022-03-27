@@ -39,15 +39,8 @@ def get_trajectory_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     :return: The Avro schema in .avsc format.
     """
     data_frame = gmn_python_api.read_trajectory_summary_as_dataframe(  # type: ignore
-        _MODEL_TRAJECTORY_SUMMARY_FILE_PATH, camel_case_column_names=True
+        _MODEL_TRAJECTORY_SUMMARY_FILE_PATH, avro_compatible=True
     )
-    data_frame.reset_index(inplace=True)
-    data_frame.rename(
-        columns={"Unique trajectory (identifier)": "unique_trajectory_identifier"},
-        inplace=True,
-    )
-    data_frame.iau_code = data_frame.iau_code.astype("unicode")
-    data_frame.schema_version = data_frame.schema_version.astype("unicode")
 
     pdx.to_avro(_AVRO_PATH, data_frame)
     pdx.read_avro(_AVRO_PATH)

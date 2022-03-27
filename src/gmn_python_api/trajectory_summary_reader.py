@@ -94,6 +94,7 @@ def read_trajectory_summary_as_dataframe(
             if x == "<NA>" or (isinstance(x, float) and math.isnan(x))
             else x
         )
+        trajectory_df.reset_index(inplace=True)
 
     if camel_case_column_names:
         trajectory_df.columns = trajectory_df.columns.str.replace(

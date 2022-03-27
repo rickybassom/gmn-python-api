@@ -75,7 +75,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
     def test_read_trajectory_summary_file_as_data_frame_avro_compatible(self) -> None:
         """
         Test: That the trajectory summary dataframe can be converted to avro format and
-         abide by the schema.
+        abide by the schema.
         When: read_trajectory_summary_file_as_dataframe is called with avro_compatible
         option.
         """

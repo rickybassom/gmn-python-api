@@ -36,9 +36,6 @@ class Test(unittest.TestCase):
                 ],
             }
         )
-        # expected_data_frame.index.name = "trajectory_id"
-        # Set index column
-        expected_data_frame.set_index("trajectory_id", inplace=True)
         mock_data_frame.return_value = expected_data_frame
 
         expected_schema = {
