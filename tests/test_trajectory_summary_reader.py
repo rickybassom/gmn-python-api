@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy.typing as npt
 import pandas as pd  # type: ignore
-from avro_validator.schema import Schema
+from avro_validator.schema import Schema  # type: ignore
 from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_COLUMN_NAMES
 from tests.expected_gmn_trajectory_summary_reader_values import (
     EXPECTED_COLUMN_NAMES_CAMEL_CASE,

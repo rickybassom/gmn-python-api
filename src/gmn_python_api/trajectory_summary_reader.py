@@ -21,7 +21,7 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 def read_trajectory_summary_as_dataframe(
     filepath_or_buffer: FilePathOrBuffer,
     camel_case_column_names: bool = False,
-    avro_compatible=False,
+    avro_compatible: bool = False,
 ) -> pd.DataFrame:
     """
     Reads a trajectory summary file into a Pandas DataFrame.
