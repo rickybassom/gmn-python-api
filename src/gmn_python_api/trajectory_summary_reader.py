@@ -78,7 +78,6 @@ def read_trajectory_summary_as_dataframe(
 
     if avro_compatible:
         camel_case_column_names = True
-        trajectory_df.reset_index(inplace=True)
         trajectory_df["Beginning (UTC Time)"] = trajectory_df[
             "Beginning (UTC Time)"
         ].astype(np.int64) / int(1e6)
