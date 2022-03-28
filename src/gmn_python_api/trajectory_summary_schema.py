@@ -15,7 +15,7 @@ import gmn_python_api
 
 
 SCHEMA_VERSION = "2.0"
-""""""
+"""The supported trajectory summary data format version."""
 
 _MODEL_TRAJECTORY_SUMMARY_FILE_PATH = os.path.join(
     os.path.dirname(__file__),
@@ -25,12 +25,12 @@ _MODEL_TRAJECTORY_SUMMARY_FILE_PATH = os.path.join(
 """Model v2.0 trajectory summary file."""
 
 _AVRO_PATH = os.path.join(tempfile.gettempdir(), "trajectory_summary.avro")
-""""""
+"""The path for the temporary Avro file used to create the .avsc schema"""
 
 _AVSC_PATH = os.path.join(
     tempfile.gettempdir(), f"trajectory_summary_schema_{SCHEMA_VERSION}.avsc"
 )
-""""""
+"""The path for the temporary Avro schema file that will be returned as a string."""
 
 
 def get_trajectory_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
@@ -39,7 +39,9 @@ def get_trajectory_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     :return: The Avro schema in .avsc format.
     """
     data_frame = gmn_python_api.read_trajectory_summary_as_dataframe(  # type: ignore
-        _MODEL_TRAJECTORY_SUMMARY_FILE_PATH, avro_compatible=True
+        _MODEL_TRAJECTORY_SUMMARY_FILE_PATH,
+        avro_compatible=True,
+        avro_long_beginning_utc_time=False,
     )
 
     pdx.to_avro(_AVRO_PATH, data_frame)

@@ -6,8 +6,8 @@ import math
 import os.path
 from io import StringIO
 from typing import Any
+from typing import Optional
 
-import numpy as np
 import numpy.typing as npt
 import pandas as pd  # type: ignore
 from pandas._typing import FilePathOrBuffer  # type: ignore
@@ -20,8 +20,9 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 def read_trajectory_summary_as_dataframe(
     filepath_or_buffer: FilePathOrBuffer,
-    camel_case_column_names: bool = False,
-    avro_compatible: bool = False,
+    camel_case_column_names: Optional[bool] = False,
+    avro_compatible: Optional[bool] = False,
+    avro_long_beginning_utc_time: Optional[bool] = True,
 ) -> pd.DataFrame:
     """
     Reads a trajectory summary file into a Pandas DataFrame.
@@ -30,6 +31,9 @@ def read_trajectory_summary_as_dataframe(
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
     :param avro_compatible: If True, the rows in the dataframe will match the avsc
      schema with row.to_dict().
+    :param avro_long_beginning_utc_time: If True, the time column will be converted from
+     a datetime object to an int64 epoch time which is compatible with the long
+     timestamp-micros avro type.
 
     :return: Pandas DataFrame of the trajectory summary file.
     """
@@ -78,12 +82,16 @@ def read_trajectory_summary_as_dataframe(
 
     if avro_compatible:
         camel_case_column_names = True
-        trajectory_df["Beginning (UTC Time)"] = trajectory_df[
-            "Beginning (UTC Time)"
-        ].astype(np.int64) / int(1e6)
-        trajectory_df["Beginning (UTC Time)"] = trajectory_df[
-            "Beginning (UTC Time)"
-        ].astype(np.int64)
+
+        if avro_long_beginning_utc_time:
+            # convert datetime nano to micro epoch and round to int
+            trajectory_df["Beginning (UTC Time)"] = (
+                trajectory_df["Beginning (UTC Time)"].astype("int64") / 1e3
+            )
+            trajectory_df["Beginning (UTC Time)"] = (
+                trajectory_df["Beginning (UTC Time)"].round(0).astype("int64")
+            )
+
         trajectory_df["IAU (code)"] = trajectory_df["IAU (code)"].astype("unicode")
         trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
             "unicode"
