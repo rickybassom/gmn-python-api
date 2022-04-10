@@ -1,9 +1,9 @@
 """Command-line interface."""
-import click  # type: ignore
+import click
 
 
-@click.command()  # type: ignore
-@click.version_option()  # type: ignore
+@click.command()
+@click.version_option()
 def main() -> None:
     """GMN Python API."""
 
