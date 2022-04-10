@@ -24,9 +24,6 @@ _MODEL_TRAJECTORY_SUMMARY_FILE_PATH = os.path.join(
 )
 """Model v2.0 trajectory summary file."""
 
-_AVRO_PATH = os.path.join(tempfile.gettempdir(), "trajectory_summary.avro")
-"""The path for the temporary Avro file used to create the .avsc schema"""
-
 _AVSC_PATH = os.path.join(
     tempfile.gettempdir(), f"trajectory_summary_schema_{SCHEMA_VERSION}.avsc"
 )
@@ -38,16 +35,18 @@ def get_trajectory_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     Get the Avro schema (.avsc) for the current trajectory summary data format.
     :return: The Avro schema in .avsc format.
     """
+    _, avro_file_path = tempfile.mkstemp()
+
     data_frame = gmn_python_api.read_trajectory_summary_as_dataframe(  # type: ignore
         _MODEL_TRAJECTORY_SUMMARY_FILE_PATH,
         avro_compatible=True,
         avro_long_beginning_utc_time=False,
     )
 
-    pdx.to_avro(_AVRO_PATH, data_frame)
-    pdx.read_avro(_AVRO_PATH)
+    pdx.to_avro(avro_file_path, data_frame)
+    pdx.read_avro(avro_file_path)
 
-    reader = DataFileReader(open(_AVRO_PATH, "rb"), DatumReader())
+    reader = DataFileReader(open(avro_file_path, "rb"), DatumReader())
     schema = json.loads(reader.meta["avro.schema"].decode())
 
     return dict(schema)
