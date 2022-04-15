@@ -4,17 +4,17 @@ from unittest import mock
 
 import pandas as pd  # type: ignore
 
-from gmn_python_api import trajectory_summary_schema
+from gmn_python_api import meteor_summary_schema
 
 
 class Test(unittest.TestCase):
-    """Tests for the trajectory_summary_schema module."""
+    """Tests for the meteor_summary_schema module."""
 
     @mock.patch(
-        "gmn_python_api.trajectory_summary_schema."
-        "gmn_python_api.read_trajectory_summary_as_dataframe"
+        "gmn_python_api.meteor_summary_schema."
+        "gmn_python_api.read_meteor_summary_csv_as_dataframe"
     )
-    def test_get_trajectory_summary_avro_schema(
+    def test_get_meteor_summary_csv_avro_schema(
         self, mock_data_frame: mock.Mock
     ) -> None:
         """
@@ -53,5 +53,5 @@ class Test(unittest.TestCase):
                 },
             ],
         }
-        actual_schema = trajectory_summary_schema.get_trajectory_summary_avro_schema()
+        actual_schema = meteor_summary_schema.get_meteor_summary_avro_schema()
         self.assertEqual(expected_schema, actual_schema)

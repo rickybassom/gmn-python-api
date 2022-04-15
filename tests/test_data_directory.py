@@ -10,7 +10,7 @@ from requests.exceptions import HTTPError
 from tests import _mock_response
 
 from gmn_python_api import data_directory as gdd
-from gmn_python_api.trajectory_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
+from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
 
 
 class TestGmnDataDirectory(unittest.TestCase):

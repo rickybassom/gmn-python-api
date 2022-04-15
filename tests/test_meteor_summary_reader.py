@@ -1,4 +1,4 @@
-"""Tests for the trajectory_summary_reader.py module."""
+"""Tests for the trajectory_summary_csv_reader.py module."""
 import json
 import unittest
 from pathlib import Path
@@ -7,19 +7,19 @@ from typing import Any
 import numpy.typing as npt
 import pandas as pd  # type: ignore
 from avro_validator.schema import Schema  # type: ignore
-from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_COLUMN_NAMES
-from tests.expected_gmn_trajectory_summary_reader_values import (
+from tests.expected_gmn_meteor_summary_reader_values import EXPECTED_COLUMN_NAMES
+from tests.expected_gmn_meteor_summary_reader_values import (
     EXPECTED_COLUMN_NAMES_CAMEL_CASE,
 )
-from tests.expected_gmn_trajectory_summary_reader_values import EXPECTED_DTYPES
+from tests.expected_gmn_meteor_summary_reader_values import EXPECTED_DTYPES
 
-from gmn_python_api import trajectory_summary_reader as gtsr
-from gmn_python_api.trajectory_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
-from gmn_python_api.trajectory_summary_schema import get_trajectory_summary_avro_schema
+from gmn_python_api import meteor_summary_csv_reader as gtsr
+from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
+from gmn_python_api.meteor_summary_schema import get_meteor_summary_avro_schema
 
 
 class TestGmnTrajectorySummaryReader(unittest.TestCase):
-    """Tests for the trajectory_summary_reader.py module."""
+    """Tests for the trajectory_summary_csv_reader.py module."""
 
     def setUp(self) -> None:
         """
@@ -34,7 +34,9 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_buffer_as_dataframe is called.
         """
         self._test_read_trajectory_summary_using_data_frame(
-            gtsr.read_trajectory_summary_as_dataframe(open(self.test_file_path).read())
+            gtsr.read_meteor_summary_csv_as_dataframe(
+                open(self.test_file_path).read(), csv_data_directory_format=True
+            )
         )
 
     def test_read_trajectory_summary_buffer_as_numpy_array(self) -> None:
@@ -44,7 +46,9 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_buffer_as_numpy_array is called.
         """
         self._test_read_trajectory_summary_using_numpy_array(
-            gtsr.read_trajectory_summary_as_numpy_array(self.test_file_path)
+            gtsr.read_trajectory_summary_as_numpy_array(
+                self.test_file_path, csv_data_directory_format=True
+            )
         )
 
     def test_read_trajectory_summary_file_as_data_frame(self) -> None:
@@ -54,7 +58,9 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_file_as_dataframe is called.
         """
         self._test_read_trajectory_summary_using_data_frame(
-            gtsr.read_trajectory_summary_as_dataframe(self.test_file_path)
+            gtsr.read_meteor_summary_csv_as_dataframe(
+                self.test_file_path, csv_data_directory_format=True
+            )
         )
 
     def test_read_trajectory_summary_file_as_data_frame_camel_case(self) -> None:
@@ -64,8 +70,10 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_file_as_dataframe is called with camel case
         option.
         """
-        actual = gtsr.read_trajectory_summary_as_dataframe(
-            self.test_file_path, camel_case_column_names=True
+        actual = gtsr.read_meteor_summary_csv_as_dataframe(
+            self.test_file_path,
+            camel_case_column_names=True,
+            csv_data_directory_format=True,
         )
         self.assertEqual(
             actual.columns.tolist(),
@@ -79,12 +87,12 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_file_as_dataframe is called with avro_compatible
         option.
         """
-        data_frame = gtsr.read_trajectory_summary_as_dataframe(
-            self.test_file_path, avro_compatible=True
+        data_frame = gtsr.read_meteor_summary_csv_as_dataframe(
+            self.test_file_path, avro_compatible=True, csv_data_directory_format=True
         )
         actual_rows = data_frame.to_dict(orient="records")
 
-        schema = Schema(json.dumps(get_trajectory_summary_avro_schema()))
+        schema = Schema(json.dumps(get_meteor_summary_avro_schema()))
         parsed_schema = schema.parse()
 
         for row in actual_rows:
@@ -97,7 +105,9 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         When: read_trajectory_summary_file_as_numpy_array is called.
         """
         self._test_read_trajectory_summary_using_numpy_array(
-            gtsr.read_trajectory_summary_as_numpy_array(self.test_file_path)
+            gtsr.read_trajectory_summary_as_numpy_array(
+                self.test_file_path, csv_data_directory_format=True
+            )
         )
 
     def _test_read_trajectory_summary_using_data_frame(

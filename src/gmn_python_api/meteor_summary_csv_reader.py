@@ -12,17 +12,18 @@ import numpy.typing as npt
 import pandas as pd  # type: ignore
 from pandas._typing import FilePathOrBuffer  # type: ignore
 
-from gmn_python_api import trajectory_summary_schema
+import gmn_python_api.meteor_summary_schema
 
 """The format of dates in trajectory summary files."""
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
-def read_trajectory_summary_as_dataframe(
+def read_meteor_summary_csv_as_dataframe(
     filepath_or_buffer: FilePathOrBuffer,
     camel_case_column_names: Optional[bool] = False,
     avro_compatible: Optional[bool] = False,
     avro_long_beginning_utc_time: Optional[bool] = True,
+    csv_data_directory_format: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
     Reads a trajectory summary file into a Pandas DataFrame.
@@ -40,18 +41,27 @@ def read_trajectory_summary_as_dataframe(
     if not os.path.isfile(filepath_or_buffer) and type(filepath_or_buffer) is str:
         filepath_or_buffer = StringIO(filepath_or_buffer, newline="\r")
 
-    trajectory_df = pd.read_csv(
-        filepath_or_buffer,
-        engine="python",
-        sep=r"\s*;\s*",
-        skiprows=[0, 5, 6],
-        header=[0, 1],
-        na_values=["nan", "...", "None"],
-    )
-    # Clean header text
-    trajectory_df.columns = trajectory_df.columns.map(
-        lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
-    )
+    if csv_data_directory_format:
+        trajectory_df = pd.read_csv(
+            filepath_or_buffer,
+            engine="python",
+            sep=r"\s*;\s*",
+            skiprows=[0, 5, 6],
+            header=[0, 1],
+            na_values=["nan", "...", "None"],
+        )
+        # Clean header text
+        trajectory_df.columns = trajectory_df.columns.map(
+            lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
+        )
+    else:
+        trajectory_df = pd.read_csv(filepath_or_buffer, engine="python")
+        # set index column
+        bidict = (
+            gmn_python_api.meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
+        )
+        for column in trajectory_df.columns:
+            trajectory_df.rename(columns={column: bidict[column]}, inplace=True)
 
     # Set data types
     trajectory_df["Beginning (UTC Time)"] = pd.to_datetime(
@@ -73,7 +83,9 @@ def read_trajectory_summary_as_dataframe(
         "Participating (stations)"
     ].apply(lambda x: x[1:-1].split(","))
 
-    trajectory_df["Schema (version)"] = trajectory_summary_schema.SCHEMA_VERSION
+    trajectory_df[
+        "Schema (version)"
+    ] = gmn_python_api.meteor_summary_schema.SCHEMA_VERSION
     trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
         "string"
     )
@@ -118,6 +130,10 @@ def read_trajectory_summary_as_dataframe(
 
 def read_trajectory_summary_as_numpy_array(
     filepath_or_buffer: FilePathOrBuffer,
+    camel_case_column_names: Optional[bool] = False,
+    avro_compatible: Optional[bool] = False,
+    avro_long_beginning_utc_time: Optional[bool] = True,
+    csv_data_directory_format: Optional[bool] = False,
 ) -> npt.NDArray[Any]:
     """
     Reads a trajectory summary file into a numpy array.
@@ -126,7 +142,13 @@ def read_trajectory_summary_as_numpy_array(
 
     :return: Numpy array of the trajectory summary file.
     """
-    data_frame = read_trajectory_summary_as_dataframe(filepath_or_buffer)
+    data_frame = read_meteor_summary_csv_as_dataframe(
+        filepath_or_buffer,
+        camel_case_column_names=camel_case_column_names,
+        avro_compatible=avro_compatible,
+        avro_long_beginning_utc_time=avro_long_beginning_utc_time,
+        csv_data_directory_format=csv_data_directory_format,
+    )
     return data_frame.to_numpy()  # type: ignore
 
 
