@@ -59,7 +59,7 @@ class Test(unittest.TestCase):
     @mock.patch("gmn_python_api.read_meteor_summary_csv_as_dataframe")
     def test_get_verbose_and_camel_case_column_name_bidict(
         self, mock_read_meteor_summary_csv_as_dataframe: mock.Mock
-    ):
+    ) -> None:
         """
         Test: get_verbose_and_camel_case_column_name_bidict produces correct dictionary.
         When: get_verbose_and_camel_case_column_name_bidict is called with mocked dataframes.

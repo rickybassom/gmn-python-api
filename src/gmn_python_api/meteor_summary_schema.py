@@ -53,7 +53,7 @@ def get_meteor_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     return dict(schema)
 
 
-def get_verbose_and_camel_case_column_name_bidict():
+def get_verbose_and_camel_case_column_name_bidict() -> Dict[str, str]:
     """
     Get a bidirectional dictionary that maps the verbose and camel case column names.
     :return: A bidirectional dictionary that maps the verbose and camel case column

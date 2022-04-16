@@ -98,7 +98,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         self.assertEqual(expected_data, actual_data)
 
     @mock.patch("requests.get")
-    def test_http_get_response(self, mock_requests_get) -> None:
+    def test_http_get_response(self, mock_requests_get: mock.Mock) -> None:
         """
         Test: That _http_get_response returns the expected response.
         When: Calling _http_get_response with a mocked response.
@@ -112,7 +112,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         self.assertEqual(expected_data, actual_data)
 
     @mock.patch("requests.get")
-    def test_http_get_response_no_next(self, mock_requests_get) -> None:
+    def test_http_get_response_no_next(self, mock_requests_get: mock.Mock) -> None:
         """
         Test: That _http_get_response returns the expected response.
         When: Calling _http_get_response with a mocked response.
@@ -126,7 +126,9 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         self.assertEqual(expected_data, actual_data)
 
     @mock.patch("requests.get")
-    def test_http_get_response_with_bad_response(self, mock_requests_get) -> None:
+    def test_http_get_response_with_bad_response(
+        self, mock_requests_get: mock.Mock
+    ) -> None:
         """
         Test: That _http_get_response() raises an exception when the HTTP
         response is bad.

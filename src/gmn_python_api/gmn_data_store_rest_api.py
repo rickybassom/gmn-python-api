@@ -49,7 +49,7 @@ def get_meteor_summary_data_reader_compatible(
 
 
 def get_meteor_summary_data(
-    table_arguments: Dict[str, str] = None,
+    table_arguments: Optional[Dict[str, str]] = None,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
 ) -> Tuple[str, str]:
@@ -86,8 +86,8 @@ def get_data_with_sql(
 
 
 def get_data(
-    table: str = None,
-    table_arguments: Dict[str, str] = None,
+    table: Optional[str] = None,
+    table_arguments: Optional[Dict[str, str]] = None,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.OBJECTS,
 ) -> Tuple[str, str]:
@@ -123,7 +123,7 @@ def _http_get_response(url: str) -> Tuple[str, str]:
     response = requests.get(url)
     if response.ok:
         try:
-            next_url = response.links.get("next").get("url")
+            next_url = response.links.get("next").get("url")  # type: ignore
         except AttributeError:
             next_url = None
         return str(response.text), next_url
