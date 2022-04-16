@@ -1,5 +1,6 @@
 """Tests for the trajectory_summary_csv_reader.py module."""
 import json
+import os
 import unittest
 from pathlib import Path
 from typing import Any
@@ -18,16 +19,21 @@ from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_
 from gmn_python_api.meteor_summary_schema import get_meteor_summary_avro_schema
 
 
-class TestGmnTrajectorySummaryReader(unittest.TestCase):
-    """Tests for the trajectory_summary_csv_reader.py module."""
+class TestGmnMeteorSummaryCsvReader(unittest.TestCase):
+    """Tests for the trajectory_summary_csv_reader module."""
 
     def setUp(self) -> None:
         """
         Sets up the tests.
         """
-        self.test_file_path: Path = Path(_MODEL_TRAJECTORY_SUMMARY_FILE_PATH)
+        self.test_data_directory_file_path: Path = Path(
+            _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
+        )
+        self.test_rest_api_file_path: Path = Path(
+            os.path.join(os.path.dirname(__file__), "test_data", "meteor_summary.txt")
+        )
 
-    def test_read_trajectory_summary_buffer_as_data_frame(self) -> None:
+    def test_read_trajectory_summary_buffer_as_data_frame_data_directory(self) -> None:
         """
         Test: That the trajectory summary buffer can be read as a dataframe by checking
         properties.
@@ -35,7 +41,21 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_data_frame(
             gtsr.read_meteor_summary_csv_as_dataframe(
-                open(self.test_file_path).read(), csv_data_directory_format=True
+                open(self.test_data_directory_file_path).read(),
+                csv_data_directory_format=True,
+            )
+        )
+
+    def test_read_trajectory_summary_buffer_as_data_frame_rest_api(self) -> None:
+        """
+        Test: That the trajectory summary buffer can be read as a dataframe by checking
+        properties.
+        When: read_trajectory_summary_buffer_as_dataframe is called.
+        """
+        self._test_read_meteor_summary_using_data_frame(
+            gtsr.read_meteor_summary_csv_as_dataframe(
+                open(self.test_rest_api_file_path).read(),
+                csv_data_directory_format=False,
             )
         )
 
@@ -47,7 +67,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_numpy_array(
             gtsr.read_trajectory_summary_as_numpy_array(
-                self.test_file_path, csv_data_directory_format=True
+                self.test_data_directory_file_path, csv_data_directory_format=True
             )
         )
 
@@ -59,7 +79,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_data_frame(
             gtsr.read_meteor_summary_csv_as_dataframe(
-                self.test_file_path, csv_data_directory_format=True
+                self.test_data_directory_file_path, csv_data_directory_format=True
             )
         )
 
@@ -71,7 +91,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         option.
         """
         actual = gtsr.read_meteor_summary_csv_as_dataframe(
-            self.test_file_path,
+            self.test_data_directory_file_path,
             camel_case_column_names=True,
             csv_data_directory_format=True,
         )
@@ -88,7 +108,9 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         option.
         """
         data_frame = gtsr.read_meteor_summary_csv_as_dataframe(
-            self.test_file_path, avro_compatible=True, csv_data_directory_format=True
+            self.test_data_directory_file_path,
+            avro_compatible=True,
+            csv_data_directory_format=True,
         )
         actual_rows = data_frame.to_dict(orient="records")
 
@@ -106,7 +128,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_numpy_array(
             gtsr.read_trajectory_summary_as_numpy_array(
-                self.test_file_path, csv_data_directory_format=True
+                self.test_data_directory_file_path, csv_data_directory_format=True
             )
         )
 
@@ -114,19 +136,38 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
         self, actual_dataframe: pd.DataFrame
     ) -> None:
         """
-        Asserts properties about the dataframe.
+        Asserts properties about the data directory trajectory dataframe.
 
         :param actual_dataframe: The dataframe to test.
         """
-        self.assertEqual(actual_dataframe.empty, False)
-        self.assertEqual(actual_dataframe.shape, (534, 86))
+        self.assertEqual(False, actual_dataframe.empty)
+        self.assertEqual((534, 86), actual_dataframe.shape)
         self.assertEqual(
-            actual_dataframe.index.tolist()[:3],
             ["20220304220741_yrPTs", "20220304221458_vpeSU", "20220304221734_ii908"],
+            actual_dataframe.index.tolist()[:3],
         )
-        self.assertEqual(actual_dataframe.dtypes.tolist(), EXPECTED_DTYPES)
-        self.assertEqual(actual_dataframe.columns.tolist(), EXPECTED_COLUMN_NAMES)
-        self.assertEqual(actual_dataframe.index.name, "Unique trajectory (identifier)")
+        self.assertEqual(EXPECTED_DTYPES, actual_dataframe.dtypes.tolist())
+        self.assertEqual(EXPECTED_COLUMN_NAMES, actual_dataframe.columns.tolist())
+        self.assertEqual("Unique trajectory (identifier)", actual_dataframe.index.name)
+
+    def _test_read_meteor_summary_using_data_frame(
+        self, actual_dataframe: pd.DataFrame
+    ) -> None:
+        """
+        Asserts properties about the rest api meteor summary dataframe.
+
+        :param actual_dataframe: The dataframe to test.
+        """
+        self.assertEqual(False, actual_dataframe.empty)
+        self.assertEqual((100, 86), actual_dataframe.shape)
+        self.assertEqual(
+            ["20220304220741_yrPTs", "20220401012310_f5I2M", "20220401012318_BIAD6"],
+            actual_dataframe.index.tolist()[:3],
+        )
+        actual_dataframe.info()
+        self.assertEqual(EXPECTED_DTYPES, actual_dataframe.dtypes.tolist())
+        self.assertEqual(EXPECTED_COLUMN_NAMES, actual_dataframe.columns.tolist())
+        self.assertEqual("Unique trajectory (identifier)", actual_dataframe.index.name)
 
     def _test_read_trajectory_summary_using_numpy_array(
         self, actual_numpy_array: npt.NDArray[Any]
@@ -136,7 +177,7 @@ class TestGmnTrajectorySummaryReader(unittest.TestCase):
 
         :param actual_numpy_array: The numpy array to test.
         """
-        self.assertEqual(actual_numpy_array.shape, (534, 86))
+        self.assertEqual((534, 86), actual_numpy_array.shape)
 
 
 if __name__ == "__main__":

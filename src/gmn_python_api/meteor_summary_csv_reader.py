@@ -68,6 +68,7 @@ def read_meteor_summary_csv_as_dataframe(
         trajectory_df["Beginning (UTC Time)"], format=DATETIME_FORMAT
     )
     trajectory_df["IAU (code)"] = trajectory_df["IAU (code)"].astype("string")
+    trajectory_df["IAU (No)"] = trajectory_df["IAU (No)"].fillna(-1).astype("int64")
     trajectory_df["Beg in (FOV)"] = trajectory_df["Beg in (FOV)"].map(
         {"True": True, "False": False}
     )

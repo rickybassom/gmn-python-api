@@ -1,10 +1,10 @@
 """
-This module contains functions to read trajectory summary data from the GMN REST API.
+This module contains functions to read meteor summary data from the GMN REST API.
 """
 from enum import Enum
-from typing import Any
 from typing import Dict
 from typing import Optional
+from typing import Tuple
 from urllib.parse import urlencode
 
 import requests
@@ -13,7 +13,7 @@ QUERY_URL = (
     "https://globalmeteornetwork.org/gmn_data_store"
     "{table}.{data_format}?_shape={data_shape}"
 )
-"""URL template of gmn data store REST endpoint."""
+"""URL template of GMN REST API endpoint."""
 
 
 class DataFormat(str, Enum):
@@ -32,7 +32,9 @@ class DataShape(str, Enum):
     OBJECT = "object"
 
 
-def get_meteor_summary_data_reader_compatible(where_sql: Optional[str] = None) -> str:
+def get_meteor_summary_data_reader_compatible(
+    where_sql: Optional[str] = None,
+) -> Tuple[str, str]:
     """
     Get the data from the GMN REST API in a format that is compatible with the
      meteor_summary_csv_reader functions.
@@ -50,7 +52,7 @@ def get_meteor_summary_data(
     table_arguments: Dict[str, str] = None,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
-):
+) -> Tuple[str, str]:
     """
     Get the data from the GMN REST API.
     :param table_arguments: An optional dictionary of arguments to filter the data.
@@ -70,7 +72,7 @@ def get_data_with_sql(
     sql: str,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
-):
+) -> Tuple[str, str]:
     """
     Get the data from the GMN REST API using an SQL query.
     :param sql: The SQL query to perform against the open access gmn data store database.
@@ -88,28 +90,30 @@ def get_data(
     table_arguments: Dict[str, str] = None,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.OBJECTS,
-):
+) -> Tuple[str, str]:
     """
-
-    :param table:
-    :param table_arguments:
-    :param data_format:
-    :param data_shape:
-    :return:
+    Get the data from the GMN REST API.
+    :param table: The table to query.
+    :param table_arguments: An optional dictionary of arguments to filter the data.
+    :param data_format: The data format of the data.
+    :param data_shape: The data shape of the data.
+    :return: The data from the GMN REST API.
     """
     if table_arguments is None:
         table_arguments = {}
     query_url = QUERY_URL.format(
-        table="/" + table, data_format=data_format.value, data_shape=data_shape.value
+        table="/" + table if table else None,
+        data_format=data_format.value,
+        data_shape=data_shape.value,
     )
     query_url += "&" + urlencode(table_arguments)
-    print(query_url)
-    return _http_get_data(query_url)
+    data = _http_get_response(query_url)
+    return data
 
 
-def _http_get_data(url: str) -> tuple[str, Any | None] | str:
+def _http_get_response(url: str) -> Tuple[str, str]:
     """
-    Get the resultant data from a given URL.
+    Get the resultant data from a given GMN Data Store REST API URL.
 
     :param url: The URL of the trajectory summary file.
 
@@ -125,10 +129,4 @@ def _http_get_data(url: str) -> tuple[str, Any | None] | str:
         return str(response.text), next_url
     else:
         response.raise_for_status()
-        return ""  # pragma: no cover
-
-
-if __name__ == "__main__":
-    QUERY_URL = (
-        "http://0.0.0.0:8001/gmn_data_store{table}.{data_format}?_shape={data_shape}"
-    )
+        return "", ""  # pragma: no cover
