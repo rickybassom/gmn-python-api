@@ -1,4 +1,4 @@
-"""Tests for trajectory_summary_schema.py module"""
+"""Tests for trajectory_summary_schema module"""
 import unittest
 from unittest import mock
 

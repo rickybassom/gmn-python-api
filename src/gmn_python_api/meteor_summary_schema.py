@@ -1,5 +1,6 @@
 """
-This module contains functions for handling the current trajectory summary data schema.
+This module contains functions for handling the current meteor/trajectory summary data
+ schema.
 """
 import json
 import os
@@ -15,7 +16,7 @@ import gmn_python_api
 
 
 SCHEMA_VERSION = "2.0"
-"""The supported trajectory summary data format version."""
+"""The supported meteor/trajectory summary data format version."""
 
 _MODEL_TRAJECTORY_SUMMARY_FILE_PATH = os.path.join(
     os.path.dirname(__file__),
@@ -32,7 +33,7 @@ _AVSC_PATH = os.path.join(
 
 def get_meteor_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     """
-    Get the Avro schema (.avsc) for the current trajectory summary data format.
+    Get the Avro schema (.avsc) for the current meteor/trajectory summary data format.
     :return: The Avro schema in .avsc format.
     """
     _, avro_file_path = tempfile.mkstemp()

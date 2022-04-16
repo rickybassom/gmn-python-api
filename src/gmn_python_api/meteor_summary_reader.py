@@ -1,6 +1,6 @@
 """
-This module contains functions to load trajectory summary data into Pandas DataFrames
-and numpy arrays.
+This module contains functions to load meteor/trajectory summary data into Pandas
+DataFrames and numpy arrays.
 """
 import math
 import os.path
@@ -14,7 +14,7 @@ from pandas._typing import FilePathOrBuffer  # type: ignore
 
 import gmn_python_api.meteor_summary_schema
 
-"""The format of dates in trajectory summary files."""
+"""The format of dates in meteor/trajectory summary data."""
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
@@ -26,9 +26,9 @@ def read_meteor_summary_csv_as_dataframe(
     csv_data_directory_format: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
-    Reads a trajectory summary file into a Pandas DataFrame.
+    Reads a meteor/trajectory summary file into a Pandas DataFrame.
 
-    :param filepath_or_buffer: Path or buffer for a trajectory summary file.
+    :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
     :param avro_compatible: If True, the rows in the dataframe will match the avsc
      schema with row.to_dict().
@@ -36,13 +36,13 @@ def read_meteor_summary_csv_as_dataframe(
      a datetime object to an int64 epoch time which is compatible with the long
      timestamp-micros avro type.
 
-    :return: Pandas DataFrame of the trajectory summary file.
+    :return: Pandas DataFrame of the meteor/trajectory summary file.
     """
     if not os.path.isfile(filepath_or_buffer) and type(filepath_or_buffer) is str:
         filepath_or_buffer = StringIO(filepath_or_buffer, newline="\r")
 
     if csv_data_directory_format:
-        trajectory_df = pd.read_csv(
+        meteor_summary_df = pd.read_csv(
             filepath_or_buffer,
             engine="python",
             sep=r"\s*;\s*",
@@ -51,82 +51,90 @@ def read_meteor_summary_csv_as_dataframe(
             na_values=["nan", "...", "None"],
         )
         # Clean header text
-        trajectory_df.columns = trajectory_df.columns.map(
+        meteor_summary_df.columns = meteor_summary_df.columns.map(
             lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
         )
     else:
-        trajectory_df = pd.read_csv(filepath_or_buffer, engine="python")
-        # set index column
+        meteor_summary_df = pd.read_csv(filepath_or_buffer, engine="python")
+        # Convert camel case column names to verbose names
         bidict = (
             gmn_python_api.meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
         )
-        for column in trajectory_df.columns:
-            trajectory_df.rename(columns={column: bidict[column]}, inplace=True)
+        for column in meteor_summary_df.columns:
+            meteor_summary_df.rename(columns={column: bidict[column]}, inplace=True)
 
     # Set data types
-    trajectory_df["Beginning (UTC Time)"] = pd.to_datetime(
-        trajectory_df["Beginning (UTC Time)"], format=DATETIME_FORMAT
+    meteor_summary_df["Beginning (UTC Time)"] = pd.to_datetime(
+        meteor_summary_df["Beginning (UTC Time)"], format=DATETIME_FORMAT
     )
-    trajectory_df["IAU (code)"] = trajectory_df["IAU (code)"].astype("string")
-    trajectory_df["IAU (No)"] = trajectory_df["IAU (No)"].fillna(-1).astype("int64")
-    trajectory_df["Beg in (FOV)"] = trajectory_df["Beg in (FOV)"].map(
+    meteor_summary_df["IAU (code)"] = meteor_summary_df["IAU (code)"].astype("string")
+    meteor_summary_df["IAU (No)"] = (
+        meteor_summary_df["IAU (No)"].fillna(-1).astype("int64")
+    )
+    meteor_summary_df["Beg in (FOV)"] = meteor_summary_df["Beg in (FOV)"].map(
         {"True": True, "False": False}
     )
-    trajectory_df["Beg in (FOV)"] = trajectory_df["Beg in (FOV)"].astype("bool")
-    trajectory_df["End in (FOV)"] = trajectory_df["End in (FOV)"].map(
+    meteor_summary_df["Beg in (FOV)"] = meteor_summary_df["Beg in (FOV)"].astype("bool")
+    meteor_summary_df["End in (FOV)"] = meteor_summary_df["End in (FOV)"].map(
         {"True": True, "False": False}
     )
-    trajectory_df["End in (FOV)"] = trajectory_df["End in (FOV)"].astype("bool")
-    trajectory_df["Participating (stations)"] = trajectory_df[
+    meteor_summary_df["End in (FOV)"] = meteor_summary_df["End in (FOV)"].astype("bool")
+    meteor_summary_df["Participating (stations)"] = meteor_summary_df[
         "Participating (stations)"
     ].astype("string")
-    trajectory_df["Participating (stations)"] = trajectory_df[
+    meteor_summary_df["Participating (stations)"] = meteor_summary_df[
         "Participating (stations)"
     ].apply(lambda x: x[1:-1].split(","))
 
-    trajectory_df[
+    meteor_summary_df[
         "Schema (version)"
     ] = gmn_python_api.meteor_summary_schema.SCHEMA_VERSION
-    trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
-        "string"
-    )
+    meteor_summary_df["Schema (version)"] = meteor_summary_df[
+        "Schema (version)"
+    ].astype("string")
 
-    trajectory_df.set_index("Unique trajectory (identifier)", inplace=True)
+    meteor_summary_df.set_index("Unique trajectory (identifier)", inplace=True)
 
     if avro_compatible:
         camel_case_column_names = True
 
         if avro_long_beginning_utc_time:
             # convert datetime nano to micro epoch and round to int
-            trajectory_df["Beginning (UTC Time)"] = (
-                trajectory_df["Beginning (UTC Time)"].astype("int64") / 1e3
+            meteor_summary_df["Beginning (UTC Time)"] = (
+                meteor_summary_df["Beginning (UTC Time)"].astype("int64") / 1e3
             )
-            trajectory_df["Beginning (UTC Time)"] = (
-                trajectory_df["Beginning (UTC Time)"].round(0).astype("int64")
+            meteor_summary_df["Beginning (UTC Time)"] = (
+                meteor_summary_df["Beginning (UTC Time)"].round(0).astype("int64")
             )
 
-        trajectory_df["IAU (code)"] = trajectory_df["IAU (code)"].astype("unicode")
-        trajectory_df["Schema (version)"] = trajectory_df["Schema (version)"].astype(
+        meteor_summary_df["IAU (code)"] = meteor_summary_df["IAU (code)"].astype(
             "unicode"
         )
-        trajectory_df = trajectory_df.applymap(
+        meteor_summary_df["Schema (version)"] = meteor_summary_df[
+            "Schema (version)"
+        ].astype("unicode")
+
+        # Convert null values to avro compatible types
+        meteor_summary_df = meteor_summary_df.applymap(
             lambda x: None
             if x == "<NA>" or (isinstance(x, float) and math.isnan(x))
             else x
         )
-        trajectory_df.reset_index(inplace=True)
+        meteor_summary_df.reset_index(inplace=True)
 
     if camel_case_column_names:
-        trajectory_df.columns = trajectory_df.columns.str.replace(
+        meteor_summary_df.columns = meteor_summary_df.columns.str.replace(
             "[^0-9a-zA-Z]+", "_", regex=True
         )
-        trajectory_df.columns = trajectory_df.columns.str.rstrip("_")
-        trajectory_df.columns = trajectory_df.columns.str.lstrip("_")
-        trajectory_df.columns = trajectory_df.columns.str.replace("Q_AU", "q_au_")
-        trajectory_df.columns = trajectory_df.columns.str.lower()
-        trajectory_df.index.name = "unique_trajectory_identifier"
+        meteor_summary_df.columns = meteor_summary_df.columns.str.rstrip("_")
+        meteor_summary_df.columns = meteor_summary_df.columns.str.lstrip("_")
+        meteor_summary_df.columns = meteor_summary_df.columns.str.replace(
+            "Q_AU", "q_au_"
+        )
+        meteor_summary_df.columns = meteor_summary_df.columns.str.lower()
+        meteor_summary_df.index.name = "unique_trajectory_identifier"
 
-    return trajectory_df
+    return meteor_summary_df
 
 
 def read_trajectory_summary_as_numpy_array(
@@ -137,11 +145,11 @@ def read_trajectory_summary_as_numpy_array(
     csv_data_directory_format: Optional[bool] = False,
 ) -> npt.NDArray[Any]:
     """
-    Reads a trajectory summary file into a numpy array.
+    Reads meteor/trajectory summary data into a numpy array.
 
-    :param filepath_or_buffer: Path or buffer for a trajectory summary file.
+    :param filepath_or_buffer: Path or buffer for a meteor/trajectory summary file.
 
-    :return: Numpy array of the trajectory summary file.
+    :return: Numpy array of the meteor/trajectory summary file.
     """
     data_frame = read_meteor_summary_csv_as_dataframe(
         filepath_or_buffer,

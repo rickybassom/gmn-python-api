@@ -13,7 +13,12 @@ QUERY_URL = (
     "https://globalmeteornetwork.org/gmn_data_store"
     "{table}.{data_format}?_shape={data_shape}"
 )
-"""URL template of GMN REST API endpoint."""
+"""
+URL template of GMN REST API endpoint. Note that the GMN REST API currently isn't live,
+ so this URL should be replaced with a local instance of the GMN REST API to use
+ functions in this module (e.g
+ http:0.0.0.0:8001/gmn_data_store{table}.{data_format}?_shape={data_shape}).
+"""
 
 
 class DataFormat(str, Enum):
@@ -36,10 +41,11 @@ def get_meteor_summary_data_reader_compatible(
     where_sql: Optional[str] = None,
 ) -> Tuple[str, str]:
     """
-    Get the data from the GMN REST API in a format that is compatible with the
-     meteor_summary_csv_reader functions.
-    :param where_sql: An optional SQL where clause to filter the data.
-    :return: The data from the GMN REST API in CSV format.
+    Get meteor summary data from the GMN REST API in a format that is compatible with
+     the meteor_summary_reader functions.
+    :param where_sql: An optional SQL WHERE clause to filter the data (e.g. iau_no='4').
+    :return: The data returned from the GMN REST API in CSV format.
+    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
     return get_meteor_summary_data(
         table_arguments={"_where": where_sql} if where_sql else None,
@@ -54,11 +60,16 @@ def get_meteor_summary_data(
     data_shape: DataShape = DataShape.ARRAY,
 ) -> Tuple[str, str]:
     """
-    Get the data from the GMN REST API.
+    Get meteor summary data from the GMN REST API.
     :param table_arguments: An optional dictionary of arguments to filter the data.
-    :param data_format: The data format of the data.
-    :param data_shape: The data shape of the data.
-    :return: The data from the GMN REST API.
+     A full list of arguments can be found here:
+     https://docs.datasette.io/en/stable/json_api.html#table-arguments
+    :param data_format: The data format of the meteor summary data using DataFormat
+     enum.
+    :param data_shape: The data shape of the meteor summary data using the DataShape
+     enum.
+    :return: The data returned from the GMN REST API.
+    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
     return get_data(
         table="meteor_summary",
@@ -74,11 +85,12 @@ def get_data_with_sql(
     data_shape: DataShape = DataShape.ARRAY,
 ) -> Tuple[str, str]:
     """
-    Get the data from the GMN REST API using an SQL query.
-    :param sql: The SQL query to perform against the open access gmn data store database.
-    :param data_format: The data format of the data.
-    :param data_shape: The data shape of the data.
-    :return: The data from the GMN REST API.
+    Get any available data from the GMN REST API using a readonly SQL query.
+    :param sql: The SQL query to perform against the open access GMN Data Store database.
+    :param data_format: The data format of the data using the DataFormat enum.
+    :param data_shape: The data shape of the data using the DataShape enum.
+    :return: The data returned from the GMN REST API.
+    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
     return get_data(
         table_arguments={"sql": sql}, data_format=data_format, data_shape=data_shape
@@ -92,12 +104,15 @@ def get_data(
     data_shape: DataShape = DataShape.OBJECTS,
 ) -> Tuple[str, str]:
     """
-    Get the data from the GMN REST API.
-    :param table: The table to query.
-    :param table_arguments: An optional dictionary of arguments to filter the data.
-    :param data_format: The data format of the data.
-    :param data_shape: The data shape of the data.
-    :return: The data from the GMN REST API.
+    Get any data from the GMN REST API.
+    :param table: The table to query in the GMN Data Store.
+    :param table_arguments: An optional dictionary of arguments to filter the data. A
+     full list of arguments can be found here:
+     https://docs.datasette.io/en/stable/json_api.html#table-arguments
+    :param data_format: The data format of the data using the DataFormat enum.
+    :param data_shape: The data shape of the data using the DataShape enum.
+    :return: The data returned from the GMN REST API.
+    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
     if table_arguments is None:
         table_arguments = {}
@@ -113,12 +128,12 @@ def get_data(
 
 def _http_get_response(url: str) -> Tuple[str, str]:
     """
-    Get the resultant data from a given GMN Data Store REST API URL.
+    Get resultant data from a given GMN REST API URL.
 
-    :param url: The URL of the trajectory summary file.
+    :param url: A query URL of the GMN REST API.
 
-    :return: The content of the file and an url to access more paginated data if needed.
-    :raises: requests.HTTPError If the file url doesn't return a 200 response.
+    :return: Data, and a URL to access more paginated data if required.
+    :raises: requests.HTTPError If URL doesn't return a 200 response.
     """
     response = requests.get(url)
     if response.ok:
