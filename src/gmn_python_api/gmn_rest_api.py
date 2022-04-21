@@ -42,7 +42,7 @@ class DataShape(str, Enum):
 def get_meteor_summary_data_reader_compatible(
     where_sql: Optional[str] = None,
     next_page: Optional[str] = None,
-) -> Tuple[str, str]:
+) -> Tuple[str, Optional[str]]:
     """
     Get meteor summary data from the GMN REST API in a format that is compatible with
      the meteor_summary_reader functions.
@@ -64,7 +64,7 @@ def get_meteor_summary_data(
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
     next_page: Optional[str] = None,
-) -> Tuple[str, str]:
+) -> Tuple[str, Optional[str]]:
     """
     Get meteor summary data from the GMN REST API.
     :param table_arguments: An optional dictionary of arguments to filter the data.
@@ -92,7 +92,7 @@ def get_data_with_sql(
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
     next_page: Optional[str] = None,
-) -> Tuple[str, str]:
+) -> Tuple[str, Optional[str]]:
     """
     Get any available data from the GMN REST API using a readonly SQL query.
     :param sql: The SQL query to perform against the open access GMN Data Store database.
@@ -116,7 +116,7 @@ def get_data(
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.OBJECTS,
     next_page: Optional[str] = None,
-) -> Tuple[str, str]:
+) -> Tuple[str, Optional[str]]:
     """
     Get any data from the GMN REST API.
     :param table: The table to query in the GMN Data Store.
