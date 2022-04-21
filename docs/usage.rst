@@ -43,9 +43,9 @@ See the `Data Directory`_ section for details about how to access trajectory sum
 
 See the `REST API`_ section for details about how to access meteor summary data using the future `GMN REST API`_.
 
-See the `API Reference`_ section for function and variable definitions.
-
 See the `Data Schema`_ section for meteor/trajectory DataFrame features.
+
+See the `API Reference`_ section for function and variable definitions.
 
 .. _Data Directory: https://gmn-python-api.readthedocs.io/en/latest/data_directory.html
 .. _GMN Data Directory: https://globalmeteornetwork.org/data/traj_summary_data/

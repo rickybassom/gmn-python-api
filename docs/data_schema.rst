@@ -1,7 +1,7 @@
 Data Schemas
 ============
 
-GMN data fields are accessible through Pandas DataFrames produced by the gmn-python-api package. See the `data_directory API reference section`_ for function and variable details.
+GMN data fields are accessible through Pandas DataFrames produced by the gmn-python-api package. See the `data_schema API reference section`_ for function and variable details.
 
 Accessing meteor trajectory summary fields code example:
 
@@ -288,4 +288,4 @@ Listing of current and historic data schemas.
 Source: https://globalmeteornetwork.org/data/media/GMN_orbit_data_columns.pdf
 
 .. _AVRO: https://avro.apache.org/docs/current/spec.html
-.. _data_directory API reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/data_directory/index.html
+.. _data_schema API reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/data_schema/index.html
