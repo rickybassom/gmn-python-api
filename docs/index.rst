@@ -23,12 +23,15 @@
 .. github-only
 .. _Contributor Guide: https://gmn-python-api.readthedocs.io/en/latest/contributing.html
 .. _Usage: https://gmn-python-api.readthedocs.io/en/latest/usage.html
-.. _API: https://gmn-python-api.readthedocs.io/en/latest/gmn_python_api/gmn_python_api/index.html
+.. _API Reference: https://gmn-python-api.readthedocs.io/en/latest/gmn_python_api/gmn_python_api/index.html
 .. _Global Meteor Network: https://globalmeteornetwork.org/
 .. _data: https://globalmeteornetwork.org/data/
-.. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-python-api/blob/b0f095f20bf31a02932f05401e5bf93fca562b66/global_meteor_network_data_analysis_template.ipynb
+.. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/bf1a44ea8c2b9edc0c7243a9a1c9d6b95d459060/gmn_data_analysis_template.ipynb
 .. _GMN data directory: https://globalmeteornetwork.org/data/traj_summary_data/
 .. _Pandas: https://pandas.pydata.org/
 .. _Numpy: https://numpy.org/
 .. _GitHub: https://github.com/gmn-data-platform/gmn-python-api
 .. _Troubleshooting: https://gmn-python-api.readthedocs.io/en/latest/troubleshooting.html
+.. _development Google Colab notebook: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/cef0b3721737e8d65002d21dc56aa27d74003593/gmn_data_analysis_template_dev.ipynb
+.. _IAU: https://www.ta3.sk/IAUC22DB/MDC2007/
+.. _AVRO: https://avro.apache.org/docs/current/spec.html

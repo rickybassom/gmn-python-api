@@ -1,4 +1,4 @@
-"""Tests for the gmn_data_store_rest_api module."""
+"""Tests for the gmn_rest_api module."""
 import unittest
 from unittest import mock
 from urllib.parse import urlencode
@@ -6,13 +6,13 @@ from urllib.parse import urlencode
 from requests import HTTPError
 from tests import _mock_response
 
-from gmn_python_api import gmn_data_store_rest_api
+from gmn_python_api import gmn_rest_api
 
 
 class TestGmnDataStoreRestApi(unittest.TestCase):
-    """Tests for the gmn_data_store_rest_api module."""
+    """Tests for the gmn_rest_api module."""
 
-    @mock.patch("gmn_python_api.gmn_data_store_rest_api._http_get_response")
+    @mock.patch("gmn_python_api.gmn_rest_api._http_get_response")
     def test_get_data_response(self, mock_http_get_response: mock.Mock) -> None:
         """
         Test: That get_data returns the expected response.
@@ -20,10 +20,10 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         """
         expected_data = "test", "next_url"
         mock_http_get_response.return_value = expected_data
-        actual_data = gmn_data_store_rest_api.get_data()
+        actual_data = gmn_rest_api.get_data()
         self.assertEqual(expected_data, actual_data)
 
-    @mock.patch("gmn_python_api.gmn_data_store_rest_api._http_get_response")
+    @mock.patch("gmn_python_api.gmn_rest_api._http_get_response")
     def test_get_data_query_url(self, mock_http_get_response: mock.Mock) -> None:
         """
         Test: That get_data uses the correct query url based on function arguments.
@@ -33,9 +33,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
             "http://0.0.0.0:8001/gmn_data_store{table}.{data_format}"
             "?_shape={data_shape}"
         )
-        with mock.patch(
-            "gmn_python_api.gmn_data_store_rest_api.QUERY_URL", expected_query_url
-        ):
+        with mock.patch("gmn_python_api.gmn_rest_api.QUERY_URL", expected_query_url):
             mock_http_get_response.return_value = ""
 
             expected_table = "test_table"
@@ -44,9 +42,9 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
                 "_test_arg2": "test_arg2_value",
                 "__test_arg3": "test_arg3_value",
             }
-            expected_data_format = gmn_data_store_rest_api.DataFormat.CSV
-            expected_data_shape = gmn_data_store_rest_api.DataShape.ARRAY
-            gmn_data_store_rest_api.get_data(
+            expected_data_format = gmn_rest_api.DataFormat.CSV
+            expected_data_shape = gmn_rest_api.DataShape.ARRAY
+            gmn_rest_api.get_data(
                 table=expected_table,
                 table_arguments=expected_table_arguments,
                 data_format=expected_data_format,
@@ -60,7 +58,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
             expected_url += "&" + urlencode(expected_table_arguments)
             mock_http_get_response.assert_called_with(expected_url)
 
-    @mock.patch("gmn_python_api.gmn_data_store_rest_api.get_data")
+    @mock.patch("gmn_python_api.gmn_rest_api.get_data")
     def test_get_data_with_sql(self, mock_get_data: mock.Mock) -> None:
         """
         Test: That get_data_with_sql returns the expected data.
@@ -68,10 +66,10 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         """
         expected_data = "test"
         mock_get_data.return_value = expected_data
-        actual_data = gmn_data_store_rest_api.get_data_with_sql("test_sql")
+        actual_data = gmn_rest_api.get_data_with_sql("test_sql")
         self.assertEqual(expected_data, actual_data)
 
-    @mock.patch("gmn_python_api.gmn_data_store_rest_api.get_data")
+    @mock.patch("gmn_python_api.gmn_rest_api.get_data")
     def test_get_meteor_summary_data(self, mock_get_data: mock.Mock) -> None:
         """
         Test: That get_meteor_summary_data returns the expected data.
@@ -79,10 +77,10 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         """
         expected_data = "test"
         mock_get_data.return_value = expected_data
-        actual_data = gmn_data_store_rest_api.get_meteor_summary_data()
+        actual_data = gmn_rest_api.get_meteor_summary_data()
         self.assertEqual(expected_data, actual_data)
 
-    @mock.patch("gmn_python_api.gmn_data_store_rest_api.get_meteor_summary_data")
+    @mock.patch("gmn_python_api.gmn_rest_api.get_meteor_summary_data")
     def test_get_meteor_summary_data_reader_compatible(
         self, mock_get_meteor_summary_data: mock.Mock
     ) -> None:
@@ -92,9 +90,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         """
         expected_data = "test"
         mock_get_meteor_summary_data.return_value = expected_data
-        actual_data = (
-            gmn_data_store_rest_api.get_meteor_summary_data_reader_compatible()
-        )
+        actual_data = gmn_rest_api.get_meteor_summary_data_reader_compatible()
         self.assertEqual(expected_data, actual_data)
 
     @mock.patch("requests.get")
@@ -107,7 +103,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         mock_requests_get.return_value.ok = True
         mock_requests_get.return_value.text = "test"
         mock_requests_get.return_value.links = {"next": {"url": "next_url"}}
-        actual_data = gmn_data_store_rest_api._http_get_response("test_url")
+        actual_data = gmn_rest_api._http_get_response("test_url")
 
         self.assertEqual(expected_data, actual_data)
 
@@ -121,7 +117,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         mock_requests_get.return_value.ok = True
         mock_requests_get.return_value.text = "test"
         mock_requests_get.return_value.links = {}
-        actual_data = gmn_data_store_rest_api._http_get_response("test_url")
+        actual_data = gmn_rest_api._http_get_response("test_url")
 
         self.assertEqual(expected_data, actual_data)
 
@@ -137,6 +133,4 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         mock_requests_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
         )
-        self.assertRaises(
-            HTTPError, gmn_data_store_rest_api._http_get_response, "test_url"
-        )
+        self.assertRaises(HTTPError, gmn_rest_api._http_get_response, "test_url")

@@ -1,0 +1,57 @@
+REST API
+========
+
+The `GMN REST API`_ provides an interface to query and retrieve data from the GMN Data Store. The GMN REST API and the `GMN Data Store`_ are not yet deployed on the GMN server but they can be deployed locally (see `development data analysis notebook`_).
+
+Datasette_ is used for the REST API and provides endpoints to select data from the readonly GMN Data Store database using SQL. See the `gmn_rest_api API reference section`_ for function and variable details. Note that data returned from the API is paginated, the function doc strings describe how to fetch the next page of data.
+
+
+
+Example 1:
+
+.. code:: python
+
+   from gmn_python_api.gmn_data_store_rest_api import get_meteor_summary_data_reader_compatible
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+
+   # Get first 100 rows returned
+   data, _ = get_meteor_summary_data_reader_compatible()
+   meteor_dataframe = read_meteor_summary_csv_as_dataframe(data)
+
+Example 2:
+
+.. code:: python
+
+   from gmn_python_api.gmn_data_store_rest_api import get_meteor_summary_data_reader_compatible
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+
+   # Get first 200 rows returned using the next url
+   data1, next_url = get_meteor_summary_data_reader_compatible()
+   data2, _ = get_meteor_summary_data_reader_compatible(
+      page=next_url,
+   )
+   meteor_dataframe = read_meteor_summary_csv_as_dataframe([data1, data2])
+
+Example 3:
+
+.. code:: python
+
+   from gmn_python_api.gmn_data_store_rest_api import get_meteor_summary_data_reader_compatible
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+
+   # Get using where_sql parameter
+   data, next_url = get_meteor_summary_data_reader_compatible(
+       where="beginning_utc_time__date=2019-07-24",
+   )
+   meteor_dataframe = read_meteor_summary_csv_as_dataframe(data)
+
+Fields available in the Pandas Dataframes can be found in the `Data Schema section`_.
+
+More info can be found in the `gmn_rest_api API reference section`_.
+
+.. _GMN REST API: https://github.com/gmn-data-platform/gmn-data-endpoints
+.. _GMN Data Store: https://github.com/gmn-data-platform/gmn-data-store
+.. _development data analysis notebook: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/cef0b3721737e8d65002d21dc56aa27d74003593/gmn_data_analysis_template_dev.ipynb
+.. _Datasette: https://datasette.io/
+.. _gmn_rest_api API reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/gmn_rest_api/index.html
+.. _Data Schema section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/data_schema/index.html

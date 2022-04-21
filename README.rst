@@ -37,7 +37,7 @@ GMN Python API
 
 Python package for accessing open `Global Meteor Network`_ (GMN) meteor trajectory `data`_.
 Global meteor data is generated using a network of low-light cameras pointed towards the night sky.
-Meteor properties (radiants, orbits, magnitudes and masses) are produced by the GMN and are available through this API.
+Meteor properties (radiants, orbits, magnitudes and masses) are produced by the GMN and are available through this package.
 
 `Demo on Google Colab`_
 
@@ -48,16 +48,20 @@ Features
 
 * Downloading specific daily and monthly csv trajectory summary files from the data directory.
 
-* Functions for loading the trajectory summary data into a Pandas_ DataFrame or Numpy_ array.
+* Functions for loading the data directory trajectory summary data into Pandas_ DataFrames or Numpy_ arrays.
 
 * Functions for retrieving meteor summary data from the future GMN Data Store using the GMN REST API.
 
-* Function for loading meteor summary data into a Pandas_ DataFrame or Numpy_ array.
+* Functions for loading REST API meteor summary data into Pandas_ DataFrames or Numpy_ arrays.
+
+* Functions for retrieving the current meteor trajectory schema in AVRO_ format.
+
+* Functions for retrieving available IAU_ registered meteor showers.
 
 Requirements
 ------------
 
-* Python 3.7, 3.8, 3.9 or 3.10
+* Python 3.7.1+, 3.8, 3.9 or 3.10
 
 
 Installation
@@ -69,7 +73,7 @@ You can install *GMN Python API* via pip_ from `PyPI`_:
 
    $ pip install gmn-python-api
 
-Or for the latest development code, through TestPyPI_ or directly from GitHub_ via pip_:
+Or install the latest development code, through TestPyPI_ or directly from GitHub_ via pip_:
 
 .. code:: console
 
@@ -77,35 +81,40 @@ Or for the latest development code, through TestPyPI_ or directly from GitHub_ v
    Or
    $ pip install git+https://github.com/gmn-data-platform/gmn-python-api
 
+There is also a `development Google Colab notebook`_.
+
 See the Troubleshooting_ section if you encounter installation issues.
 
 Usage
 -----
 
-Simple example:
+Simple meteor analysis example:
 
 .. code:: python
 
    from datetime import datetime
    from gmn_python_api.data_directory import get_daily_file_content_by_date
-   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_datafram
 
-   # Load the contents of a specific daily trajectory summary file into a Pandas DataFrame
    trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
-   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(trajectory_summary_file_content, csv_data_directory_format=True)
+   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
+       trajectory_summary_file_content,
+       csv_data_directory_format=True,
+   )
 
-   print("For the 24th of July 2019, the following data was recorded by the GMN:")
-   print(f"- {trajectory_summary_dataframe['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity out of all meteors for that day.")
-   print(f"- {trajectory_summary_dataframe.loc[trajectory_summary_dataframe['IAU (code)'] == 'PER'].shape[0]} meteors were estimated to be part of the Perseids shower.")
-   print(f"- Station #{trajectory_summary_dataframe['Num (stat)'].mode().values[0]} recorded the highest number of meteors.")
+   print(f"{trajectory_summary_dataframe['Vgeo (km/s)'].max()} km/s "
+          "was the fastest geostationary velocity out of all meteors for that day.")
+   # 65.38499 km/s was the fastest geostationary velocity out of all meteors (24th of July 2019).
 
-   # Output:
-   # For the 24th of July 2019, the following data was recorded by the GMN:
-   # - 65.38499 km/s was the fastest geostationary velocity out of all meteors for that day.
-   # - 8 meteors were estimated to be part of the Perseids shower.
-   # - Station #2 recorded the highest number of meteors.
+   print(f"{trajectory_summary_dataframe.loc[trajectory_summary_dataframe['IAU (code)'] == 'PER'].shape[0]} "
+          "meteors were estimated to be part of the Perseids shower.")
+   # 8 meteors were estimated to be part of the Perseids shower (24th of July 2019).
 
-Please see the Usage_ and API_ section for more details. Or Troubleshooting_ for common problems.
+   print(f"Station {trajectory_summary_dataframe['Num (stat)'].mode().values[0]} "
+          "recorded the highest number of meteors.")
+   # Station 2 recorded the highest number of meteors (24th of July 2019).
+
+Please see the Usage_ and `API Reference`_ section for more details.
 
 
 Contributing
@@ -144,12 +153,15 @@ Credits
 .. github-only
 .. _Contributor Guide: https://gmn-python-api.readthedocs.io/en/latest/contributing.html
 .. _Usage: https://gmn-python-api.readthedocs.io/en/latest/usage.html
-.. _API: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/index.html
+.. _API Reference: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/index.html
 .. _Global Meteor Network: https://globalmeteornetwork.org/
 .. _data: https://globalmeteornetwork.org/data/
-.. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/cef0b3721737e8d65002d21dc56aa27d74003593/gmn_data_analysis_template.ipynb
+.. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/bf1a44ea8c2b9edc0c7243a9a1c9d6b95d459060/gmn_data_analysis_template.ipynb
 .. _GMN data directory: https://globalmeteornetwork.org/data/traj_summary_data/
 .. _Pandas: https://pandas.pydata.org/
 .. _Numpy: https://numpy.org/
 .. _GitHub: https://github.com/gmn-data-platform/gmn-python-api
 .. _Troubleshooting: https://gmn-python-api.readthedocs.io/en/latest/troubleshooting.html
+.. _development Google Colab notebook: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/cef0b3721737e8d65002d21dc56aa27d74003593/gmn_data_analysis_template_dev.ipynb
+.. _IAU: https://www.ta3.sk/IAUC22DB/MDC2007/
+.. _AVRO: https://avro.apache.org/docs/current/spec.html

@@ -1,53 +1,55 @@
 API Usage
 =========
 
-Simple API example:
+Simple meteor analysis example:
 
 .. code:: python
 
    from datetime import datetime
    from gmn_python_api.data_directory import get_daily_file_content_by_date
-   from gmn_python_api.trajectory_summary_reader import read_trajectory_summary_as_dataframe
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_datafram
 
-   # Load the contents of a specific daily trajectory summary file into a Pandas DataFrame
    trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
-   trajectory_summary_dataframe = read_trajectory_summary_as_dataframe(trajectory_summary_file_content)
+   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
+       trajectory_summary_file_content,
+       csv_data_directory_format=True,
+   )
 
-   print("For the 24th of July 2019, the following data was recorded by the GMN:")
-   print(f"- {trajectory_summary_dataframe['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity out of all meteors for that day.")
-   print(f"- {trajectory_summary_dataframe.loc[trajectory_summary_dataframe['IAU (code)'] == 'PER'].shape[0]} meteors were estimated to be part of the Perseids shower.")
-   print(f"- Station #{trajectory_summary_dataframe['Num (stat)'].mode().values[0]} recorded the highest number of meteors.")
+   print(f"{trajectory_summary_dataframe['Vgeo (km/s)'].max()} km/s "
+          "was the fastest geostationary velocity out of all meteors for that day.")
+   # 65.38499 km/s was the fastest geostationary velocity out of all meteors (24th of July 2019).
 
-   # Output:
-   # For the 24th of July 2019, the following data was recorded by the GMN:
-   # - 65.38499 km/s was the fastest geostationary velocity out of all meteors for that day.
-   # - 8 meteors were estimated to be part of the Perseids shower.
-   # - Station #2 recorded the highest number of meteors.
+   print(f"{trajectory_summary_dataframe.loc[trajectory_summary_dataframe['IAU (code)'] == 'PER'].shape[0]} "
+          "meteors were estimated to be part of the Perseids shower.")
+   # 8 meteors were estimated to be part of the Perseids shower (24th of July 2019).
 
-TODO: Add more examples.
+   print(f"Station {trajectory_summary_dataframe['Num (stat)'].mode().values[0]} "
+          "recorded the highest number of meteors.")
+   # Station 2 recorded the highest number of meteors (24th of July 2019).
 
-Please see the API_ section for more details.
+The trajectory summary data model can be loaded offline:
 
-Dataset Features
-================
+.. code:: python
 
-.. image:: GMN_orbit_data_columns_1.png
-  :width: 600
-  :alt: GMN Orbit Data Columns 1
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+   from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
 
-.. image:: GMN_orbit_data_columns_2.png
-  :width: 600
-  :alt: GMN Orbit Data Columns 2
+   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
+       _MODEL_TRAJECTORY_SUMMARY_FILE_PATH,
+       csv_data_directory_format=True,
+   )
 
-Source: https://globalmeteornetwork.org/data/media/GMN_orbit_data_columns.pdf
+See the `Data Directory`_ section for details about how to access trajectory summary data using `GMN Data Directory`_.
 
-Command Line Interface
-======================
+See the `REST API`_ section for details about how to access meteor summary data using the future `GMN REST API`_.
 
-TODO: CLI and section
+See the `Data Schema`_ section for meteor/trajectory DataFrame features.
 
-.. click:: gmn_python_api.__main__:main
-   :prog: gmn-python-api
-   :nested: full
+See the `API Reference`_ section for function and variable definitions.
 
-.. _API: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/index.html
+.. _Data Directory: https://gmn-python-api.readthedocs.io/en/latest/data_directory.html
+.. _GMN Data Directory: https://globalmeteornetwork.org/data/traj_summary_data/
+.. _REST API: https://gmn-python-api.readthedocs.io/en/latest/rest_api.html
+.. _GMN REST API: https://github.com/gmn-data-platform/gmn-data-endpoints
+.. _API Reference: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/index.html
+.. _Data Schema: https://gmn-python-api.readthedocs.io/en/latest/data_schema.html
