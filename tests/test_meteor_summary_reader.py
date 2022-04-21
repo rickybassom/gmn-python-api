@@ -33,11 +33,11 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             os.path.join(os.path.dirname(__file__), "test_data", "meteor_summary.txt")
         )
 
-    def test_read_trajectory_summary_buffer_as_data_frame_data_directory(self) -> None:
+    def test_read_meteor_summary_csv_as_dataframe_str(self) -> None:
         """
-        Test: That the trajectory summary buffer can be read as a dataframe by checking
-        properties.
-        When: read_trajectory_summary_buffer_as_dataframe is called.
+        Test: That the model trajectory summary buffer can be read as a dataframe by
+         checking properties.
+        When: read_meteor_summary_csv_as_dataframe is called.
         """
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
@@ -46,11 +46,38 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             )
         )
 
-    def test_read_trajectory_summary_buffer_as_data_frame_rest_api(self) -> None:
+    def test_read_meteor_summary_csv_as_dataframe_multiple(self) -> None:
         """
-        Test: That the trajectory summary buffer can be read as a dataframe by checking
-        properties.
-        When: read_trajectory_summary_buffer_as_dataframe is called.
+        Test: That a trajectory summary buffer can be read as a split up dataframe by
+         checking properties.
+        When: read_meteor_summary_csv_as_dataframe is called with a list of data.
+        """
+        data = open(self.test_data_directory_file_path).read().splitlines()
+        self._test_read_trajectory_summary_using_data_frame(
+            msr.read_meteor_summary_csv_as_dataframe(
+                ["\n".join(data[:40]), "\n".join(data[40:80]), "\n".join(data[80:])],
+                csv_data_directory_format=True,
+            )
+        )
+
+    def test_read_meteor_summary_csv_as_dataframe_failed_type(self) -> None:
+        """
+        Test: That read_meteor_summary_csv_as_dataframe raises error with incorrect
+         type.
+        When: read_meteor_summary_csv_as_dataframe is called with an int for data.
+        """
+        self.assertRaises(
+            TypeError,
+            msr.read_meteor_summary_csv_as_dataframe,
+            5,
+            csv_data_directory_format=True,
+        )
+
+    def test_read_meteor_summary_csv_as_dataframe_rest_api(self) -> None:
+        """
+        Test: That a trajectory summary buffer can be read as a dataframe by checking
+         properties.
+        When: read_meteor_summary_csv_as_dataframe is called.
         """
         self._test_read_meteor_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
@@ -59,14 +86,14 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             )
         )
 
-    def test_read_trajectory_summary_buffer_as_numpy_array(self) -> None:
+    def test_read_meteor_summary_csv_as_numpy_array(self) -> None:
         """
         Test: That the trajectory summary buffer can be read as a numpy array by
-        checking properties.
-        When: read_trajectory_summary_buffer_as_numpy_array is called.
+         checking properties.
+        When: read_meteor_summary_csv_as_numpy_array is called.
         """
         self._test_read_trajectory_summary_using_numpy_array(
-            msr.read_trajectory_summary_as_numpy_array(
+            msr.read_meteor_summary_csv_as_numpy_array(
                 self.test_data_directory_file_path, csv_data_directory_format=True
             )
         )
@@ -74,8 +101,8 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
     def test_read_trajectory_summary_file_as_data_frame(self) -> None:
         """
         Test: That the trajectory summary file can be read as a dataframe by
-        checking properties.
-        When: read_trajectory_summary_file_as_dataframe is called.
+         checking properties.
+        When: read_meteor_summary_csv_as_dataframe is called with a file path.
         """
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
@@ -86,9 +113,9 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
     def test_read_trajectory_summary_file_as_data_frame_camel_case(self) -> None:
         """
         Test: That the trajectory summary file can be read as a dataframe by
-        checking properties with camel case column names.
-        When: read_trajectory_summary_file_as_dataframe is called with camel case
-        option.
+         checking properties with camel case column names.
+        When: read_meteor_summary_csv_as_dataframe is called with camel case
+         option.
         """
         actual = msr.read_meteor_summary_csv_as_dataframe(
             self.test_data_directory_file_path,
@@ -103,9 +130,9 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
     def test_read_trajectory_summary_file_as_data_frame_avro_compatible(self) -> None:
         """
         Test: That the trajectory summary dataframe can be converted to avro format and
-        abide by the schema.
-        When: read_trajectory_summary_file_as_dataframe is called with avro_compatible
-        option.
+         abide by the schema.
+        When: read_meteor_summary_csv_as_dataframe is called with avro_compatible
+         option.
         """
         data_frame = msr.read_meteor_summary_csv_as_dataframe(
             self.test_data_directory_file_path,
@@ -120,14 +147,14 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         for row in actual_rows:
             self.assertTrue(parsed_schema.validate(row))
 
-    def test_read_trajectory_summary_file_as_numpy_array(self) -> None:
+    def test_read_meteor_summary_csv_as_numpy_array_file(self) -> None:
         """
         Test: That the trajectory summary file can be read as a numpy array by checking
-        properties.
-        When: read_trajectory_summary_file_as_numpy_array is called.
+         properties.
+        When: read_meteor_summary_csv_as_numpy_array is called.
         """
         self._test_read_trajectory_summary_using_numpy_array(
-            msr.read_trajectory_summary_as_numpy_array(
+            msr.read_meteor_summary_csv_as_numpy_array(
                 self.test_data_directory_file_path, csv_data_directory_format=True
             )
         )

@@ -122,6 +122,17 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         self.assertEqual(expected_data, actual_data)
 
     @mock.patch("requests.get")
+    def test_get_data_next_page(self, mock_requests_get: mock.Mock) -> None:
+        """
+        Test: That get_data fetches next_page if passed.
+        When: get_data is called with a next_page and mocked response.
+        """
+        next_page = "next_page"
+        mock_requests_get.return_value = _mock_response(text="")
+        gmn_rest_api.get_data("test_url", next_page=next_page)
+        mock_requests_get.assert_called_with(next_page)
+
+    @mock.patch("requests.get")
     def test_http_get_response_with_bad_response(
         self, mock_requests_get: mock.Mock
     ) -> None:

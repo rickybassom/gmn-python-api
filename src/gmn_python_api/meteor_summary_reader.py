@@ -5,8 +5,11 @@ DataFrames and numpy arrays.
 import math
 import os.path
 from io import StringIO
+from pathlib import Path
 from typing import Any
+from typing import List
 from typing import Optional
+from typing import Union
 
 import numpy.typing as npt
 import pandas as pd  # type: ignore
@@ -18,8 +21,8 @@ import gmn_python_api.meteor_summary_schema
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
-def read_meteor_summary_csv_as_dataframe(
-    filepath_or_buffer: FilePathOrBuffer,
+def read_meteor_summary_csv_as_dataframe(  # noqa: C901
+    filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]],
     camel_case_column_names: Optional[bool] = False,
     avro_compatible: Optional[bool] = False,
     avro_long_beginning_utc_time: Optional[bool] = True,
@@ -28,7 +31,8 @@ def read_meteor_summary_csv_as_dataframe(
     """
     Reads a meteor/trajectory summary file into a Pandas DataFrame.
 
-    :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file.
+    :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
+     list of paths or buffers (types can be mixed) that will be joined in the dataframe.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
     :param avro_compatible: If True, the rows in the dataframe will match the avsc
      schema with row.to_dict().
@@ -38,12 +42,30 @@ def read_meteor_summary_csv_as_dataframe(
 
     :return: Pandas DataFrame of the meteor/trajectory summary file.
     """
-    if not os.path.isfile(filepath_or_buffer) and type(filepath_or_buffer) is str:
-        filepath_or_buffer = StringIO(filepath_or_buffer, newline="\r")
+    if not isinstance(filepath_or_buffer, list):
+        filepath_or_buffer_list = [filepath_or_buffer]
+    else:
+        filepath_or_buffer_list = filepath_or_buffer
+
+    # Join list of data passed in to be used in a single dataframe
+    joined_data = ""
+    for item in filepath_or_buffer_list:
+        if type(item) is str:
+            if os.path.isfile(item):
+                joined_data += open(item).read() + "\n"
+            else:
+                joined_data += item + "\n"
+        elif isinstance(item, Path):
+            joined_data += open(item).read() + "\n"
+        else:
+            raise TypeError(
+                f"filepath_or_buffer must be of type string or bytes, or a list of those"
+                f" types. Got {type(item)}."
+            )
 
     if csv_data_directory_format:
         meteor_summary_df = pd.read_csv(
-            filepath_or_buffer,
+            StringIO(joined_data, newline="\r"),
             engine="python",
             sep=r"\s*;\s*",
             skiprows=[0, 5, 6],
@@ -55,7 +77,9 @@ def read_meteor_summary_csv_as_dataframe(
             lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
         )
     else:
-        meteor_summary_df = pd.read_csv(filepath_or_buffer, engine="python")
+        meteor_summary_df = pd.read_csv(
+            StringIO(joined_data, newline="\r"), engine="python"
+        )
         # Convert camel case column names to verbose names
         bidict = (
             gmn_python_api.meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
@@ -137,7 +161,7 @@ def read_meteor_summary_csv_as_dataframe(
     return meteor_summary_df
 
 
-def read_trajectory_summary_as_numpy_array(
+def read_meteor_summary_csv_as_numpy_array(
     filepath_or_buffer: FilePathOrBuffer,
     camel_case_column_names: Optional[bool] = False,
     avro_compatible: Optional[bool] = False,
