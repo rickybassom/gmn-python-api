@@ -1,5 +1,7 @@
 """
 This module contains functions to read meteor summary data from the GMN REST API.
+ The REST API uses the Datasette API endpoint. More info:
+ https://docs.datasette.io/en/stable/json_api.html
 """
 from enum import Enum
 from typing import Dict
