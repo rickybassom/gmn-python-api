@@ -41,11 +41,13 @@ class DataShape(str, Enum):
 
 def get_meteor_summary_data_reader_compatible(
     where_sql: Optional[str] = None,
+    next_page: Optional[str] = None,
 ) -> Tuple[str, str]:
     """
     Get meteor summary data from the GMN REST API in a format that is compatible with
      the meteor_summary_reader functions.
     :param where_sql: An optional SQL WHERE clause to filter the data (e.g. iau_no='4').
+    :param next_page: An optional URL to access more paginated data provided by the api.
     :return: The data returned from the GMN REST API in CSV format.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
@@ -53,6 +55,7 @@ def get_meteor_summary_data_reader_compatible(
         table_arguments={"_where": where_sql} if where_sql else None,
         data_format=DataFormat.CSV,
         data_shape=DataShape.ARRAY,
+        next_page=next_page,
     )
 
 
@@ -60,6 +63,7 @@ def get_meteor_summary_data(
     table_arguments: Optional[Dict[str, str]] = None,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
+    next_page: Optional[str] = None,
 ) -> Tuple[str, str]:
     """
     Get meteor summary data from the GMN REST API.
@@ -70,6 +74,7 @@ def get_meteor_summary_data(
      enum.
     :param data_shape: The data shape of the meteor summary data using the DataShape
      enum.
+    :param next_page: An optional URL to access more paginated data provided by the api.
     :return: The data returned from the GMN REST API.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
@@ -78,6 +83,7 @@ def get_meteor_summary_data(
         table_arguments=table_arguments,
         data_format=data_format,
         data_shape=data_shape,
+        next_page=next_page,
     )
 
 
@@ -85,17 +91,22 @@ def get_data_with_sql(
     sql: str,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.ARRAY,
+    next_page: Optional[str] = None,
 ) -> Tuple[str, str]:
     """
     Get any available data from the GMN REST API using a readonly SQL query.
     :param sql: The SQL query to perform against the open access GMN Data Store database.
     :param data_format: The data format of the data using the DataFormat enum.
     :param data_shape: The data shape of the data using the DataShape enum.
+    :param next_page: An optional URL to access more paginated data provided by the api.
     :return: The data returned from the GMN REST API.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
     return get_data(
-        table_arguments={"sql": sql}, data_format=data_format, data_shape=data_shape
+        table_arguments={"sql": sql},
+        data_format=data_format,
+        data_shape=data_shape,
+        next_page=next_page,
     )
 
 
@@ -104,6 +115,7 @@ def get_data(
     table_arguments: Optional[Dict[str, str]] = None,
     data_format: DataFormat = DataFormat.JSON,
     data_shape: DataShape = DataShape.OBJECTS,
+    next_page: Optional[str] = None,
 ) -> Tuple[str, str]:
     """
     Get any data from the GMN REST API.
@@ -118,17 +130,22 @@ def get_data(
     """
     if table_arguments is None:
         table_arguments = {}
-    query_url = QUERY_URL.format(
-        table="/" + table if table else None,
-        data_format=data_format.value,
-        data_shape=data_shape.value,
-    )
-    query_url += "&" + urlencode(table_arguments)
+
+    if next_page:
+        query_url = next_page
+    else:
+        query_url = QUERY_URL.format(
+            table="/" + table if table else None,
+            data_format=data_format.value,
+            data_shape=data_shape.value,
+        )
+        query_url += "&" + urlencode(table_arguments)
+
     data = _http_get_response(query_url)
     return data
 
 
-def _http_get_response(url: str) -> Tuple[str, str]:
+def _http_get_response(url: str) -> Tuple[str, Optional[str]]:
     """
     Get resultant data from a given GMN REST API URL.
 
@@ -142,7 +159,14 @@ def _http_get_response(url: str) -> Tuple[str, str]:
         try:
             next_url = response.links.get("next").get("url")  # type: ignore
         except AttributeError:
-            next_url = None
+            # next_url somtimes is not given even when paginated (for example with CSVs)
+            if str(response.text).count("\n") == 101 and (
+                requests.head(url + "&_next=100").ok
+                or requests.head(url + "?_next=100").ok
+            ):  # pragma: no cover
+                next_url = url + "&_next=100" if "?" in url else url + "?_next=100"
+            else:
+                next_url = None
         return str(response.text), next_url
     else:
         response.raise_for_status()
