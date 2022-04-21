@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup  # type: ignore
 BASE_URL: str = "https://globalmeteornetwork.org/data/traj_summary_data/"
 """The base URL for trajectory summary files in the GMN data directory."""
 
-DATA_START_DATE: datetime = datetime(2018, 1, 9)
+DATA_START_DATE: datetime = datetime(2018, 12, 9)
 """The date of the earliest trajectory summary file in the GMN data directory."""
 
 DAILY_DIRECTORY: str = "daily/"
