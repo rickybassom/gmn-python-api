@@ -34,7 +34,7 @@ def read_meteor_summary_csv_as_dataframe(
     :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
      list of paths or buffers (types can be mixed) that will be joined in the dataframe.
      If using a list the first item must contain the csv header, and
-     csv_data_directory_format should be set according to the first item in the list.
+     all items must either be all data directory CSVs or all REST API CSVs.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
     :param avro_compatible: If True, the rows in the dataframe will match the avsc
      schema with row.to_dict().
@@ -43,8 +43,7 @@ def read_meteor_summary_csv_as_dataframe(
      timestamp-micros avro type.
     :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
      treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
-     headers will be treated as a REST API CSV. If using multiple filepath_or_buffer
-     define this variable according to the first item in the list.
+     headers will be treated as a REST API CSV.
 
     :return: Pandas DataFrame of the meteor/trajectory summary file.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
@@ -182,7 +181,11 @@ def _join_filepath_or_buffer(  # noqa: C901
 
     :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
      list of paths or buffers (types can be mixed) that will be joined in the dataframe.
-     If using a list the first item must contain the csv header.
+     If using a list the first item must contain the csv header, and
+     all items must either be all data directory CSVs or all REST API CSVs.
+    :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
+     treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
+     headers will be treated as a REST API CSV.
 
     :return: The joined CSV data.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
@@ -195,14 +198,13 @@ def _join_filepath_or_buffer(  # noqa: C901
     # Join list of data passed in to a single CSV
     joined_data = ""
     for i, item in enumerate(filepath_or_buffer_list):
-        new_data = ""
         if type(item) is str:
             if os.path.isfile(item):
                 new_data = open(item).read() + "\n"
             else:
-                new_data += item + "\n"
+                new_data = item + "\n"
         elif isinstance(item, Path):
-            new_data += open(item).read() + "\n"
+            new_data = open(item).read() + "\n"
         else:
             raise TypeError(
                 f"filepath_or_buffer must be of type string or bytes, or a list of those"
