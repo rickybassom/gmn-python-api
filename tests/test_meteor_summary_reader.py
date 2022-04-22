@@ -26,9 +26,18 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         Sets up the tests.
         """
-        self.test_data_directory_file_path: Path = Path(
+        self.test_data_directory_file_path1: Path = Path(
             _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
         )
+
+        self.test_data_directory_file_path2: Path = Path(
+            os.path.join(
+                os.path.dirname(__file__),
+                "test_data",
+                "traj_summary_monthly_201812.txt",
+            )
+        )
+
         self.test_rest_api_file_path: Path = Path(
             os.path.join(os.path.dirname(__file__), "test_data", "meteor_summary.txt")
         )
@@ -41,7 +50,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
-                open(self.test_data_directory_file_path).read(),
+                open(self.test_data_directory_file_path1).read(),
                 csv_data_directory_format=True,
             )
         )
@@ -52,13 +61,28 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
          checking properties.
         When: read_meteor_summary_csv_as_dataframe is called with a list of data.
         """
-        data = open(self.test_data_directory_file_path).read().splitlines()
+        data = open(self.test_data_directory_file_path1).read().splitlines()
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
                 ["\n".join(data[:40]), "\n".join(data[40:80]), "\n".join(data[80:])],
                 csv_data_directory_format=True,
             )
         )
+
+    def test_read_meteor_summary_csv_as_dataframe_multiple_with_headers(self) -> None:
+        """
+        Test: That a trajectory summary buffer can be read as a split up dataframe by
+         checking properties.
+        When: read_meteor_summary_csv_as_dataframe is called with a list of data.
+        """
+        data1 = open(self.test_data_directory_file_path1).read().splitlines()
+        data2 = open(self.test_data_directory_file_path2).read().splitlines()
+        joined_dataframe = msr.read_meteor_summary_csv_as_dataframe(
+            ["\n".join(data1[:12]), "\n".join(data2[:12])],
+            csv_data_directory_format=True,
+        )
+
+        self.assertEqual(len(joined_dataframe), 4)
 
     def test_read_meteor_summary_csv_as_dataframe_failed_type(self) -> None:
         """
@@ -94,7 +118,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_numpy_array(
             msr.read_meteor_summary_csv_as_numpy_array(
-                self.test_data_directory_file_path, csv_data_directory_format=True
+                self.test_data_directory_file_path1, csv_data_directory_format=True
             )
         )
 
@@ -106,7 +130,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
-                self.test_data_directory_file_path, csv_data_directory_format=True
+                self.test_data_directory_file_path1, csv_data_directory_format=True
             )
         )
 
@@ -118,7 +142,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
          option.
         """
         actual = msr.read_meteor_summary_csv_as_dataframe(
-            self.test_data_directory_file_path,
+            self.test_data_directory_file_path1,
             camel_case_column_names=True,
             csv_data_directory_format=True,
         )
@@ -135,7 +159,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
          option.
         """
         data_frame = msr.read_meteor_summary_csv_as_dataframe(
-            self.test_data_directory_file_path,
+            self.test_data_directory_file_path1,
             avro_compatible=True,
             csv_data_directory_format=True,
         )
@@ -155,7 +179,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_numpy_array(
             msr.read_meteor_summary_csv_as_numpy_array(
-                self.test_data_directory_file_path, csv_data_directory_format=True
+                self.test_data_directory_file_path1, csv_data_directory_format=True
             )
         )
 

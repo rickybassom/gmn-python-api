@@ -7,7 +7,7 @@ Simple meteor analysis example:
 
    from datetime import datetime
    from gmn_python_api.data_directory import get_daily_file_content_by_date
-   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_datafram
+   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
 
    trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
    trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(

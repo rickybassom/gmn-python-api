@@ -33,6 +33,7 @@ def read_meteor_summary_csv_as_dataframe(  # noqa: C901
 
     :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
      list of paths or buffers (types can be mixed) that will be joined in the dataframe.
+     If using a list the first item must contain the csv header.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
     :param avro_compatible: If True, the rows in the dataframe will match the avsc
      schema with row.to_dict().
@@ -49,19 +50,36 @@ def read_meteor_summary_csv_as_dataframe(  # noqa: C901
 
     # Join list of data passed in to be used in a single dataframe
     joined_data = ""
-    for item in filepath_or_buffer_list:
+    for i, item in enumerate(filepath_or_buffer_list):
+        new_data = ""
         if type(item) is str:
             if os.path.isfile(item):
-                joined_data += open(item).read() + "\n"
+                new_data = open(item).read() + "\n"
             else:
-                joined_data += item + "\n"
+                new_data += item + "\n"
         elif isinstance(item, Path):
-            joined_data += open(item).read() + "\n"
+            new_data += open(item).read() + "\n"
         else:
             raise TypeError(
                 f"filepath_or_buffer must be of type string or bytes, or a list of those"
                 f" types. Got {type(item)}."
             )
+
+        # Handle multiple headers in data to join by removing headers after first header
+        if i > 0:
+            new_data_lines = new_data.split("\n")
+            # splice out lines that start with a #, break after # stops
+            if new_data_lines[0][0] == "#":
+                for j, line in enumerate(new_data_lines):  # pragma: no branch
+                    line = line.replace("\n", "").replace("\r", "")
+                    if line != "" and line[0] != "#":
+                        new_data_lines = new_data_lines[j:]
+                        break
+
+            new_data = "\n".join(new_data_lines)
+
+        joined_data += new_data
+        i += 1
 
     if csv_data_directory_format:
         meteor_summary_df = pd.read_csv(
