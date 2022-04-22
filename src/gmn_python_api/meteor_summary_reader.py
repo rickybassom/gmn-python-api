@@ -21,7 +21,7 @@ import gmn_python_api.meteor_summary_schema
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
-def read_meteor_summary_csv_as_dataframe(  # noqa: C901
+def read_meteor_summary_csv_as_dataframe(
     filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]],
     camel_case_column_names: Optional[bool] = False,
     avro_compatible: Optional[bool] = False,
@@ -42,44 +42,9 @@ def read_meteor_summary_csv_as_dataframe(  # noqa: C901
      timestamp-micros avro type.
 
     :return: Pandas DataFrame of the meteor/trajectory summary file.
+    :raises: TypeError if an invalid filepath_or_buffer type is provided.
     """
-    if not isinstance(filepath_or_buffer, list):
-        filepath_or_buffer_list = [filepath_or_buffer]
-    else:
-        filepath_or_buffer_list = filepath_or_buffer
-
-    # Join list of data passed in to be used in a single dataframe
-    joined_data = ""
-    for i, item in enumerate(filepath_or_buffer_list):
-        new_data = ""
-        if type(item) is str:
-            if os.path.isfile(item):
-                new_data = open(item).read() + "\n"
-            else:
-                new_data += item + "\n"
-        elif isinstance(item, Path):
-            new_data += open(item).read() + "\n"
-        else:
-            raise TypeError(
-                f"filepath_or_buffer must be of type string or bytes, or a list of those"
-                f" types. Got {type(item)}."
-            )
-
-        # Handle multiple headers in data to join by removing headers after first header
-        if i > 0:
-            new_data_lines = new_data.split("\n")
-            # splice out lines that start with a #, break after # stops
-            if new_data_lines[0][0] == "#":
-                for j, line in enumerate(new_data_lines):  # pragma: no branch
-                    line = line.replace("\n", "").replace("\r", "")
-                    if line != "" and line[0] != "#":
-                        new_data_lines = new_data_lines[j:]
-                        break
-
-            new_data = "\n".join(new_data_lines)
-
-        joined_data += new_data
-        i += 1
+    joined_data = _join_filepath_or_buffer(filepath_or_buffer)
 
     if csv_data_directory_format:
         meteor_summary_df = pd.read_csv(
@@ -201,6 +166,59 @@ def read_meteor_summary_csv_as_numpy_array(
         csv_data_directory_format=csv_data_directory_format,
     )
     return data_frame.to_numpy()  # type: ignore
+
+
+def _join_filepath_or_buffer(
+    filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]]
+) -> str:
+    """
+    Join data provided in the reader filepath_or_buffer parameter into a single CSV
+     string that can be read by the reader function.
+    :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
+     list of paths or buffers (types can be mixed) that will be joined in the dataframe.
+     If using a list the first item must contain the csv header.
+    :return: The joined CSV data.
+    :raises: TypeError if an invalid filepath_or_buffer type is provided.
+    """
+    if not isinstance(filepath_or_buffer, list):
+        filepath_or_buffer_list = [filepath_or_buffer]
+    else:
+        filepath_or_buffer_list = filepath_or_buffer
+
+    # Join list of data passed in to a single CSV
+    joined_data = ""
+    for i, item in enumerate(filepath_or_buffer_list):
+        new_data = ""
+        if type(item) is str:
+            if os.path.isfile(item):
+                new_data = open(item).read() + "\n"
+            else:
+                new_data += item + "\n"
+        elif isinstance(item, Path):
+            new_data += open(item).read() + "\n"
+        else:
+            raise TypeError(
+                f"filepath_or_buffer must be of type string or bytes, or a list of those"
+                f" types. Got {type(item)}."
+            )
+
+        # Handle multiple headers in data to join by removing headers after first header
+        if i > 0:
+            new_data_lines = new_data.split("\n")
+            # splice out lines that start with a #, break after # stops
+            if new_data_lines[0][0] == "#":
+                for j, line in enumerate(new_data_lines):  # pragma: no branch
+                    line = line.replace("\n", "").replace("\r", "")
+                    if line != "" and line[0] != "#":
+                        new_data_lines = new_data_lines[j:]
+                        break
+
+            new_data = "\n".join(new_data_lines)
+
+        joined_data += new_data
+        i += 1
+
+    return joined_data
 
 
 def _clean_header(text: str, is_unit: bool = False) -> str:
