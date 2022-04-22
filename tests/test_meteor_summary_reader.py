@@ -73,7 +73,8 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         Test: That a trajectory summary buffer can be read as a split up dataframe by
          checking properties.
-        When: read_meteor_summary_csv_as_dataframe is called with a list of data.
+        When: read_meteor_summary_csv_as_dataframe is called with a list of data with
+         headers.
         """
         data1 = open(self.test_data_directory_file_path1).read().splitlines()
         data2 = open(self.test_data_directory_file_path2).read().splitlines()
@@ -82,7 +83,21 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             csv_data_directory_format=True,
         )
 
-        self.assertEqual(len(joined_dataframe), 4)
+        self.assertEqual(len(joined_dataframe.index), 4)
+
+    def test_read_meteor_summary_csv_as_dataframe_multiple_rest_api_csv(self) -> None:
+        """
+        Test: That a trajectory summary buffer can be read as a split up dataframe by
+         checking properties.
+        When: read_meteor_summary_csv_as_dataframe is called with a list of REST data.
+        """
+        data = open(self.test_rest_api_file_path).read().splitlines()
+        joined_dataframe = msr.read_meteor_summary_csv_as_dataframe(
+            ["\n".join(data[:2]), data[0] + "\n" + "\n".join(data[2:4])],
+            csv_data_directory_format=False,
+        )
+
+        self.assertEqual(len(joined_dataframe.index), 3)
 
     def test_read_meteor_summary_csv_as_dataframe_failed_type(self) -> None:
         """
