@@ -26,7 +26,7 @@
 .. _API Reference: https://gmn-python-api.readthedocs.io/en/latest/gmn_python_api/gmn_python_api/index.html
 .. _Global Meteor Network: https://globalmeteornetwork.org/
 .. _data: https://globalmeteornetwork.org/data/
-.. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/08d6f9da46c7e7a9829871637e29b3c92c2205d7/gmn_data_analysis_template.ipynb
+.. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/29f8c820bda950bf10d94e93c202857d73566e20/gmn_data_analysis_template.ipynb
 .. _GMN data directory: https://globalmeteornetwork.org/data/traj_summary_data/
 .. _Pandas: https://pandas.pydata.org/
 .. _Numpy: https://numpy.org/
