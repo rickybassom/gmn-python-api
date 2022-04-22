@@ -1,6 +1,6 @@
 """
 This module contains functions to load meteor/trajectory summary data into Pandas
-DataFrames and numpy arrays.
+DataFrames and NumPy arrays.
 """
 import math
 import os.path
@@ -29,15 +29,18 @@ def read_meteor_summary_csv_as_dataframe(
     csv_data_directory_format: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
-    Reads a meteor/trajectory summary file into a Pandas DataFrame.
+    Reads meteor summary REST API or trajectory summary data directory CSV data into a
+     Pandas DataFrame. Columns available in the DataFrame can be found here:
+     https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html
 
     :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
-     list of paths or buffers (types can be mixed) that will be joined in the dataframe.
+     list of paths or buffers (types can be mixed) that will be joined in the DataFrame.
      If using a list the first item must contain the csv header, and
      all items must either be all data directory CSVs or all REST API CSVs.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
-    :param avro_compatible: If True, the rows in the dataframe will match the avsc
-     schema with row.to_dict().
+    :param avro_compatible: If True, the types and column names in the DataFrame will
+     match exactly the AVSC schema with row.to_dict(). AVRO AVSC Schema can be found
+     with the get_meteor_summary_avro_schema function.
     :param avro_long_beginning_utc_time: If True, the time column will be converted from
      a datetime object to an int64 epoch time which is compatible with the long
      timestamp-micros avro type.
@@ -45,7 +48,7 @@ def read_meteor_summary_csv_as_dataframe(
      treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
      headers will be treated as a REST API CSV.
 
-    :return: Pandas DataFrame of the meteor/trajectory summary file.
+    :return: Pandas DataFrame of the meteor/trajectory summary data.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
     """
     joined_data = _join_filepath_or_buffer(filepath_or_buffer)
@@ -156,11 +159,28 @@ def read_meteor_summary_csv_as_numpy_array(
     csv_data_directory_format: Optional[bool] = False,
 ) -> npt.NDArray[Any]:
     """
-    Reads meteor/trajectory summary data into a numpy array.
+    Reads meteor summary REST API or trajectory summary data directory CSV data into a
+     NumPy array. Similar to read_meteor_summary_csv_as_dataframe. Columns available in
+     the DataFrame can be found here:
+     https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html
 
-    :param filepath_or_buffer: Path or buffer for a meteor/trajectory summary file.
+    :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
+     list of paths or buffers (types can be mixed) that will be joined in the array.
+     If using a list the first item must contain the csv header, and
+     all items must either be all Data Directory CSVs or all REST API CSVs.
+    :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
+    :param avro_compatible: If True, the types and column names in the array will
+     match exactly the AVSC schema with row.to_dict(). AVRO AVSC Schema can be found
+     with the get_meteor_summary_avro_schema function.
+    :param avro_long_beginning_utc_time: If True, the time column will be converted from
+     a datetime object to an int64 epoch time which is compatible with the long
+     timestamp-micros avro type.
+    :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
+     treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
+     headers will be treated as a REST API CSV.
 
-    :return: Numpy array of the meteor/trajectory summary file.
+    :return: NumPy array of the meteor/trajectory summary data.
+    :raises: TypeError if an invalid filepath_or_buffer type is provided.
     """
     data_frame = read_meteor_summary_csv_as_dataframe(
         filepath_or_buffer,
@@ -238,10 +258,10 @@ def _join_filepath_or_buffer(  # noqa: C901
 
 def _clean_header(text: str, is_unit: bool = False) -> str:
     """
-    Extract header text from each raw csv file header.
+    Extract header text from each raw trajectory summary csv file header.
 
-    :param text: Raw csv header.
-    :param is_unit: return text with brackets for units.
+    :param text: Raw trajectory summary csv column header text.
+    :param is_unit: If True, return text with brackets for units.
 
     :returns: Formatted text.
     """

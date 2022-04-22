@@ -54,10 +54,10 @@ Example 3:
    )
 
 
-Fields available in the Pandas Dataframes can be found in the `Data Schema section`_.
+Fields available in the Pandas Dataframes can be found in the `Data Schemas`_ section.
 
 More info can be found in the `data_directory API reference section`_.
 
 .. _data_directory API reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/data_directory/index.html
 .. _Data Directory: https://globalmeteornetwork.org/data/traj_summary_data/
-.. _Data Schema section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/data_schema/index.html
+.. _Data Schemas: https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html

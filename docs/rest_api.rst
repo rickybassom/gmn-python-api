@@ -45,7 +45,7 @@ Example 3:
    )
    meteor_dataframe = read_meteor_summary_csv_as_dataframe(data)
 
-Fields available in the Pandas Dataframes can be found in the `Data Schema section`_.
+Fields available in the Pandas Dataframes can be found in the `Data Schemas`_ section.
 
 More info can be found in the `gmn_rest_api API reference section`_.
 
@@ -54,4 +54,4 @@ More info can be found in the `gmn_rest_api API reference section`_.
 .. _development data analysis notebook: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/cef0b3721737e8d65002d21dc56aa27d74003593/gmn_data_analysis_template_dev.ipynb
 .. _Datasette: https://datasette.io/
 .. _gmn_rest_api API reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/gmn_rest_api/index.html
-.. _Data Schema section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/data_schema/index.html
+.. _Data Schemas: https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html
