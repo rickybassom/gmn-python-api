@@ -41,7 +41,6 @@ Getting the current meteor trajectory summary schema code example:
 
 .. code:: python
 
-   from datetime import datetime
    from gmn_python_api.meteor_summary_schema import get_meteor_summary_avro_schema
 
    schema = get_meteor_summary_avro_schema()  # JSON dict

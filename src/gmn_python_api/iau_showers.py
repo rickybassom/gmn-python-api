@@ -12,8 +12,9 @@ IAU_SHOWERS_LIST_URL = "https://www.ta3.sk/IAUC22DB/MDC2007/Etc/streamfulldata.t
 def get_iau_showers() -> Dict[str, Dict[str, str]]:
     """
     Gets the official list of IAU shower numbers, codes and names.
+
     :return: A dictionary, where the key is the shower number, of dictionaries
-    containing the IAU shower information.
+     containing the IAU shower information.
     :raises: requests.HTTPError if the source server doesn't return a 200 response.
     """
     response = requests.get(IAU_SHOWERS_LIST_URL)

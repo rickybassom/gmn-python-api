@@ -46,8 +46,10 @@ def get_meteor_summary_data_reader_compatible(
     """
     Get meteor summary data from the GMN REST API in a format that is compatible with
      the meteor_summary_reader functions.
+
     :param where_sql: An optional SQL WHERE clause to filter the data (e.g. iau_no='4').
     :param next_page: An optional URL to access more paginated data provided by the api.
+
     :return: The data returned from the GMN REST API in CSV format.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
@@ -67,6 +69,7 @@ def get_meteor_summary_data(
 ) -> Tuple[str, Optional[str]]:
     """
     Get meteor summary data from the GMN REST API.
+
     :param table_arguments: An optional dictionary of arguments to filter the data.
      A full list of arguments can be found here:
      https://docs.datasette.io/en/stable/json_api.html#table-arguments
@@ -75,6 +78,7 @@ def get_meteor_summary_data(
     :param data_shape: The data shape of the meteor summary data using the DataShape
      enum.
     :param next_page: An optional URL to access more paginated data provided by the api.
+
     :return: The data returned from the GMN REST API.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
@@ -95,10 +99,12 @@ def get_data_with_sql(
 ) -> Tuple[str, Optional[str]]:
     """
     Get any available data from the GMN REST API using a readonly SQL query.
+
     :param sql: The SQL query to perform against the open access GMN Data Store database.
     :param data_format: The data format of the data using the DataFormat enum.
     :param data_shape: The data shape of the data using the DataShape enum.
     :param next_page: An optional URL to access more paginated data provided by the api.
+
     :return: The data returned from the GMN REST API.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """
@@ -119,12 +125,14 @@ def get_data(
 ) -> Tuple[str, Optional[str]]:
     """
     Get any data from the GMN REST API.
+
     :param table: The table to query in the GMN Data Store.
     :param table_arguments: An optional dictionary of arguments to filter the data. A
      full list of arguments can be found here:
      https://docs.datasette.io/en/stable/json_api.html#table-arguments
     :param data_format: The data format of the data using the DataFormat enum.
     :param data_shape: The data shape of the data using the DataShape enum.
+
     :return: The data returned from the GMN REST API.
     :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
     """

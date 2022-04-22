@@ -11,7 +11,7 @@ Example 1:
 
 .. code:: python
 
-   from gmn_python_api.gmn_data_store_rest_api import get_meteor_summary_data_reader_compatible
+   from gmn_python_api.gmn_rest_api import get_meteor_summary_data_reader_compatible
    from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
 
    # Get first 100 rows returned
@@ -22,13 +22,13 @@ Example 2:
 
 .. code:: python
 
-   from gmn_python_api.gmn_data_store_rest_api import get_meteor_summary_data_reader_compatible
+   from gmn_python_api.gmn_rest_api import get_meteor_summary_data_reader_compatible
    from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
 
    # Get first 200 rows returned using the next url
    data1, next_url = get_meteor_summary_data_reader_compatible()
    data2, _ = get_meteor_summary_data_reader_compatible(
-      page=next_url,
+      next_page=next_url,
    )
    meteor_dataframe = read_meteor_summary_csv_as_dataframe([data1, data2])
 
@@ -36,12 +36,12 @@ Example 3:
 
 .. code:: python
 
-   from gmn_python_api.gmn_data_store_rest_api import get_meteor_summary_data_reader_compatible
+   from gmn_python_api.gmn_rest_api import get_meteor_summary_data_reader_compatible
    from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
 
    # Get using where_sql parameter
-   data, next_url = get_meteor_summary_data_reader_compatible(
-       where="beginning_utc_time__date=2019-07-24",
+   data, _ = get_meteor_summary_data_reader_compatible(
+       where_sql="date(beginning_utc_time)=date('2019-07-24')",
    )
    meteor_dataframe = read_meteor_summary_csv_as_dataframe(data)
 

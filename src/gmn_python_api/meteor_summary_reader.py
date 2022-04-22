@@ -33,13 +33,18 @@ def read_meteor_summary_csv_as_dataframe(
 
     :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
      list of paths or buffers (types can be mixed) that will be joined in the dataframe.
-     If using a list the first item must contain the csv header.
+     If using a list the first item must contain the csv header, and
+     csv_data_directory_format should be set according to the first item in the list.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
     :param avro_compatible: If True, the rows in the dataframe will match the avsc
      schema with row.to_dict().
     :param avro_long_beginning_utc_time: If True, the time column will be converted from
      a datetime object to an int64 epoch time which is compatible with the long
      timestamp-micros avro type.
+    :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
+     treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
+     headers will be treated as a REST API CSV. If using multiple filepath_or_buffer
+     define this variable according to the first item in the list.
 
     :return: Pandas DataFrame of the meteor/trajectory summary file.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
@@ -168,15 +173,17 @@ def read_meteor_summary_csv_as_numpy_array(
     return data_frame.to_numpy()  # type: ignore
 
 
-def _join_filepath_or_buffer(
+def _join_filepath_or_buffer(  # noqa: C901
     filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]]
 ) -> str:
     """
     Join data provided in the reader filepath_or_buffer parameter into a single CSV
      string that can be read by the reader function.
+
     :param filepath_or_buffer: Path or buffer for a trajectory/meteor summary file. Or a
      list of paths or buffers (types can be mixed) that will be joined in the dataframe.
      If using a list the first item must contain the csv header.
+
     :return: The joined CSV data.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
     """
@@ -202,11 +209,17 @@ def _join_filepath_or_buffer(
                 f" types. Got {type(item)}."
             )
 
-        # Handle multiple headers in data to join by removing headers after first header
+        # Remove multiple headers in data by only keeping the first header
         if i > 0:
             new_data_lines = new_data.split("\n")
-            # splice out lines that start with a #, break after # stops
-            if new_data_lines[0][0] == "#":
+
+            # For REST API CSV header
+            if new_data_lines[0].startswith("unique_trajectory_identifier,"):
+                new_data_lines = new_data_lines[1:]
+
+            # For data directory CSV header
+            # Splice out lines that start with a #, break after # stops
+            elif new_data_lines[0][0] == "#":
                 for j, line in enumerate(new_data_lines):  # pragma: no branch
                     line = line.replace("\n", "").replace("\r", "")
                     if line != "" and line[0] != "#":

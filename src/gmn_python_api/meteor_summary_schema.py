@@ -34,6 +34,7 @@ _AVSC_PATH = os.path.join(
 def get_meteor_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
     """
     Get the Avro schema (.avsc) for the current meteor/trajectory summary data format.
+
     :return: The Avro schema in .avsc format.
     """
     _, avro_file_path = tempfile.mkstemp()
@@ -57,6 +58,7 @@ def get_meteor_summary_avro_schema() -> Dict[str, Dict[str, Any]]:
 def get_verbose_and_camel_case_column_name_bidict() -> Dict[str, str]:
     """
     Get a bidirectional dictionary that maps the verbose and camel case column names.
+
     :return: A bidirectional dictionary that maps the verbose and camel case column
      names.
     """
