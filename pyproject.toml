@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gmn-python-api"
-version = "0.0.5"
+version = "0.0.6"
 description = "GMN Python API"
 authors = ["Ricky Bassom <rickybas12@gmail.com>"]
 license = "MIT"
