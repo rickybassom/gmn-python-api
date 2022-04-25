@@ -3,6 +3,7 @@ This module contains functions to read trajectory summary files from the GMN dat
 directory.
 """
 from datetime import datetime
+from datetime import timedelta
 from typing import List
 from typing import Optional
 
@@ -84,7 +85,7 @@ def get_daily_file_url_by_date(
     if date == current_date:
         return BASE_URL + DAILY_DIRECTORY + SUMMARY_TODAY_FILENAME
 
-    if date.day == current_date.day - 1:
+    if date == current_date - timedelta(days=1):
         return BASE_URL + DAILY_DIRECTORY + SUMMARY_YESTERDAY_FILENAME
 
     all_daily_filenames = get_all_daily_file_urls()
