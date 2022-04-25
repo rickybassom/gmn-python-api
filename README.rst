@@ -39,7 +39,7 @@ Python package for accessing open `Global Meteor Network`_ (GMN) meteor trajecto
 Global meteor data is generated using a network of low-light cameras pointed towards the night sky.
 Meteor properties (radiants, orbits, magnitudes and masses) are produced by the GMN and are available through this package.
 
-.. image:: https://github.com/gmn-data-platform/gmn-python-api/blob/main/screenshot.png
+.. image:: https://raw.githubusercontent.com/gmn-data-platform/gmn-python-api/main/screenshot.png
   :alt: Data screenshot
 
 |
