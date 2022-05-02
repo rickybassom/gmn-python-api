@@ -167,6 +167,6 @@ Credits
 .. _Numpy: https://numpy.org/
 .. _GitHub: https://github.com/gmn-data-platform/gmn-python-api
 .. _Troubleshooting: https://gmn-python-api.readthedocs.io/en/latest/troubleshooting.html
-.. _development Google Colab notebook: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/dc25444cb98693081443bb31e8f6b2abbed3fde2/gmn_data_analysis_template_dev.ipynb
+.. _development Google Colab notebook: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/main/gmn_data_analysis_template_dev.ipynb
 .. _IAU: https://www.ta3.sk/IAUC22DB/MDC2007/
 .. _AVRO: https://avro.apache.org/docs/current/spec.html
