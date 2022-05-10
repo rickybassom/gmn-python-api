@@ -23,7 +23,7 @@
 .. github-only
 .. _Contributor Guide: https://gmn-python-api.readthedocs.io/en/latest/contributing.html
 .. _Usage: https://gmn-python-api.readthedocs.io/en/latest/usage.html
-.. _API Reference: https://gmn-python-api.readthedocs.io/en/latest/gmn_python_api/gmn_python_api/index.html
+.. _API Reference: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/index.html
 .. _Global Meteor Network: https://globalmeteornetwork.org/
 .. _data: https://globalmeteornetwork.org/data/
 .. _Demo on Google Colab: https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/dc25444cb98693081443bb31e8f6b2abbed3fde2/gmn_data_analysis_template.ipynb
