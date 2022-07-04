@@ -7,17 +7,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "aspy.refactor-imports"
-version = "2.2.1"
-description = "Utilities for refactoring imports in python-like syntax."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-cached-property = "*"
-
-[[package]]
 name = "astroid"
 version = "2.9.3"
 description = "An abstract syntax tree for Python with inference support."
@@ -161,14 +150,6 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "cached-property"
-version = "1.5.2"
-description = "A decorator for caching properties in classes."
-category = "dev"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "certifi"
 version = "2021.10.8"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -194,6 +175,14 @@ python-versions = ">=3.5.0"
 
 [package.extras]
 unicode_backport = ["unicodedata2"]
+
+[[package]]
+name = "classify-imports"
+version = "4.0.2"
+description = "Utilities for refactoring imports in python-like syntax."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
 
 [[package]]
 name = "click"
@@ -1180,14 +1169,14 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "reorder-python-imports"
-version = "2.7.1"
+version = "3.3.0"
 description = "Tool for reordering python imports"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-"aspy.refactor-imports" = ">=2.2.1"
+classify-imports = "*"
 
 [[package]]
 name = "requests"
@@ -1792,16 +1781,12 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "804b4a369d6ccc348634b659a7562a31e591abf9d89664561882e1832cdda695"
+content-hash = "bc94a6c0ed63c20e884c1451b2e87cd773515cc74888bdd82b01cddf64aa3a6d"
 
 [metadata.files]
 alabaster = [
     {file = "alabaster-0.7.12-py2.py3-none-any.whl", hash = "sha256:446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359"},
     {file = "alabaster-0.7.12.tar.gz", hash = "sha256:a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"},
-]
-"aspy.refactor-imports" = [
-    {file = "aspy.refactor_imports-2.2.1-py2.py3-none-any.whl", hash = "sha256:ace9ca78abf6cfdd20ea1a321b75b20c8cc2c1af58aecb9dc4ba9d6f70f74645"},
-    {file = "aspy.refactor_imports-2.2.1.tar.gz", hash = "sha256:f5b2fcbf9fd68361168588f14eda64d502d029eefe632d15094cd0683ae12984"},
 ]
 astroid = [
     {file = "astroid-2.9.3-py3-none-any.whl", hash = "sha256:506daabe5edffb7e696ad82483ad0228245a9742ed7d2d8c9cdb31537decf9f6"},
@@ -1901,10 +1886,6 @@ brotli = [
     {file = "Brotli-1.0.9-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:76ffebb907bec09ff511bb3acc077695e2c32bc2142819491579a695f77ffd4d"},
     {file = "Brotli-1.0.9.zip", hash = "sha256:4d1b810aa0ed773f81dceda2cc7b403d01057458730e309856356d4ef4188438"},
 ]
-cached-property = [
-    {file = "cached-property-1.5.2.tar.gz", hash = "sha256:9fa5755838eecbb2d234c3aa390bd80fbd3ac6b6869109bfc1b499f7bd89a130"},
-    {file = "cached_property-1.5.2-py2.py3-none-any.whl", hash = "sha256:df4f613cf7ad9a588cc381aaf4a512d26265ecebd5eb9e1ba12f1319eb85a6a0"},
-]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
     {file = "certifi-2021.10.8.tar.gz", hash = "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872"},
@@ -1916,6 +1897,10 @@ cfgv = [
 charset-normalizer = [
     {file = "charset-normalizer-2.0.12.tar.gz", hash = "sha256:2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597"},
     {file = "charset_normalizer-2.0.12-py3-none-any.whl", hash = "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"},
+]
+classify-imports = [
+    {file = "classify_imports-4.0.2-py2.py3-none-any.whl", hash = "sha256:09bbc28481a9f464aca30b054f74243c035324aa93cdf72f56e5fe78412fe52e"},
+    {file = "classify_imports-4.0.2.tar.gz", hash = "sha256:a1880ba36cca1a3e6efc338698685c3c93019c92ecb7cc246636abb42c621e7f"},
 ]
 click = [
     {file = "click-8.0.4-py3-none-any.whl", hash = "sha256:6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1"},
@@ -1988,15 +1973,18 @@ dash-colorscales = [
     {file = "dash_colorscales-0.0.4.tar.gz", hash = "sha256:e2eb8c78e702d03e9c13fb7ca888ed202152494dbb053f5aab6417b6f6d19f63"},
 ]
 dash-core-components = [
+    {file = "dash_core_components-2.0.0-py3-none-any.whl", hash = "sha256:52b8e8cce13b18d0802ee3acbc5e888cb1248a04968f962d63d070400af2e346"},
     {file = "dash_core_components-2.0.0.tar.gz", hash = "sha256:c6733874af975e552f95a1398a16c2ee7df14ce43fa60bb3718a3c6e0b63ffee"},
 ]
 dash-daq = [
     {file = "dash_daq-0.5.0.tar.gz", hash = "sha256:a1d85b6799f7b885652fbc44aebdb58c41254616a8d350b943beeb42ade4256a"},
 ]
 dash-html-components = [
+    {file = "dash_html_components-2.0.0-py3-none-any.whl", hash = "sha256:b42cc903713c9706af03b3f2548bda4be7307a7cf89b7d6eae3da872717d1b63"},
     {file = "dash_html_components-2.0.0.tar.gz", hash = "sha256:8703a601080f02619a6390998e0b3da4a5daabe97a1fd7a9cebc09d015f26e50"},
 ]
 dash-table = [
+    {file = "dash_table-5.0.0-py3-none-any.whl", hash = "sha256:19036fa352bb1c11baf38068ec62d172f0515f73ca3276c79dee49b95ddc16c9"},
     {file = "dash_table-5.0.0.tar.gz", hash = "sha256:18624d693d4c8ef2ddec99a6f167593437a7ea0bf153aa20f318c170c5bc7308"},
 ]
 distlib = [
@@ -2592,8 +2580,8 @@ pyyaml = [
     {file = "PyYAML-6.0.tar.gz", hash = "sha256:68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2"},
 ]
 reorder-python-imports = [
-    {file = "reorder_python_imports-2.7.1-py2.py3-none-any.whl", hash = "sha256:5477c008cd7a5f2dbe32a35e90d74b5a3427468731441f033034310e427143a3"},
-    {file = "reorder_python_imports-2.7.1.tar.gz", hash = "sha256:1ae34422f13f5a4b4669f340774909d721bfc0a8311973c70b3a50540b595bc5"},
+    {file = "reorder_python_imports-3.3.0-py2.py3-none-any.whl", hash = "sha256:2bb9b6507e9e9d6f691a3eed1309c947327dd7ca0c231a6fd7d87248146d462d"},
+    {file = "reorder_python_imports-3.3.0.tar.gz", hash = "sha256:01fc01665fc51e236f7ef26b080a2134259937dca5ea3aaadac022cb87444f0e"},
 ]
 requests = [
     {file = "requests-2.27.1-py2.py3-none-any.whl", hash = "sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d"},
