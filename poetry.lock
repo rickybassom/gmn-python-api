@@ -262,11 +262,11 @@ flask-compress = "*"
 plotly = ">=5.0.0"
 
 [package.extras]
-celery = ["redis (>=3.5.3)", "celery[redis] (>=5.1.2)"]
-ci = ["black (==21.6b0)", "dash-flow-example (==0.0.5)", "dash-dangerously-set-inner-html", "flake8 (==3.9.2)", "flaky (==3.7.0)", "flask-talisman (==0.8.1)", "mimesis", "mock (==4.0.3)", "numpy", "preconditions", "pylint (==2.10.2)", "pytest-mock (==3.2.0)", "pytest-sugar (==0.9.4)", "isort (==4.3.21)", "orjson (==3.5.4)", "pyarrow (<3)", "pandas (==1.1.5)", "xlrd (<2)", "orjson (==3.6.3)", "pyarrow", "openpyxl", "pandas (>=1.4.0)", "xlrd (>=2.0.1)"]
-dev = ["coloredlogs (>=15.0.1)", "fire (>=0.4.0)", "PyYAML (>=5.4.1)"]
-diskcache = ["diskcache (>=5.2.1)", "multiprocess (>=0.70.12)", "psutil (>=5.8.0)"]
-testing = ["beautifulsoup4 (>=4.8.2)", "lxml (>=4.6.2)", "percy (>=2.0.2)", "pytest (>=6.0.2)", "requests[security] (>=2.21.0)", "selenium (>=3.141.0)", "waitress (>=1.4.4)", "cryptography (<3.4)"]
+testing = ["cryptography (<3.4)", "waitress (>=1.4.4)", "selenium (>=3.141.0)", "requests[security] (>=2.21.0)", "pytest (>=6.0.2)", "percy (>=2.0.2)", "lxml (>=4.6.2)", "beautifulsoup4 (>=4.8.2)"]
+diskcache = ["psutil (>=5.8.0)", "multiprocess (>=0.70.12)", "diskcache (>=5.2.1)"]
+dev = ["PyYAML (>=5.4.1)", "fire (>=0.4.0)", "coloredlogs (>=15.0.1)"]
+ci = ["xlrd (>=2.0.1)", "pandas (>=1.4.0)", "openpyxl", "pyarrow", "orjson (==3.6.3)", "xlrd (<2)", "pandas (==1.1.5)", "pyarrow (<3)", "orjson (==3.5.4)", "isort (==4.3.21)", "pytest-sugar (==0.9.4)", "pytest-mock (==3.2.0)", "pylint (==2.10.2)", "preconditions", "numpy", "mock (==4.0.3)", "mimesis", "flask-talisman (==0.8.1)", "flaky (==3.7.0)", "flake8 (==3.9.2)", "dash-dangerously-set-inner-html", "dash-flow-example (==0.0.5)", "black (==21.6b0)"]
+celery = ["celery[redis] (>=5.1.2)", "redis (>=3.5.3)"]
 
 [[package]]
 name = "dash-bootstrap-components"
@@ -280,7 +280,7 @@ python-versions = ">=3.6, <4"
 dash = ">=2.0.0"
 
 [package.extras]
-pandas = ["numpy", "pandas"]
+pandas = ["pandas", "numpy"]
 
 [[package]]
 name = "dash-colorscales"
@@ -811,7 +811,7 @@ scipy = "*"
 seaborn = "*"
 
 [package.extras]
-tests = ["pytest", "pytest-mpl"]
+tests = ["pytest-mpl", "pytest"]
 
 [[package]]
 name = "mypy"
@@ -951,7 +951,7 @@ numpy = ">=1.4"
 six = "*"
 
 [package.extras]
-test = ["pytest", "pytest-cov", "scipy"]
+test = ["scipy", "pytest-cov", "pytest"]
 
 [[package]]
 name = "pbr"
@@ -1017,8 +1017,8 @@ python-versions = ">=3.6"
 importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 
 [package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
+testing = ["pytest-benchmark", "pytest"]
+dev = ["tox", "pre-commit"]
 
 [[package]]
 name = "ppscore"
@@ -1161,11 +1161,11 @@ python-versions = "*"
 
 [[package]]
 name = "pyupgrade"
-version = "2.31.0"
+version = "2.37.3"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
-python-versions = ">=3.6.1"
+python-versions = ">=3.7"
 
 [package.dependencies]
 tokenize-rt = ">=3.2.0"
@@ -1437,8 +1437,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-devhelp"
@@ -1449,8 +1449,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-htmlhelp"
@@ -1461,8 +1461,8 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
-test = ["pytest", "html5lib"]
+test = ["html5lib", "pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-jsmath"
@@ -1473,7 +1473,7 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-test = ["pytest", "flake8", "mypy"]
+test = ["mypy", "flake8", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-qthelp"
@@ -1484,8 +1484,8 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-serializinghtml"
@@ -1773,9 +1773,9 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
 [package.extras]
-build = ["wheel", "twine"]
+test = ["pytest-cov", "pytest"]
 docs = ["sphinx"]
-test = ["pytest", "pytest-cov"]
+build = ["twine", "wheel"]
 
 [[package]]
 name = "zipp"
@@ -1792,7 +1792,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "804b4a369d6ccc348634b659a7562a31e591abf9d89664561882e1832cdda695"
+content-hash = "9af8a50f4a4d09628d2924c83ae336e2e5f32cdc319f108e2de2159177256c3d"
 
 [metadata.files]
 alabaster = [
@@ -1988,15 +1988,18 @@ dash-colorscales = [
     {file = "dash_colorscales-0.0.4.tar.gz", hash = "sha256:e2eb8c78e702d03e9c13fb7ca888ed202152494dbb053f5aab6417b6f6d19f63"},
 ]
 dash-core-components = [
+    {file = "dash_core_components-2.0.0-py3-none-any.whl", hash = "sha256:52b8e8cce13b18d0802ee3acbc5e888cb1248a04968f962d63d070400af2e346"},
     {file = "dash_core_components-2.0.0.tar.gz", hash = "sha256:c6733874af975e552f95a1398a16c2ee7df14ce43fa60bb3718a3c6e0b63ffee"},
 ]
 dash-daq = [
     {file = "dash_daq-0.5.0.tar.gz", hash = "sha256:a1d85b6799f7b885652fbc44aebdb58c41254616a8d350b943beeb42ade4256a"},
 ]
 dash-html-components = [
+    {file = "dash_html_components-2.0.0-py3-none-any.whl", hash = "sha256:b42cc903713c9706af03b3f2548bda4be7307a7cf89b7d6eae3da872717d1b63"},
     {file = "dash_html_components-2.0.0.tar.gz", hash = "sha256:8703a601080f02619a6390998e0b3da4a5daabe97a1fd7a9cebc09d015f26e50"},
 ]
 dash-table = [
+    {file = "dash_table-5.0.0-py3-none-any.whl", hash = "sha256:19036fa352bb1c11baf38068ec62d172f0515f73ca3276c79dee49b95ddc16c9"},
     {file = "dash_table-5.0.0.tar.gz", hash = "sha256:18624d693d4c8ef2ddec99a6f167593437a7ea0bf153aa20f318c170c5bc7308"},
 ]
 distlib = [
@@ -2553,8 +2556,8 @@ pytz = [
     {file = "pytz-2021.3.tar.gz", hash = "sha256:acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.31.0-py2.py3-none-any.whl", hash = "sha256:0a62c5055f854d7f36e155b7ee8920561bf0399c53edd975cf02436eef8937fc"},
-    {file = "pyupgrade-2.31.0.tar.gz", hash = "sha256:80e2308cae2b11c3fdd091137495d99abf7e0cd98b501aa5758974991497c24c"},
+    {file = "pyupgrade-2.37.3-py2.py3-none-any.whl", hash = "sha256:9746efd064dbf53d7f86d6f88a1d48120f58dbfc378f517768634740ea2225e2"},
+    {file = "pyupgrade-2.37.3.tar.gz", hash = "sha256:1414c7a7c558004cf610e6180716b876814b639b5a5789c3da023c5cdaebcd49"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
