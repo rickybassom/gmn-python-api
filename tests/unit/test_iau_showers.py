@@ -3,7 +3,7 @@ import unittest
 from unittest import mock
 
 from requests.exceptions import HTTPError
-from tests import _mock_response
+from tests.unit import _mock_response
 
 from gmn_python_api import iau_showers
 
@@ -29,7 +29,7 @@ class TestIAUShowers(unittest.TestCase):
         Test: That get_iau_showers() returns the expected dictionary of iau information.
         When: get_iau_showers() is called with an HTTP mocked response.
         """
-        expected_content = open("tests/test_data/streamfulldata.txt").read()
+        expected_content = open("tests/unit/test_data/streamfulldata.txt").read()
         expected_dict = {
             "00001": {"id": "00001", "code": "CAP", "name": "alpha Capricornids"},
             "00002": {"id": "00002", "code": "STA", "name": "Southern Taurids"},
