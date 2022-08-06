@@ -29,6 +29,10 @@ This is a known issue with some newer versions of Pandas. Try installing an olde
    pip uninstall pandas
    pip install pandas==1.1.5
 
-References:
+https://stackoverflow.com/questions/65684415/exporting-csv-shows-importerror-cannot-import-name-compressionoptions-from-p
 
-- https://stackoverflow.com/questions/65684415/exporting-csv-shows-importerror-cannot-import-name-compressionoptions-from-p
+**Scipy No BLAS/LAPACK libraries found**
+
+Install `openblas` and `lapack`, see link below.
+
+https://github.com/scipy/scipy/issues/9005
