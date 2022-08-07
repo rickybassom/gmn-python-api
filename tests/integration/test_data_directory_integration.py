@@ -5,7 +5,6 @@ from datetime import datetime
 import requests
 
 from gmn_python_api import data_directory as dd
-from gmn_python_api import get_all_file_url
 from gmn_python_api import meteor_summary_reader as msr
 
 
@@ -47,7 +46,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
          directory.
         When: get_all_file_url is fetched from the live GMN server.
         """
-        r = requests.get(get_all_file_url(), stream=True)
+        r = requests.get(dd.get_all_file_url(), stream=True)
 
         lines = []
         for line in r.iter_lines():
