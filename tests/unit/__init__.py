@@ -1,4 +1,4 @@
-"""Unit tests for the gmn_python_api package."""
+"""Unit tests for the gmn_python_api library."""
 from typing import Optional
 from unittest import mock
 

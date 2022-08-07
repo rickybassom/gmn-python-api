@@ -1,7 +1,7 @@
 Data Schemas
 ============
 
-GMN data fields are accessible through Pandas DataFrames produced by the gmn-python-api package. See the `meteor_summary_schema API reference section`_ for function and variable details.
+GMN data fields are accessible through Pandas DataFrames produced by the gmn-python-api library. See the `meteor_summary_schema API reference section`_ for function and variable details.
 
 Accessing meteor trajectory summary fields code example:
 

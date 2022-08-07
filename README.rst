@@ -35,9 +35,9 @@ GMN Python API
    :target: https://github.com/psf/black
    :alt: Black
 
-Python package for accessing open `Global Meteor Network`_ (GMN) meteor trajectory `data`_.
+Python library for accessing open `Global Meteor Network`_ (GMN) meteor trajectory `data`_.
 Global meteor data is generated using a network of low-light cameras pointed towards the night sky.
-Meteor properties (radiants, orbits, magnitudes and masses) are produced by the GMN and are available through this package.
+Meteor properties (radiants, orbits, magnitudes and masses) are produced by the GMN and are available through this library.
 
 .. image:: https://raw.githubusercontent.com/gmn-data-platform/gmn-python-api/main/screenshot.png
   :alt: Data screenshot
