@@ -42,8 +42,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
     def test_load_all_file_100_lines(self) -> None:
         """
         Test: That read_meteor_summary_csv_as_dataframe can load the first 100 lines of
-         the all file from the data
-         directory.
+         the all file from the data directory.
         When: get_all_file_url is fetched from the live GMN server.
         """
         r = requests.get(dd.get_all_file_url(), stream=True)
