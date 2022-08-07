@@ -55,7 +55,7 @@ def read_meteor_summary_csv_as_dataframe(
 
     if csv_data_directory_format:
         meteor_summary_df = pd.read_csv(
-            StringIO(joined_data, newline="\n"),
+            StringIO(joined_data, newline="\r"),
             engine="python",
             sep=r"\s*;\s*",
             skiprows=[0, 5, 6],

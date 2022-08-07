@@ -4,7 +4,7 @@ from unittest import mock
 from urllib.parse import urlencode
 
 from requests import HTTPError
-from tests import _mock_response
+from tests.unit import _mock_response
 
 from gmn_python_api import gmn_rest_api
 

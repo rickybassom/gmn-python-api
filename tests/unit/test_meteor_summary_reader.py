@@ -8,11 +8,11 @@ from typing import Any
 import numpy.typing as npt
 import pandas as pd  # type: ignore
 from avro_validator.schema import Schema  # type: ignore
-from tests.expected_gmn_meteor_summary_reader_values import EXPECTED_COLUMN_NAMES
-from tests.expected_gmn_meteor_summary_reader_values import (
+from tests.unit.expected_gmn_meteor_summary_reader_values import EXPECTED_COLUMN_NAMES
+from tests.unit.expected_gmn_meteor_summary_reader_values import (
     EXPECTED_COLUMN_NAMES_CAMEL_CASE,
 )
-from tests.expected_gmn_meteor_summary_reader_values import EXPECTED_DTYPES
+from tests.unit.expected_gmn_meteor_summary_reader_values import EXPECTED_DTYPES
 
 from gmn_python_api import meteor_summary_reader as msr
 from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
