@@ -7,6 +7,9 @@
    Home <self>
    usage
    API Reference <autoapi/gmn_python_api/index>
+   data_directory
+   rest_api
+   data_schemas
    contributing
    troubleshooting
    Code of Conduct <codeofconduct>
