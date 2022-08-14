@@ -1,36 +1,36 @@
 Data Schemas
 ============
 
-GMN data fields are accessible through Pandas DataFrames produced by the gmn-python-api library. See the `meteor_summary_schema API reference section`_ for function and variable details.
+GMN data fields are accessible through Pandas DataFrames produced by the gmn-python-api library. See the `meteor_summary_schema API Reference section`_ for function and variable details.
 
 Accessing meteor trajectory summary fields code example:
 
 .. code:: python
 
    from datetime import datetime
-   from gmn_python_api.data_directory import get_daily_file_content_by_date
-   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+   from gmn_python_api import data_directory
+   from gmn_python_api import meteor_summary_reader as reader
 
    # Access column names (verbose)
-   trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
-   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
-       trajectory_summary_file_content,
+   traj_sum_file_content = data_directory.get_daily_file_content_by_date(datetime(2019, 7, 24))
+   traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
+       traj_sum_file_content,
        csv_data_directory_format=True,
        camel_case_column_names=False,
    )
 
-   trajectory_summary_dataframe.iloc[0]['Vgeo (km/s)']
+   traj_sum_df.iloc[0]['Vgeo (km/s)']
    # 63.95235
 
    # Access column names (camel case)
-   trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
-   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
-       trajectory_summary_file_content,
+   traj_sum_file_content = data_directory.get_daily_file_content_by_date(datetime(2019, 7, 24))
+   traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
+       traj_sum_file_content,
        csv_data_directory_format=True,
        camel_case_column_names=True,
    )
 
-   trajectory_summary_dataframe.iloc[0]['vgeo_km_s']
+   traj_sum_df.iloc[0]['vgeo_km_s']
    # 63.952355
 
 Verbose and camel case column names can be found below.
@@ -44,11 +44,11 @@ Getting the current meteor trajectory summary schema code example:
    from gmn_python_api.meteor_summary_schema import get_meteor_summary_avro_schema
 
    schema = get_meteor_summary_avro_schema()  # JSON dict
-   # {'fields': [
-   #  {'name': 'unique_trajectory_identifier', 'type': ['null', 'string']},
-   #  {'name': 'beginning_julian_date', 'type': ['null', 'double']},
-   #  {'name': 'beginning_utc_time', 'type': ['null', {'logicalType': 'timestamp-micros', 'type': 'long'}]},
-   #  {'name': 'iau_no', 'type': ['null', 'long']},
+   #  {'fields': [
+   #    {'name': 'unique_trajectory_identifier', 'type': ['null', 'string']},
+   #    {'name': 'beginning_julian_date', 'type': ['null', 'double']},
+   #    {'name': 'beginning_utc_time', 'type': ['null', {'logicalType': 'timestamp-micros', 'type': 'long'}]},
+   #    {'name': 'iau_no', 'type': ['null', 'long']},
    #  ...
 
 Meteor Trajectory Features
@@ -288,4 +288,4 @@ Listing of current and historic data schemas.
 Source: https://globalmeteornetwork.org/data/media/GMN_orbit_data_columns.pdf
 
 .. _AVRO: https://avro.apache.org/docs/current/spec.html
-.. _meteor_summary_schema API reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/meteor_summary_schema/index.html
+.. _meteor_summary_schema API Reference section: https://gmn-python-api.readthedocs.io/en/latest/autoapi/gmn_python_api/meteor_summary_schema/index.html

@@ -1,4 +1,4 @@
-API Usage
+Usage
 =========
 
 Simple meteor analysis example:
@@ -6,35 +6,35 @@ Simple meteor analysis example:
 .. code:: python
 
    from datetime import datetime
-   from gmn_python_api.data_directory import get_daily_file_content_by_date
-   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+   from gmn_python_api import data_directory
+   from gmn_python_api import meteor_summary_reader as reader
 
-   trajectory_summary_file_content = get_daily_file_content_by_date(datetime(2019, 7, 24))
-   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
-       trajectory_summary_file_content,
+   # Analyse recorded meteor data for the 24th of July 2019
+   traj_sum_file_content = data_directory.get_daily_file_content_by_date(datetime(2019, 7, 24))
+
+   # Read data as a Pandas DataFrame
+   traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
+       traj_sum_file_content,
        csv_data_directory_format=True,
    )
 
-   print(f"{trajectory_summary_dataframe['Vgeo (km/s)'].max()} km/s "
-          "was the fastest geostationary velocity out of all meteors for that day.")
-   # 65.38499 km/s was the fastest geostationary velocity out of all meteors (24th of July 2019).
+   print(f"{traj_sum_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity")
+   # Output: 65.38499 km/s was the fastest geostationary velocity
 
-   print(f"{trajectory_summary_dataframe.loc[trajectory_summary_dataframe['IAU (code)'] == 'PER'].shape[0]} "
-          "meteors were estimated to be part of the Perseids shower.")
-   # 8 meteors were estimated to be part of the Perseids shower (24th of July 2019).
+   print(f"{traj_sum_df.loc[traj_sum_df['IAU (code)'] == 'PER'].shape[0]} Perseid meteors")
+   # Output: 8 Perseid meteors
 
-   print(f"Station {trajectory_summary_dataframe['Num (stat)'].mode().values[0]} "
-          "recorded the highest number of meteors.")
-   # Station 2 recorded the highest number of meteors (24th of July 2019).
+   print(f"Station #{traj_sum_df['Num (stat)'].mode().values[0]} recorded the most meteors")
+   # Output: Station #2 recorded the most meteors
 
 The trajectory summary data model can be loaded offline:
 
 .. code:: python
 
-   from gmn_python_api.meteor_summary_reader import read_meteor_summary_csv_as_dataframe
+   from gmn_python_api import meteor_summary_reader as reader
    from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
 
-   trajectory_summary_dataframe = read_meteor_summary_csv_as_dataframe(
+   trajectory_summary_df = reader.read_meteor_summary_csv_as_dataframe(
        _MODEL_TRAJECTORY_SUMMARY_FILE_PATH,
        csv_data_directory_format=True,
    )
