@@ -1,7 +1,7 @@
 Data Directory
 ==============
 
-The GMN provides a `Data Directory`_ of trajectory summary CSV data. The gmn-python-api library allows you to read from the directory (see `data_directory API reference section`_ for function and variable details).
+The GMN provides a `Data Directory`_ of trajectory summary CSV data. The gmn-python-api library allows you to read from the directory (see `data_directory API Reference section`_ for function and variable details).
 
 
 Example 1:
