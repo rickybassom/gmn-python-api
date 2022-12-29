@@ -15,7 +15,7 @@ from avro.io import DatumReader  # type: ignore
 import gmn_python_api
 
 
-SCHEMA_VERSION = "2.0"
+SCHEMA_VERSION = "1.0"
 """The supported meteor/trajectory summary data format version."""
 
 _MODEL_TRAJECTORY_SUMMARY_FILE_PATH = os.path.join(

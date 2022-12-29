@@ -20,7 +20,6 @@ class TestIAUShowers(unittest.TestCase):
         mock_get.return_value = _mock_response(
             status=500, raise_for_status=HTTPError("Bad response")
         )
-        # iau_showers.get_iau_showers()
         self.assertRaises(HTTPError, iau_showers.get_iau_showers)
 
     @mock.patch("requests.get")
