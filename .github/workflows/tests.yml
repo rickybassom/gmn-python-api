@@ -67,7 +67,7 @@ jobs:
           nox --version
 
       - name: Upload coverage data
-        if: always() && matrix.session == 'tests'
+        if: always() && matrix.session == 'unit-tests'
         uses: "actions/upload-artifact@v2.3.1"
         with:
           name: coverage-data
