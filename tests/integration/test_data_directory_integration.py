@@ -19,7 +19,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
          server.
         """
         trajectory_summary_file_content = dd.get_daily_file_content_by_date(
-            datetime(2022, 5, 28)
+            datetime(2018, 12, 10)
         )
         msr.read_meteor_summary_csv_as_dataframe(
             trajectory_summary_file_content, csv_data_directory_format=True
@@ -33,7 +33,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
          server.
         """
         trajectory_summary_file_content = dd.get_monthly_file_content_by_date(
-            datetime(2022, 5, 1)
+            datetime(2019, 1, 1)
         )
         msr.read_meteor_summary_csv_as_dataframe(
             trajectory_summary_file_content, csv_data_directory_format=True

@@ -7,12 +7,14 @@ sys.path.insert(0, os.path.abspath("../src/gmn_python_api/"))
 
 project = "GMN Python API"
 author = "Ricky Bassom"
+language = "en"
 copyright = f"{datetime.now().year}, {author}"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx_click",
     "autoapi.extension",
+    "myst_parser",
 ]
 autodoc_typehints = "description"
 html_theme = "furo"
