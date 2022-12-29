@@ -1,13 +1,12 @@
 """Tests for the meteor_summary_reader module."""
-import json
 import os
+import tempfile
 import unittest
 from pathlib import Path
 from typing import Any
 
 import numpy.typing as npt
 import pandas as pd  # type: ignore
-from avro_validator.schema import Schema  # type: ignore
 from tests.unit.expected_gmn_meteor_summary_reader_values import EXPECTED_COLUMN_NAMES
 from tests.unit.expected_gmn_meteor_summary_reader_values import (
     EXPECTED_COLUMN_NAMES_CAMEL_CASE,
@@ -16,7 +15,6 @@ from tests.unit.expected_gmn_meteor_summary_reader_values import EXPECTED_DTYPES
 
 from gmn_python_api import meteor_summary_reader as msr
 from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
-from gmn_python_api.meteor_summary_schema import get_meteor_summary_avro_schema
 
 
 class TestGmnMeteorSummaryReader(unittest.TestCase):
@@ -55,7 +53,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             )
         )
 
-    def test_read_meteor_summary_csv_as_dataframe_multiple(self) -> None:
+    def test_read_meteor_summary_csv_as_dataframe_multiple_contents(self) -> None:
         """
         Test: That a trajectory summary buffer can be read as a split up dataframe by
          checking properties.
@@ -68,6 +66,37 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
                 csv_data_directory_format=True,
             )
         )
+
+    def test_read_meteor_summary_csv_as_dataframe_multiple_paths(self) -> None:
+        """
+        Test: That a multiple summary paths can be read and combined by checking
+         properties.
+        When: read_meteor_summary_csv_as_dataframe is called with a list of paths.
+        """
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file1 = Path(os.path.join(temp_dir, "temp1.txt"))
+            temp_file2 = Path(os.path.join(temp_dir, "temp2.txt"))
+            temp_file3 = Path(os.path.join(temp_dir, "temp3.txt"))
+
+            data = open(self.test_data_directory_file_path1, "r").read().splitlines()
+
+            with open(temp_file1, "w") as file:
+                file.write("\n".join(data[:40]))
+            with open(temp_file2, "w") as file:
+                file.write("\n".join(data[40:80]))
+            with open(temp_file3, "w") as file:
+                file.write("\n".join(data[80:]))
+
+            self._test_read_trajectory_summary_using_data_frame(
+                msr.read_meteor_summary_csv_as_dataframe(
+                    [str(temp_file1), str(temp_file2), str(temp_file3)],
+                    csv_data_directory_format=True,
+                )
+            )
+
+            os.remove(temp_file1)
+            os.remove(temp_file2)
+            os.remove(temp_file3)
 
     def test_read_meteor_summary_csv_as_dataframe_multiple_with_headers(self) -> None:
         """
@@ -166,26 +195,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             EXPECTED_COLUMN_NAMES_CAMEL_CASE,
         )
 
-    def test_read_trajectory_summary_file_as_data_frame_avro_compatible(self) -> None:
-        """
-        Test: That the trajectory summary dataframe can be converted to avro format and
-         abide by the schema.
-        When: read_meteor_summary_csv_as_dataframe is called with avro_compatible
-         option.
-        """
-        data_frame = msr.read_meteor_summary_csv_as_dataframe(
-            self.test_data_directory_file_path1,
-            avro_compatible=True,
-            csv_data_directory_format=True,
-        )
-        actual_rows = data_frame.to_dict(orient="records")
-
-        schema = Schema(json.dumps(get_meteor_summary_avro_schema()))
-        parsed_schema = schema.parse()
-
-        for row in actual_rows:
-            self.assertTrue(parsed_schema.validate(row))
-
     def test_read_meteor_summary_csv_as_numpy_array_file(self) -> None:
         """
         Test: That the trajectory summary file can be read as a numpy array by checking
@@ -199,7 +208,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         )
 
     def _test_read_trajectory_summary_using_data_frame(
-        self, actual_dataframe: pd.DataFrame
+            self, actual_dataframe: pd.DataFrame
     ) -> None:
         """
         Asserts properties about the data directory trajectory dataframe.
@@ -217,7 +226,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         self.assertEqual("Unique trajectory (identifier)", actual_dataframe.index.name)
 
     def _test_read_meteor_summary_using_data_frame(
-        self, actual_dataframe: pd.DataFrame
+            self, actual_dataframe: pd.DataFrame
     ) -> None:
         """
         Asserts properties about the rest api meteor summary dataframe.
@@ -236,7 +245,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         self.assertEqual("Unique trajectory (identifier)", actual_dataframe.index.name)
 
     def _test_read_trajectory_summary_using_numpy_array(
-        self, actual_numpy_array: npt.NDArray[Any]
+            self, actual_numpy_array: npt.NDArray[Any]
     ) -> None:
         """
         Asserts properties about the numpy array.

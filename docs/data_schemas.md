@@ -1,7 +1,7 @@
 # Data Schemas
 
-GMN data fields are accessible through Pandas DataFrames produced by the 
-`gmn-python-api` library. See the 
+GMN data fields are accessible through Pandas DataFrames produced by the
+`gmn-python-api` library. See the
 [meteor_summary_schema API Reference section](autoapi/gmn_python_api/meteor_summary_schema/index)
 for function and variable details.
 
@@ -34,24 +34,10 @@ traj_sum_df.iloc[0]['vgeo_km_s']
 # 63.952355
 ```
 
+The model data file is `meteor_summary_schema._MODEL_TRAJECTORY_SUMMARY_FILE_PATH`. The
+one line version of the file is `meteor_summary_schema._MODEL_TRAJECTORY_SUMMARY_FILE_ONE_ROW_PATH`.
+
 Verbose and camel case column names can be found below.
-
-An [AVRO](https://avro.apache.org/docs/current/spec.html) formatted schema can be
-generated using the gmn-python-api package.
-
-## Getting the current meteor trajectory summary schema code example
-
-```python
-from gmn_python_api.meteor_summary_schema import get_meteor_summary_avro_schema
-
-schema = get_meteor_summary_avro_schema()  # JSON dict
-#  {'fields': [
-#    {'name': 'unique_trajectory_identifier', 'type': ['null', 'string']},
-#    {'name': 'beginning_julian_date', 'type': ['null', 'double']},
-#    {'name': 'beginning_utc_time', 'type': ['null', {'logicalType': 'timestamp-micros', 'type': 'long'}]},
-#    {'name': 'iau_no', 'type': ['null', 'long']},
-#  ...
-```
 
 ## Meteor Trajectory Features
 

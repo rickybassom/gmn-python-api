@@ -2,7 +2,6 @@
 This module contains functions to load meteor/trajectory summary data into Pandas
 DataFrames and NumPy arrays.
 """
-import math
 import os.path
 from io import StringIO
 from pathlib import Path
@@ -24,8 +23,6 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 def read_meteor_summary_csv_as_dataframe(
     filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]],
     camel_case_column_names: Optional[bool] = False,
-    avro_compatible: Optional[bool] = False,
-    avro_long_beginning_utc_time: Optional[bool] = True,
     csv_data_directory_format: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
@@ -38,12 +35,6 @@ def read_meteor_summary_csv_as_dataframe(
      If using a list the first item must contain the csv header, and
      all items must either be all data directory CSVs or all REST API CSVs.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
-    :param avro_compatible: If True, the types and column names in the DataFrame will
-     match exactly the AVSC schema with row.to_dict(). AVRO AVSC Schema can be found
-     with the get_meteor_summary_avro_schema function.
-    :param avro_long_beginning_utc_time: If True, the time column will be converted from
-     a datetime object to an int64 epoch time which is compatible with the long
-     timestamp-micros avro type.
     :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
      treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
      headers will be treated as a REST API CSV.
@@ -109,33 +100,6 @@ def read_meteor_summary_csv_as_dataframe(
 
     meteor_summary_df.set_index("Unique trajectory (identifier)", inplace=True)
 
-    if avro_compatible:
-        camel_case_column_names = True
-
-        if avro_long_beginning_utc_time:
-            # convert datetime nano to micro epoch and round to int
-            meteor_summary_df["Beginning (UTC Time)"] = (
-                meteor_summary_df["Beginning (UTC Time)"].astype("int64") / 1e3
-            )
-            meteor_summary_df["Beginning (UTC Time)"] = (
-                meteor_summary_df["Beginning (UTC Time)"].round(0).astype("int64")
-            )
-
-        meteor_summary_df["IAU (code)"] = meteor_summary_df["IAU (code)"].astype(
-            "unicode"
-        )
-        meteor_summary_df["Schema (version)"] = meteor_summary_df[
-            "Schema (version)"
-        ].astype("unicode")
-
-        # Convert null values to avro compatible types
-        meteor_summary_df = meteor_summary_df.applymap(
-            lambda x: None
-            if x == "<NA>" or (isinstance(x, float) and math.isnan(x))
-            else x
-        )
-        meteor_summary_df.reset_index(inplace=True)
-
     if camel_case_column_names:
         meteor_summary_df.columns = meteor_summary_df.columns.str.replace(
             "[^0-9a-zA-Z]+", "_", regex=True
@@ -154,8 +118,6 @@ def read_meteor_summary_csv_as_dataframe(
 def read_meteor_summary_csv_as_numpy_array(
     filepath_or_buffer: FilePathOrBuffer,
     camel_case_column_names: Optional[bool] = False,
-    avro_compatible: Optional[bool] = False,
-    avro_long_beginning_utc_time: Optional[bool] = True,
     csv_data_directory_format: Optional[bool] = False,
 ) -> npt.NDArray[Any]:
     """
@@ -169,12 +131,6 @@ def read_meteor_summary_csv_as_numpy_array(
      If using a list the first item must contain the csv header, and
      all items must either be all Data Directory CSVs or all REST API CSVs.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
-    :param avro_compatible: If True, the types and column names in the array will
-     match exactly the AVSC schema with row.to_dict(). AVRO AVSC Schema can be found
-     with the get_meteor_summary_avro_schema function.
-    :param avro_long_beginning_utc_time: If True, the time column will be converted from
-     a datetime object to an int64 epoch time which is compatible with the long
-     timestamp-micros avro type.
     :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
      treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
      headers will be treated as a REST API CSV.
@@ -185,8 +141,6 @@ def read_meteor_summary_csv_as_numpy_array(
     data_frame = read_meteor_summary_csv_as_dataframe(
         filepath_or_buffer,
         camel_case_column_names=camel_case_column_names,
-        avro_compatible=avro_compatible,
-        avro_long_beginning_utc_time=avro_long_beginning_utc_time,
         csv_data_directory_format=csv_data_directory_format,
     )
     return data_frame.to_numpy()  # type: ignore

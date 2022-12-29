@@ -40,9 +40,6 @@ library.
   into [Pandas](https://pandas.pydata.org/) DataFrames or [Numpy](https://numpy.org/)
   arrays.
 
-- Functions for retrieving the current meteor trajectory schema in 
-  [AVRO](https://avro.apache.org/) format.
-
 - Functions for retrieving available 
   [IAU](https://www.ta3.sk/IAUC22DB/MDC2007/Roje/roje_lista.php) registered meteor showers.
 
@@ -101,8 +98,7 @@ print(f"{traj_sum_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary ve
 print(f"{traj_sum_df.loc[traj_sum_df['IAU (code)'] == 'PER'].shape[0]} Perseid meteors")
 # Output: 8 Perseid meteors
 
-print(
-    f"Station #{traj_sum_df['Num (stat)'].mode().values[0]} recorded the most meteors")
+print(f"Station #{traj_sum_df['Num (stat)'].mode().values[0]} recorded the most meteors")
 # Output: Station #2 recorded the most meteors
 ```
 
