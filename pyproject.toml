@@ -43,7 +43,7 @@ pyupgrade = "^2.29.1"
 furo = ">=2021.11.12"
 sphinx-autoapi = "^1.8.4"
 kaleido = "0.2.1"
-dtale = "^1.61.1"
+dtale = "^2.9.1"
 nox = "^2022.1.7"
 nox-poetry = "^1.0.2"
 
