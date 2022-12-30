@@ -32,7 +32,6 @@ jobs:
     env:
       NOXSESSION: ${{ matrix.session }}
       FORCE_COLOR: "1"
-      SETUPTOOLS_USE_DISTUTILS: "stdlib"
 
     steps:
       - name: Check out the repository
@@ -57,6 +56,9 @@ jobs:
 
       - name: Run Nox
         run: |
+          if [ "${{ matrix.os }}" = "macos-latest" ]; then
+            export SETUPTOOLS_USE_DISTUTILS=stdlib
+          fi
           nox --python=${{ matrix.python }}
 
       - name: Upload coverage data
