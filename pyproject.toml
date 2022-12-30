@@ -28,7 +28,7 @@ types-requests = "^2.27.8"
 pytest = "^7.0.1"
 coverage = {extras = ["toml"], version = "^6.1"}
 safety = "^2.2.0"
-mypy = "^0.931"
+mypy = "^0.991"
 sphinx = "^4.3.0"
 sphinx-autobuild = ">=2021.3.14"
 flake8 = "^4.0.1"
