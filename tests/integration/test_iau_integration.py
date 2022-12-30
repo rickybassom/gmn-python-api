@@ -6,9 +6,10 @@ from gmn_python_api import iau_showers
 class TestIAUShowers(unittest.TestCase):
     """Tests for live integration with the IAU showers API."""
 
-    def test_get_iau_showers(self) -> None:
+    def test_load_iau_showers(self) -> None:
         """
-        Test: That get_iau_showers() returns the expected dictionary of iau information.
+        Test: That get_iau_showers() returns the expected dictionary of iau information
+         from the live server.
         When: get_iau_showers() is called.
         """
         showers = iau_showers.get_iau_showers()

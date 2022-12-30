@@ -12,7 +12,7 @@ API Reference <autoapi/gmn_python_api/index>
 data_directory
 rest_api
 data_schemas
-trouble_shooting
+troubleshooting
 contributing
 License <license>
 Changelog <https://github.com/gmn-data-platform/gmn-python-api/releases>

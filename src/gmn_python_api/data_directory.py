@@ -37,10 +37,10 @@ SUMMARY_ALL_FILENAME: str = "traj_summary_all.txt"
 """The filename of the trajectory summary file containing all data."""
 
 DAILY_DATE_INPUT_FORMAT: str = "%Y-%m-%d"
-"""The daily string date format that should be passed into the functions in this"""
+"""The daily string date format that should be passed into the functions in this."""
 
 MONTHLY_DATE_INPUT_FORMAT: str = "%Y-%m"
-"""The monthly string date format that should be passed into the functions in this"""
+"""The monthly string date format that should be passed into the functions in this."""
 
 
 def get_all_daily_file_urls() -> List[str]:
