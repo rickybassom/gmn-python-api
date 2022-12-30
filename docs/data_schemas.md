@@ -8,11 +8,11 @@ for function and variable details.
 ## Accessing meteor trajectory summary fields code example
 
 ```python
-from gmn_python_api import data_directory
+from gmn_python_api import data_directory as dd
 from gmn_python_api import meteor_summary_reader as reader
 
 # Access column names (verbose)
-traj_sum_file_content = data_directory.get_daily_file_content_by_date("2019-07-24")
+traj_sum_file_content = dd.get_daily_file_content_by_date("2019-07-24")
 traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
     traj_sum_file_content,
     rest_format=True,
@@ -23,7 +23,7 @@ traj_sum_df.iloc[0]['Vgeo (km/s)']
 # 63.95235
 
 # Access column names (camel case)
-traj_sum_file_content = data_directory.get_daily_file_content_by_date("2019-07-24")
+traj_sum_file_content = dd.get_daily_file_content_by_date("2019-07-24")
 traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
     traj_sum_file_content,
     camel_case_column_names=True,

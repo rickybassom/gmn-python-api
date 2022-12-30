@@ -7,7 +7,7 @@
 [![Tests](https://github.com/gmn-data-platform/gmn-python-api/workflows/Tests/badge.svg)](https://github.com/gmn-data-platform/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain)
 [![Codecov](https://codecov.io/gh/gmn-data-platform/gmn-python-api/branch/main/graph/badge.svg)](https://codecov.io/gh/gmn-data-platform/gmn-python-api)
 
-[![Demo on Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/dc25444cb98693081443bb31e8f6b2abbed3fde2/gmn_data_analysis_template.ipynb)
+[![Demo on Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/gist/rickybassom/74d2c99ebbd612b88861038a5b33e021/gmn_data_analysis_template.ipynb)
 
 # gmn-python-api
 
@@ -20,7 +20,7 @@ library.
 
 ![Screenshot of GMN data](docs/screenshot.png)
 
-[Demo on Google Colab](https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/dc25444cb98693081443bb31e8f6b2abbed3fde2/gmn_data_analysis_template.ipynb)
+[Demo on Google Colab](https://colab.research.google.com/gist/rickybassom/74d2c99ebbd612b88861038a5b33e021/gmn_data_analysis_template.ipynb)
 
 ## Features
 
@@ -73,20 +73,16 @@ pip install git+https://github.com/gmn-data-platform/gmn-python-api
 
 Refer to the [Troubleshooting] guide if you encounter any issues.
 
-There is also a 
-[development Google Colab notebook](https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/dc25444cb98693081443bb31e8f6b2abbed3fde2/gmn_data_analysis_template.ipynb)
-that can be used to install the latest development code.
-
 ## Usage
 
 Simple meteor analysis example:
 
 ```python
-from gmn_python_api import data_directory
+from gmn_python_api import data_directory as dd
 from gmn_python_api import meteor_summary_reader as reader
 
 # Analyse recorded meteor data for the 24th of July 2019
-traj_sum_file_content = data_directory.get_daily_file_content_by_date("2019-07-24")
+traj_sum_file_content = dd.get_daily_file_content_by_date("2019-07-24")
 
 # Read data as a Pandas DataFrame
 traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(traj_sum_file_content)
