@@ -60,6 +60,10 @@ jobs:
           pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
           poetry --version
 
+      - name: Run Nox
+        run: |
+          nox --python=${{ matrix.python }}
+
       - name: Install Nox
         run: |
           pipx install --pip-args=--constraint=.github/workflows/constraints.txt nox

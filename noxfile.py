@@ -81,15 +81,7 @@ def unit_tests(session: Session) -> None:
             session.notify("coverage", posargs=[])
 
 
-@session(name="integration-tests", python="3.10")
-def integration_tests(session: Session) -> None:
-    """Run the integration test suite."""
-    session.install(".")
-    session.install("pytest")
-    session.run("pytest", "tests/integration", *session.posargs)
-
-
-@session
+@session(python=python_versions[0])
 def coverage(session: Session) -> None:
     """Produce the coverage report."""
     args = session.posargs or ["report"]
@@ -100,6 +92,14 @@ def coverage(session: Session) -> None:
         session.run("coverage", "combine")
 
     session.run("coverage", *args)
+
+
+@session(name="integration-tests", python="3.10")
+def integration_tests(session: Session) -> None:
+    """Run the integration test suite."""
+    session.install(".")
+    session.install("pytest")
+    session.run("pytest", "tests/integration", *session.posargs)
 
 
 @session(name="docs-build", python="3.10")
