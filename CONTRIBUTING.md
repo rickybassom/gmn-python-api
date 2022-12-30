@@ -6,13 +6,13 @@ and welcomes contributions in the form of bug reports, feature requests, and pul
 
 Here is a list of important resources for contributors:
 
-- [Source Code](https://github.com/gmn-data-platform/gmn-python-api)
+- [Source Code](https://github.com/rickybassom/gmn-python-api)
 - [Documentation](https://gmn-python-api.readthedocs.io/)
-- [Issue Tracker](https://github.com/gmn-data-platform/gmn-python-api/issues)
+- [Issue Tracker](https://github.com/rickybassom/gmn-python-api/issues)
 
 ## How to report a bug
 
-Report bugs on the [Issue Tracker](https://github.com/gmn-data-platform/gmn-python-api/issues).
+Report bugs on the [Issue Tracker](https://github.com/rickybassom/gmn-python-api/issues).
 
 When filing an issue, make sure to answer these questions:
 
@@ -26,7 +26,7 @@ The best way to get your bug fixed is to provide a test case, and/or steps to re
 
 ## How to request a feature
 
-Request features on the [Issue Tracker](https://github.com/gmn-data-platform/gmn-python-api/issues).
+Request features on the [Issue Tracker](https://github.com/rickybassom/gmn-python-api/issues).
 
 ## How to set up your development environment
 
@@ -87,7 +87,7 @@ Built documentation is located in the `docs/_build` directory.
 
 ## How to submit changes
 
-Open a [pull request](https://github.com/gmn-data-platform/gmn-python-api/pulls) to submit changes to this project.
+Open a [pull request](https://github.com/rickybassom/gmn-python-api/pulls) to submit changes to this project.
 
 Your pull request needs to meet the following guidelines for acceptance:
 - The Nox test suite must pass without errors and warnings.

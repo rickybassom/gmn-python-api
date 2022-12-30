@@ -4,8 +4,8 @@
 [![License](https://img.shields.io/pypi/l/gmn-python-api)](https://pypi.org/project/gmn-python-api/)
 
 [![Read the Docs](https://img.shields.io/readthedocs/gmn-python-api)](https://gmn-python-api.readthedocs.io/en/latest/)
-[![Tests](https://github.com/gmn-data-platform/gmn-python-api/workflows/Tests/badge.svg)](https://github.com/gmn-data-platform/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain)
-[![Codecov](https://codecov.io/gh/gmn-data-platform/gmn-python-api/branch/main/graph/badge.svg)](https://codecov.io/gh/gmn-data-platform/gmn-python-api)
+[![Tests](https://github.com/rickybassom/gmn-python-api/workflows/Tests/badge.svg)](https://github.com/rickybassom/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain)
+[![Codecov](https://codecov.io/gh/rickybassom/gmn-python-api/branch/main/graph/badge.svg)](https://codecov.io/gh/rickybassom/gmn-python-api)
 
 [![Demo on Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/gist/rickybassom/74d2c99ebbd612b88861038a5b33e021/gmn_data_analysis_template.ipynb)
 
@@ -58,7 +58,7 @@ pip install gmn-python-api
 
 Or install the latest development code, through 
 [TestPyPI](https://test.pypi.org/project/gmn-python-api/) or directly from 
-[GitHub](https://github.com/gmn-data-platform/gmn-python-api) via 
+[GitHub](https://github.com/rickybassom/gmn-python-api) via 
 [pip](https://pip.pypa.io/):
 
 ```sh
@@ -68,7 +68,7 @@ pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/
 Or
 
 ```sh
-pip install git+https://github.com/gmn-data-platform/gmn-python-api
+pip install git+https://github.com/rickybassom/gmn-python-api
 ```
 
 Refer to the [Troubleshooting] guide if you encounter any issues.

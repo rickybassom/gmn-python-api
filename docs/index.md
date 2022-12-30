@@ -15,7 +15,7 @@ data_schemas
 troubleshooting
 contributing
 License <license>
-Changelog <https://github.com/gmn-data-platform/gmn-python-api/releases>
+Changelog <https://github.com/rickybassom/gmn-python-api/releases>
 ```
 
 ```{include} ../README.md
