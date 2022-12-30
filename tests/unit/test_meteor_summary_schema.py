@@ -74,3 +74,7 @@ class Test(unittest.TestCase):
             meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
         )
         self.assertEqual(expected_bidict, actual_bidict)
+
+
+if __name__ == "__main__":
+    unittest.main()  # pragma: no cover

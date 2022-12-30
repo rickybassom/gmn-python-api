@@ -24,7 +24,7 @@ data1, next_url = rest_api.get_meteor_summary_data_reader_compatible()
 data2, _ = rest_api.get_meteor_summary_data_reader_compatible(
     next_page=next_url,
 )
-meteor_df = reader.read_meteor_summary_csv_as_dataframe([data1, data2])
+meteor_df = reader.read_meteor_summary_csv_as_dataframe([data1, data2], rest_format=True)
 ```
 
 ## Example 2
@@ -38,7 +38,7 @@ data1, next_url = rest_api.get_meteor_summary_data_reader_compatible()
 data2, _ = rest_api.get_meteor_summary_data_reader_compatible(
     next_page=next_url,
 )
-meteor_df = reader.read_meteor_summary_csv_as_dataframe([data1, data2])
+meteor_df = reader.read_meteor_summary_csv_as_dataframe([data1, data2], rest_format=True)
 ```
 
 ## Example 3
@@ -51,7 +51,7 @@ from gmn_python_api import meteor_summary_reader as reader
 data, _ = rest_api.get_meteor_summary_data_reader_compatible(
     where_sql="date(beginning_utc_time)=date('2019-07-24')",
 )
-meteor_df = reader.read_meteor_summary_csv_as_dataframe(data)
+meteor_df = reader.read_meteor_summary_csv_as_dataframe(data, rest_format=True)
 ```
 
 Fields available in the Pandas Dataframes can be found in the 

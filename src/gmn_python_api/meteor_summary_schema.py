@@ -37,12 +37,10 @@ def get_verbose_and_camel_case_column_name_bidict() -> Dict[str, str]:
     df_verbose = gmn_python_api.read_meteor_summary_csv_as_dataframe(  # type: ignore
         model,
         camel_case_column_names=False,
-        csv_data_directory_format=True,
     )
     df_camel_case = gmn_python_api.read_meteor_summary_csv_as_dataframe(  # type: ignore
         model,
         camel_case_column_names=True,
-        csv_data_directory_format=True,
     )
 
     bidict[df_verbose.index.name] = df_camel_case.index.name

@@ -49,7 +49,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
                 open(self.test_data_directory_file_path1).read(),
-                csv_data_directory_format=True,
             )
         )
 
@@ -63,7 +62,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
                 ["\n".join(data[:40]), "\n".join(data[40:80]), "\n".join(data[80:])],
-                csv_data_directory_format=True,
             )
         )
 
@@ -90,7 +88,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             self._test_read_trajectory_summary_using_data_frame(
                 msr.read_meteor_summary_csv_as_dataframe(
                     [str(temp_file1), str(temp_file2), str(temp_file3)],
-                    csv_data_directory_format=True,
                 )
             )
 
@@ -109,7 +106,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         data2 = open(self.test_data_directory_file_path2).read().splitlines()
         joined_dataframe = msr.read_meteor_summary_csv_as_dataframe(
             ["\n".join(data1[:12]), "\n".join(data2[:12])],
-            csv_data_directory_format=True,
         )
 
         self.assertEqual(len(joined_dataframe.index), 4)
@@ -123,7 +119,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         data = open(self.test_rest_api_file_path).read().splitlines()
         joined_dataframe = msr.read_meteor_summary_csv_as_dataframe(
             ["\n".join(data[:2]), data[0] + "\n" + "\n".join(data[2:4])],
-            csv_data_directory_format=False,
+            rest_format=True,
         )
 
         self.assertEqual(len(joined_dataframe.index), 3)
@@ -138,7 +134,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
             TypeError,
             msr.read_meteor_summary_csv_as_dataframe,
             5,
-            csv_data_directory_format=True,
         )
 
     def test_read_meteor_summary_csv_as_dataframe_rest_api(self) -> None:
@@ -150,7 +145,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         self._test_read_meteor_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
                 open(self.test_rest_api_file_path).read(),
-                csv_data_directory_format=False,
+                rest_format=True,
             )
         )
 
@@ -162,7 +157,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_numpy_array(
             msr.read_meteor_summary_csv_as_numpy_array(
-                self.test_data_directory_file_path1, csv_data_directory_format=True
+                self.test_data_directory_file_path1
             )
         )
 
@@ -174,7 +169,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_data_frame(
             msr.read_meteor_summary_csv_as_dataframe(
-                self.test_data_directory_file_path1, csv_data_directory_format=True
+                self.test_data_directory_file_path1
             )
         )
 
@@ -188,7 +183,6 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         actual = msr.read_meteor_summary_csv_as_dataframe(
             self.test_data_directory_file_path1,
             camel_case_column_names=True,
-            csv_data_directory_format=True,
         )
         self.assertEqual(
             actual.columns.tolist(),
@@ -203,7 +197,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
         """
         self._test_read_trajectory_summary_using_numpy_array(
             msr.read_meteor_summary_csv_as_numpy_array(
-                self.test_data_directory_file_path1, csv_data_directory_format=True
+                self.test_data_directory_file_path1
             )
         )
 

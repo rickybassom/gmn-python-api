@@ -87,10 +87,7 @@ from gmn_python_api import meteor_summary_reader as reader
 traj_sum_file_content = data_directory.get_daily_file_content_by_date("2019-07-24")
 
 # Read data as a Pandas DataFrame
-traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
-    traj_sum_file_content,
-    csv_data_directory_format=True,
-)
+traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(traj_sum_file_content)
 
 print(f"{traj_sum_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity")
 # Output: 65.38499 km/s was the fastest geostationary velocity

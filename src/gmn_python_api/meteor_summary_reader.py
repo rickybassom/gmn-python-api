@@ -23,7 +23,7 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 def read_meteor_summary_csv_as_dataframe(
     filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]],
     camel_case_column_names: Optional[bool] = False,
-    csv_data_directory_format: Optional[bool] = False,
+    rest_format: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
     Reads meteor summary REST API or trajectory summary data directory CSV data into a
@@ -35,16 +35,26 @@ def read_meteor_summary_csv_as_dataframe(
      If using a list the first item must contain the csv header, and
      all items must either be all data directory CSVs or all REST API CSVs.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
-    :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
-     treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
-     headers will be treated as a REST API CSV.
+    :param rest_format: If True, the filepath_or_buffer headers will be treated as a
+     REST API CSV. If False, the filepath_or_buffer headers will be treated as a CSV
+     from the GMN Data Directory.
 
     :return: Pandas DataFrame of the meteor/trajectory summary data.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
     """
     joined_data = _join_filepath_or_buffer(filepath_or_buffer)
 
-    if csv_data_directory_format:
+    if rest_format:
+        meteor_summary_df = pd.read_csv(
+            StringIO(joined_data, newline="\r"), engine="python"
+        )
+        # Convert camel case column names to verbose names
+        bidict = (
+            gmn_python_api.meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
+        )
+        for column in meteor_summary_df.columns:
+            meteor_summary_df.rename(columns={column: bidict[column]}, inplace=True)
+    else:
         meteor_summary_df = pd.read_csv(
             StringIO(joined_data, newline="\r"),
             engine="python",
@@ -57,16 +67,6 @@ def read_meteor_summary_csv_as_dataframe(
         meteor_summary_df.columns = meteor_summary_df.columns.map(
             lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
         )
-    else:
-        meteor_summary_df = pd.read_csv(
-            StringIO(joined_data, newline="\r"), engine="python"
-        )
-        # Convert camel case column names to verbose names
-        bidict = (
-            gmn_python_api.meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
-        )
-        for column in meteor_summary_df.columns:
-            meteor_summary_df.rename(columns={column: bidict[column]}, inplace=True)
 
     # Set data types
     meteor_summary_df["Beginning (UTC Time)"] = pd.to_datetime(
@@ -118,7 +118,7 @@ def read_meteor_summary_csv_as_dataframe(
 def read_meteor_summary_csv_as_numpy_array(
     filepath_or_buffer: FilePathOrBuffer,
     camel_case_column_names: Optional[bool] = False,
-    csv_data_directory_format: Optional[bool] = False,
+    rest_format: Optional[bool] = False,
 ) -> npt.NDArray[Any]:
     """
     Reads meteor summary REST API or trajectory summary data directory CSV data into a
@@ -131,9 +131,9 @@ def read_meteor_summary_csv_as_numpy_array(
      If using a list the first item must contain the csv header, and
      all items must either be all Data Directory CSVs or all REST API CSVs.
     :param camel_case_column_names: If True, column names will be camel cased e.g. m_deg
-    :param csv_data_directory_format: If True, the filepath_or_buffer headers will be
-     treated as a CSV from the GMN Data Directory. If False, the filepath_or_buffer
-     headers will be treated as a REST API CSV.
+    :param rest_format: If True, the filepath_or_buffer headers will be treated as a
+     REST API CSV. If False, the filepath_or_buffer headers will be treated as a CSV
+     from the GMN Data Directory.
 
     :return: NumPy array of the meteor/trajectory summary data.
     :raises: TypeError if an invalid filepath_or_buffer type is provided.
@@ -141,7 +141,7 @@ def read_meteor_summary_csv_as_numpy_array(
     data_frame = read_meteor_summary_csv_as_dataframe(
         filepath_or_buffer,
         camel_case_column_names=camel_case_column_names,
-        csv_data_directory_format=csv_data_directory_format,
+        rest_format=rest_format,
     )
     return data_frame.to_numpy()  # type: ignore
 

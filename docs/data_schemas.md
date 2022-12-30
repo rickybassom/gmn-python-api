@@ -15,7 +15,7 @@ from gmn_python_api import meteor_summary_reader as reader
 traj_sum_file_content = data_directory.get_daily_file_content_by_date("2019-07-24")
 traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
     traj_sum_file_content,
-    csv_data_directory_format=True,
+    rest_format=True,
     camel_case_column_names=False,
 )
 
@@ -26,7 +26,6 @@ traj_sum_df.iloc[0]['Vgeo (km/s)']
 traj_sum_file_content = data_directory.get_daily_file_content_by_date("2019-07-24")
 traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
     traj_sum_file_content,
-    csv_data_directory_format=True,
     camel_case_column_names=True,
 )
 
