@@ -20,6 +20,10 @@ Changelog <https://github.com/gmn-data-platform/gmn-python-api/releases>
 
 ```{include} ../README.md
 :start-after: "# gmn-python-api"
+:end-before: "<!-- Links -->"
 :relative-docs: docs/
 :relative-images:
 ```
+
+[Troubleshooting]: docs/troubleshooting.md
+[Contributing guide]: docs/contributing.md

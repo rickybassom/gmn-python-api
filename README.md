@@ -71,7 +71,7 @@ Or
 pip install git+https://github.com/gmn-data-platform/gmn-python-api
 ```
 
-Refer to the [Troubleshooting](docs/troubleshooting.md) guide if you encounter any issues.
+Refer to the [Troubleshooting] guide if you encounter any issues.
 
 There is also a 
 [development Google Colab notebook](https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/dc25444cb98693081443bb31e8f6b2abbed3fde2/gmn_data_analysis_template.ipynb)
@@ -107,9 +107,13 @@ sections for more details.
 
 ## Contributing
 Contributions are very welcome. To learn more, see the 
-[Contributing guide](CONTRIBUTING.md).
+[Contributing guide].
 
 ## License
 
 Distributed under the terms of the [MIT](https://opensource.org/licenses/MIT) license,
 `gmn-python-api` is free and open source software.
+
+<!-- Links -->
+[Troubleshooting]: ./TROUBLESHOOTING.md
+[Contributing guide]: ./CONTRIBUTING.md
