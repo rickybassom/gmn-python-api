@@ -1,17 +1,10 @@
 # REST API
 
-The [GMN REST API](https://github.com/gmn-data-platform/gmn-rest-api) provides an
-interface to query and retrieve data from the GMN Data Store. The GMN REST API and
-the [GMN Data Store](https://github.com/gmn-data-platform/gmn-data-store) are not yet
-deployed on the GMN server, but they can be deployed locally (see 
-[development data analysis notebook](https://colab.research.google.com/github/gmn-data-platform/gmn-data-endpoints/blob/cef0b3721737e8d65002d21dc56aa27d74003593/gmn_data_analysis_template_dev.ipynb))
-.
+**Still under development**
 
-[Datasette](https://datasette.io/) is used for the REST API and provides endpoints to
-select data from the readonly GMN Data Store database using SQL. See the 
-[gmn_rest_api API Reference section](autoapi/gmn_python_api/gmn_rest_api/index) for 
-function and variable details. Note that data returned from the API is paginated, the 
-function doc strings describe how to fetch the next page of data.
+The GMN REST API provides an interface to query and retrieve data from the GMN Data 
+Store with more precision. The GMN REST API is under development and is not deployed. 
+The `gmn_rest_api` code is not functional yet.
 
 ## Example 1
 
