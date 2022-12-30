@@ -2,7 +2,7 @@
 This module contains functions to read trajectory summary files from the GMN data
 directory.
 """
-from datetime import datetime
+from datetime import date, datetime
 from datetime import timedelta
 from typing import List
 from typing import Optional
@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup  # type: ignore
 BASE_URL: str = "https://globalmeteornetwork.org/data/traj_summary_data/"
 """The base URL for trajectory summary files in the GMN data directory."""
 
-DATA_START_DATE: datetime = datetime(2018, 12, 9)
+DATA_START_DATE: date = date(2018, 12, 9)
 """The date of the earliest trajectory summary file in the GMN data directory."""
 
 DAILY_DIRECTORY: str = "daily/"
@@ -35,6 +35,12 @@ SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
 
 SUMMARY_ALL_FILENAME: str = "traj_summary_all.txt"
 """The filename of the trajectory summary file containing all data."""
+
+DAILY_DATE_INPUT_FORMAT: str = "%Y-%m-%d"
+"""The daily string date format that should be passed into the functions in this."""
+
+MONTHLY_DATE_INPUT_FORMAT: str = "%Y-%m"
+"""The monthly string date format that should be passed into the functions in this."""
 
 
 def get_all_daily_file_urls() -> List[str]:
@@ -67,20 +73,24 @@ def get_all_file_url() -> str:
 
 
 def get_daily_file_url_by_date(
-    date: datetime, current_date: Optional[datetime] = None
+        date_str: str, current_date: Optional[date] = None
 ) -> str:
     """
     Get the URL of the daily trajectory summary file for a given date.
 
-    :param date: The date of the daily file.
+    :param date_str: The date of the daily file to get in the format YYYY-MM-DD.
     :param current_date: The current date. Defaults to datetime.now().
 
     :return: The URL of the daily file.
     :raises: FileNotFoundError if the daily file cannot be found. Or
      requests.HTTPError is raised if the file url doesn't return a 200 response.
     """
+    date = datetime.strptime(date_str, DAILY_DATE_INPUT_FORMAT).date()
+
     if not current_date:
-        current_date = datetime.today()
+        current_date = datetime.today().date()
+    else:
+        current_date = current_date
 
     if date == current_date:
         return BASE_URL + DAILY_DIRECTORY + SUMMARY_TODAY_FILENAME
@@ -94,21 +104,23 @@ def get_daily_file_url_by_date(
     ]
 
     if len(files_containing_date) == 0:
-        raise FileNotFoundError(f"Trajectory summary file not found for date {date}.")
+        raise FileNotFoundError(f"Trajectory summary file not found for date "
+                                f"{date.strftime(DAILY_DATE_INPUT_FORMAT)}")
 
     return files_containing_date[0]
 
 
-def get_monthly_file_url_by_month(date: datetime) -> str:
+def get_monthly_file_url_by_month(date_str: str) -> str:
     """
     Get the URL of the monthly trajectory summary file for a given month.
 
-    :param date: The date of the monthly file.
+    :param date_str: The date of the monthly file to get in the format YYYY-MM.
 
     :return: The URL of the monthly file.
     :raises: FileNotFoundError if the monthly file cannot be found. Or
      requests.HTTPError is raised if the file url doesn't return a 200 response.
     """
+    date = datetime.strptime(date_str, MONTHLY_DATE_INPUT_FORMAT).date()
     all_monthly_filenames = get_all_monthly_file_urls()
     files_containing_date = [
         f for f in all_monthly_filenames if date.strftime("%Y%m") in f
@@ -116,7 +128,8 @@ def get_monthly_file_url_by_month(date: datetime) -> str:
 
     if len(files_containing_date) == 0:
         raise FileNotFoundError(
-            f"Trajectory summary file not found for month in date {date}."
+            f"Trajectory summary file not found for month in date "
+            f"{date.strftime(MONTHLY_DATE_INPUT_FORMAT)}"
         )
 
     return files_containing_date[0]
@@ -140,31 +153,31 @@ def get_file_content_from_url(file_url: str) -> str:
 
 
 def get_daily_file_content_by_date(
-    date: datetime, current_date: Optional[datetime] = None
+        date_str: str, current_date: Optional[date] = None
 ) -> str:
     """
     Get the content of the daily trajectory summary file for a given date.
 
-    :param date: The date of the daily file.
+    :param date_str: The date of the daily file to get in the format YYYY-MM-DD.
     :param current_date: The current date. Defaults to datetime.now().
 
     :return: The content of the daily file.
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
-    file_url = get_daily_file_url_by_date(date, current_date)
+    file_url = get_daily_file_url_by_date(date_str, current_date)
     return get_file_content_from_url(file_url)
 
 
-def get_monthly_file_content_by_date(date: datetime) -> str:
+def get_monthly_file_content_by_date(date_str: str) -> str:
     """
     Get the content of the monthly trajectory summary file for a given date.
 
-    :param date: The date to get the monthly file for.
+    :param date_str: The date to get the monthly file for in the format YYYY-MM.
 
     :return: The content of the monthly file.
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
     """
-    file_url = get_monthly_file_url_by_month(date)
+    file_url = get_monthly_file_url_by_month(date_str)
     return get_file_content_from_url(file_url)
 
 

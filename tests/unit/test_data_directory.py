@@ -10,6 +10,8 @@ from requests.exceptions import HTTPError
 from tests.unit import _mock_response
 
 from gmn_python_api import data_directory as gdd
+from gmn_python_api.data_directory import DAILY_DATE_INPUT_FORMAT, \
+    MONTHLY_DATE_INPUT_FORMAT
 from gmn_python_api.meteor_summary_schema import _MODEL_TRAJECTORY_SUMMARY_FILE_PATH
 
 
@@ -78,7 +80,7 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     @mock.patch("requests.get")
     def test_get_all_daily_file_urls_with_bad_response(
-        self, mock_get: mock.Mock
+            self, mock_get: mock.Mock
     ) -> None:
         """
         Test: That get_all_daily_file_urls() raises an exception when the HTTP response
@@ -92,7 +94,7 @@ class TestGmnDataDirectory(unittest.TestCase):
 
     @mock.patch("requests.get")
     def test_get_all_monthly_file_urls_with_bad_response(
-        self, mock_get: mock.Mock
+            self, mock_get: mock.Mock
     ) -> None:
         """
         Test: That get_all_monthly_file_urls() raises an exception when the HTTP
@@ -113,7 +115,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertEqual(
             [gdd.BASE_URL + gdd.DAILY_DIRECTORY + expected_filename],
             self._run_get_all_method_with_mock_directory_listing(
-                lambda: [gdd.get_daily_file_url_by_date(datetime.datetime(2019, 1, 1))],
+                lambda: [gdd.get_daily_file_url_by_date(
+                    datetime.date(2019, 1, 1).strftime(DAILY_DATE_INPUT_FORMAT))],
                 [expected_filename, "hgahfgasjghi.txt", "filename-20190102-XYZ123.txt"],
                 gdd.DAILY_DIRECTORY,
             )[1],
@@ -129,7 +132,8 @@ class TestGmnDataDirectory(unittest.TestCase):
             [gdd.BASE_URL + gdd.MONTHLY_DIRECTORY + expected_filename],
             self._run_get_all_method_with_mock_directory_listing(
                 lambda: [
-                    gdd.get_monthly_file_url_by_month(datetime.datetime(2019, 1, 1))
+                    gdd.get_monthly_file_url_by_month(
+                        datetime.date(2019, 1, 1).strftime(MONTHLY_DATE_INPUT_FORMAT)),
                 ],
                 [expected_filename, "hgahfgasjghi.txt", "filename-201902-XYZ123.txt"],
                 gdd.MONTHLY_DIRECTORY,
@@ -173,7 +177,8 @@ class TestGmnDataDirectory(unittest.TestCase):
             self._run_get_all_method_with_mock_directory_listing(
                 lambda: [
                     gdd.get_daily_file_url_by_date(
-                        datetime.datetime(2019, 1, 1), datetime.datetime(2019, 1, 1)
+                        datetime.date(2019, 1, 1).strftime(DAILY_DATE_INPUT_FORMAT),
+                        datetime.date(2019, 1, 1)
                     )
                 ],
                 [expected_filename, "hgahfgasjghi.txt", "filename-20181204-XYZ123.txt"],
@@ -193,7 +198,8 @@ class TestGmnDataDirectory(unittest.TestCase):
             self._run_get_all_method_with_mock_directory_listing(
                 lambda: [
                     gdd.get_daily_file_url_by_date(
-                        datetime.datetime(2019, 1, 1), datetime.datetime(2019, 1, 2)
+                        datetime.datetime(2019, 1, 1).strftime(DAILY_DATE_INPUT_FORMAT),
+                        datetime.date(2019, 1, 2)
                     )
                 ],
                 [expected_filename, "hgahfgasjghi.txt", "filename-20181204-XYZ123.txt"],
@@ -204,7 +210,7 @@ class TestGmnDataDirectory(unittest.TestCase):
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_daily_file_content_by_date(
-        self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
+            self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
         Test: That get_daily_file_content_by_date() returns the expected file content.
@@ -220,13 +226,14 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,
-            gdd.get_daily_file_content_by_date(datetime.datetime(2018, 12, 9)),
+            gdd.get_daily_file_content_by_date(
+                datetime.date(2018, 12, 9).strftime(DAILY_DATE_INPUT_FORMAT)),
         )
 
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_monthly_file_content_by_date(
-        self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
+            self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
         Test: That get_monthly_file_content_by_date() returns the expected file content.
@@ -240,7 +247,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         mock_get.return_value = _mock_response(text=expected_content)
         self.assertEqual(
             expected_content,
-            gdd.get_monthly_file_content_by_date(datetime.datetime(2018, 12, 1)),
+            gdd.get_monthly_file_content_by_date(
+                datetime.date(2018, 12, 1).strftime(MONTHLY_DATE_INPUT_FORMAT)),
         )
 
     @mock.patch("requests.get")
@@ -259,7 +267,7 @@ class TestGmnDataDirectory(unittest.TestCase):
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_daily_file_content_by_date_bad_response(
-        self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
+            self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
         Test: That get_daily_file_content_by_date() raises an exception when the HTTP
@@ -278,13 +286,13 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertRaises(
             HTTPError,
             gdd.get_daily_file_content_by_date,
-            datetime.datetime(2018, 12, 9),
+            datetime.date(2018, 12, 9).strftime(DAILY_DATE_INPUT_FORMAT),
         )
 
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_daily_file_content_by_date_not_found(
-        self, mock_get_url_paths: mock.Mock, _: mock.Mock
+            self, mock_get_url_paths: mock.Mock, _: mock.Mock
     ) -> None:
         """
         Test: That get_daily_file_content_by_date() raises an FileNotFoundError
@@ -300,13 +308,13 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertRaises(
             FileNotFoundError,
             gdd.get_daily_file_content_by_date,
-            datetime.datetime(2018, 12, 10),
+            datetime.date(2018, 12, 10).strftime(DAILY_DATE_INPUT_FORMAT),
         )
 
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_monthly_file_content_by_date_with_bad_response(
-        self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
+            self, mock_get_url_paths: mock.Mock, mock_get: mock.Mock
     ) -> None:
         """
         Test: That get_monthly_file_content_by_date() raises an exception when the HTTP
@@ -323,13 +331,13 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertRaises(
             HTTPError,
             gdd.get_monthly_file_content_by_date,
-            datetime.datetime(2018, 12, 1),
+            datetime.date(2018, 12, 1).strftime(MONTHLY_DATE_INPUT_FORMAT),
         )
 
     @mock.patch("requests.get")
     @mock.patch("gmn_python_api.data_directory._get_url_paths")
     def test_get_monthly_file_content_by_date_with_not_found(
-        self, mock_get_url_paths: mock.Mock, _: mock.Mock
+            self, mock_get_url_paths: mock.Mock, _: mock.Mock
     ) -> None:
         """
         Test: That get_monthly_file_content_by_date() raises an FileNotFoundError
@@ -343,16 +351,16 @@ class TestGmnDataDirectory(unittest.TestCase):
         self.assertRaises(
             FileNotFoundError,
             gdd.get_monthly_file_content_by_date,
-            datetime.datetime(2018, 11, 1),
+            datetime.date(2018, 11, 1).strftime(MONTHLY_DATE_INPUT_FORMAT),
         )
 
     @mock.patch("requests.get")
     def _run_get_all_method_with_mock_directory_listing(
-        self,
-        func: Callable[..., List[str]],
-        filenames: List[str],
-        directory: str,
-        mock_get: mock.Mock,
+            self,
+            func: Callable[..., List[str]],
+            filenames: List[str],
+            directory: str,
+            mock_get: mock.Mock,
     ) -> Tuple[List[str], List[str]]:
         """
         Mock the GMN data directory response run by mocking the files produced in a
@@ -373,8 +381,8 @@ class TestGmnDataDirectory(unittest.TestCase):
         ]
         mock_get.return_value = _mock_response(
             text="<html>"
-            f"{''.join(f'<a href={url}></a>' for url in filenames)}"
-            "</html>"
+                 f"{''.join(f'<a href={url}></a>' for url in filenames)}"
+                 "</html>"
         )
         return expected_file_urls, func()
 

@@ -145,3 +145,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
             status=500, raise_for_status=HTTPError("Bad response")
         )
         self.assertRaises(HTTPError, gmn_rest_api._http_get_response, "test_url")
+
+
+if __name__ == "__main__":
+    unittest.main()  # pragma: no cover

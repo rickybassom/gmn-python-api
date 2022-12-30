@@ -10,52 +10,6 @@ from gmn_python_api import meteor_summary_schema
 class Test(unittest.TestCase):
     """Tests for the meteor_summary_schema module."""
 
-    @mock.patch(
-        "gmn_python_api.meteor_summary_schema."
-        "gmn_python_api.read_meteor_summary_csv_as_dataframe"
-    )
-    def test_get_meteor_summary_csv_avro_schema(
-        self, mock_data_frame: mock.Mock
-    ) -> None:
-        """
-        Test: That get_trajectory_summary_avro_schema returns the correct schema.
-        When: get_trajectory_summary_avro_schema() is called with a mocked trajectory
-         summary data frame.
-        """
-        expected_data_frame = pd.DataFrame(
-            {
-                "trajectory_id": [1, 2, 3],
-                "trajectory_start_time": [1.123, 2.5423, 3.343],
-                "trajectory_end_time": [2.123, 3.5423, 4.343],
-                "iau_code": ["trajectory_1", "trajectory_2", "trajectory_3"],
-                "schema_version": ["1.0", "1.0", "1.0"],
-                "trajectory_participating_stations": [
-                    ["station_1", "station_2"],
-                    ["station_3", "station_4"],
-                    ["station_5", "station_6"],
-                ],
-            }
-        )
-        mock_data_frame.return_value = expected_data_frame
-
-        expected_schema = {
-            "type": "record",
-            "name": "Root",
-            "fields": [
-                {"name": "trajectory_id", "type": ["null", "long"]},
-                {"name": "trajectory_start_time", "type": ["null", "double"]},
-                {"name": "trajectory_end_time", "type": ["null", "double"]},
-                {"name": "iau_code", "type": ["null", "string"]},
-                {"name": "schema_version", "type": ["null", "string"]},
-                {
-                    "name": "trajectory_participating_stations",
-                    "type": ["null", {"type": "array", "items": ["null", "string"]}],
-                },
-            ],
-        }
-        actual_schema = meteor_summary_schema.get_meteor_summary_avro_schema()
-        self.assertEqual(expected_schema, actual_schema)
-
     @mock.patch("gmn_python_api.read_meteor_summary_csv_as_dataframe")
     def test_get_verbose_and_camel_case_column_name_bidict(
         self, mock_read_meteor_summary_csv_as_dataframe: mock.Mock
@@ -120,3 +74,7 @@ class Test(unittest.TestCase):
             meteor_summary_schema.get_verbose_and_camel_case_column_name_bidict()
         )
         self.assertEqual(expected_bidict, actual_bidict)
+
+
+if __name__ == "__main__":
+    unittest.main()  # pragma: no cover

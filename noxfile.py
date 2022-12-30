@@ -19,91 +19,17 @@ except ImportError:
     {sys.executable} -m pip install nox-poetry"""
     raise SystemExit(dedent(message)) from None
 
-
 package = "gmn_python_api"
 python_versions = ["3.10", "3.9", "3.8", "3.7"]
 nox.needs_version = ">= 2021.6.6"
 nox.options.sessions = (
-    "pre-commit",
     "safety",
+    "lint",
     "mypy",
-    "tests",
-    "xdoctest",
+    "unit-tests",
+    "integration-tests",
     "docs-build",
 )
-
-
-def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
-    """Activate virtualenv in hooks installed by pre-commit.
-
-    This function patches git hooks installed by pre-commit to activate the
-    session's virtual environment. This allows pre-commit to locate hooks in
-    that environment when invoked from git.
-
-    Args:
-        session: The Session object.
-    """
-    assert session.bin is not None  # noqa: S101
-
-    virtualenv = session.env.get("VIRTUAL_ENV")
-    if virtualenv is None:
-        return
-
-    hookdir = Path(".git") / "hooks"
-    if not hookdir.is_dir():
-        return
-
-    for hook in hookdir.iterdir():
-        if hook.name.endswith(".sample") or not hook.is_file():
-            continue
-
-        text = hook.read_text()
-        bindir = repr(session.bin)[1:-1]  # strip quotes
-        if not (
-            Path("A") == Path("a") and bindir.lower() in text.lower() or bindir in text
-        ):
-            continue
-
-        lines = text.splitlines()
-        if not (lines[0].startswith("#!") and "python" in lines[0].lower()):
-            continue
-
-        header = dedent(
-            f"""\
-            import os
-            os.environ["VIRTUAL_ENV"] = {virtualenv!r}
-            os.environ["PATH"] = os.pathsep.join((
-                {session.bin!r},
-                os.environ.get("PATH", ""),
-            ))
-            """
-        )
-
-        lines.insert(1, header)
-        hook.write_text("\n".join(lines))
-
-
-@session(name="pre-commit", python="3.10")
-def precommit(session: Session) -> None:
-    """Lint using pre-commit."""
-    args = session.posargs or ["run", "--all-files", "--show-diff-on-failure"]
-    session.install(
-        "black",
-        "darglint",
-        "flake8",
-        "flake8-bandit",
-        "flake8-bugbear",
-        "flake8-docstrings",
-        "flake8-rst-docstrings",
-        "pep8-naming",
-        "pre-commit",
-        "pre-commit-hooks",
-        "pyupgrade",
-        "reorder-python-imports",
-    )
-    session.run("pre-commit", *args)
-    if args and args[0] == "install":
-        activate_virtualenv_in_precommit_hooks(session)
 
 
 @session(python="3.10")
@@ -117,9 +43,23 @@ def safety(session: Session) -> None:
     session.run("safety", "check", "--full-report", f"--file={requirements}", *ignored)
 
 
+@session(python="3.10")
+def lint(session: Session) -> None:
+    """Lint using flake8 and pep8-naming."""
+    session.install(
+        "flake8",
+        "flake8-bandit",
+        "flake8-bugbear",
+        "flake8-docstrings",
+        "flake8-rst-docstrings",
+        "pep8-naming",
+    )
+    session.run("flake8", "src", "tests")
+
+
 @session(python=python_versions)
 def mypy(session: Session) -> None:
-    """Type-check using mypy."""
+    """Static type-check using mypy."""
     args = session.posargs or ["src", "tests", "docs/conf.py"]
     session.install(".")
     session.install("mypy", "pytest")
@@ -128,19 +68,20 @@ def mypy(session: Session) -> None:
         session.run("mypy", f"--python-executable={sys.executable}", "noxfile.py")
 
 
-@session(python=python_versions)
-def tests(session: Session) -> None:
-    """Run the test suite."""
+@session(name="unit-tests", python=python_versions)
+def unit_tests(session: Session) -> None:
+    """Run the unit test suite with coverage."""
     session.install(".")
     session.install("coverage[toml]", "pytest", "pygments")
     try:
-        session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
+        session.run("coverage", "run", "--parallel", "-m", "pytest", "tests/unit",
+                    *session.posargs)
     finally:
         if session.interactive:
             session.notify("coverage", posargs=[])
 
 
-@session
+@session(python=python_versions[0])
 def coverage(session: Session) -> None:
     """Produce the coverage report."""
     args = session.posargs or ["report"]
@@ -153,27 +94,12 @@ def coverage(session: Session) -> None:
     session.run("coverage", *args)
 
 
-# @session(python=python_versions)
-# def typeguard(session: Session) -> None:
-#     """Runtime type checking using Typeguard."""
-#     session.install(".")
-#     session.install("pytest", "typeguard", "pygments")
-#     session.run("pytest", f"--typeguard-packages={package}", *session.posargs)
-
-
-@session(python=python_versions)
-def xdoctest(session: Session) -> None:
-    """Run examples with xdoctest."""
-    if session.posargs:
-        args = [package, *session.posargs]
-    else:
-        args = [f"--modname={package}", "--command=all"]
-        if "FORCE_COLOR" in os.environ:
-            args.append("--colored=1")
-
+@session(name="integration-tests", python="3.10")
+def integration_tests(session: Session) -> None:
+    """Run the integration test suite."""
     session.install(".")
-    session.install("xdoctest[colors]")
-    session.run("python", "-m", "xdoctest", *args)
+    session.install("pytest")
+    session.run("pytest", "tests/integration", *session.posargs)
 
 
 @session(name="docs-build", python="3.10")
@@ -184,7 +110,7 @@ def docs_build(session: Session) -> None:
         args.insert(0, "--color")
 
     session.install(".")
-    session.install("sphinx", "sphinx-click", "furo", "sphinx-autoapi")
+    session.install("sphinx", "sphinx-click", "furo", "sphinx-autoapi", "myst-parser")
 
     build_dir = Path("docs", "_build")
     if build_dir.exists():
@@ -199,7 +125,8 @@ def docs(session: Session) -> None:
     args = session.posargs or ["--open-browser", "docs", "docs/_build"]
     session.install(".")
     session.install(
-        "sphinx", "sphinx-autobuild", "sphinx-click", "furo", "sphinx-autoapi"
+        "sphinx", "sphinx-autobuild", "sphinx-click", "furo", "sphinx-autoapi",
+        "myst-parser"
     )
 
     build_dir = Path("docs", "_build")
