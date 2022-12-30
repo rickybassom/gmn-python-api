@@ -72,7 +72,7 @@ nox --list-sessions
 You can also run a specific Nox session. For example, invoke the unit test suite like this:
 
 ```sh
-nox --session=tests
+nox --session=unit-tests
 ```
 
 Unit tests are located in the `tests` directory, and are written using the [pytest](https://pytest.readthedocs.io/) testing framework.
