@@ -57,7 +57,7 @@ jobs:
       - name: Run Nox
         shell: bash
         run: |
-          if [ "${{ matrix.os }}" = "macos-latest" ]; then
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
             export SETUPTOOLS_USE_DISTUTILS=stdlib
           fi
           nox --python=${{ matrix.python }}
