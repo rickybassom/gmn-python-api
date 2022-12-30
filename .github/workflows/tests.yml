@@ -32,6 +32,7 @@ jobs:
     env:
       NOXSESSION: ${{ matrix.session }}
       FORCE_COLOR: "1"
+      SETUPTOOLS_USE_DISTUTILS: "stdlib"
 
     steps:
       - name: Check out the repository
