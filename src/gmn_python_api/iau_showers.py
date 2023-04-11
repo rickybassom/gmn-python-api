@@ -17,7 +17,7 @@ def get_iau_showers() -> Dict[str, Dict[str, str]]:
      containing the IAU shower information.
     :raises: requests.HTTPError if the source server doesn't return a 200 response.
     """
-    response = requests.get(IAU_SHOWERS_LIST_URL)
+    response = requests.get(IAU_SHOWERS_LIST_URL, timeout=200)
     if not response.ok:
         response.raise_for_status()
         return {}  # pragma: no cover

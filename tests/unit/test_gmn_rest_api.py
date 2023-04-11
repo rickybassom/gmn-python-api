@@ -130,7 +130,7 @@ class TestGmnDataStoreRestApi(unittest.TestCase):
         next_page = "next_page"
         mock_requests_get.return_value = _mock_response(text="")
         gmn_rest_api.get_data("test_url", next_page=next_page)
-        mock_requests_get.assert_called_with(next_page)
+        mock_requests_get.assert_called_with(next_page, timeout=200)
 
     @mock.patch("requests.get")
     def test_http_get_response_with_bad_response(

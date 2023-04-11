@@ -162,15 +162,15 @@ def _http_get_response(url: str) -> Tuple[str, Optional[str]]:
     :return: Data, and a URL to access more paginated data if required.
     :raises: requests.HTTPError If URL doesn't return a 200 response.
     """
-    response = requests.get(url)
+    response = requests.get(url, timeout=200)
     if response.ok:
         try:
             next_url = response.links.get("next").get("url")  # type: ignore
         except AttributeError:
             # next_url somtimes is not given even when paginated (for example with CSVs)
             if str(response.text).count("\n") == 101 and (
-                requests.head(url + "&_next=100").ok
-                or requests.head(url + "?_next=100").ok
+                requests.head(url + "&_next=100", timeout=200).ok
+                or requests.head(url + "?_next=100", timeout=200).ok
             ):  # pragma: no cover
                 next_url = url + "&_next=100" if "?" in url else url + "?_next=100"
             else:

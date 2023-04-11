@@ -54,7 +54,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
          the all file from the data directory.
         When: get_all_file_url is fetched from the live GMN server.
         """
-        r = requests.get(dd.get_all_file_url(), stream=True)
+        r = requests.get(dd.get_all_file_url(), stream=True, timeout=200)
 
         lines = []
         for line in r.iter_lines():

@@ -144,7 +144,7 @@ def get_file_content_from_url(file_url: str) -> str:
     :return: The content of the file.
     :raises: requests.HTTPError If the file url doesn't return a 200 response.
     """
-    response = requests.get(file_url)
+    response = requests.get(file_url, timeout=200)
     if response.ok:
         return str(response.text)
     else:
