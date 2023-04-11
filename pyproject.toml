@@ -24,6 +24,7 @@ beautifulsoup4 = "^4.10.0"
 requests = "^2.21.0"
 types-requests = "^2.27.8"
 future = ">=0.18.3"
+werkzeug = ">=2.2.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"
