@@ -3,7 +3,8 @@ This module contains functions for handling the current meteor/trajectory summar
  schema.
 """
 import os
-from typing import Dict
+import pandas as pd  # type: ignore
+from typing import Dict, List
 
 import gmn_python_api
 
@@ -23,6 +24,32 @@ _MODEL_TRAJECTORY_SUMMARY_FILE_ONE_ROW_PATH = os.path.join(
     "traj_summary_20220304_solrange_344.0-345.0_one_row.txt",
 )
 """Model v1.0 trajectory summary file, just one data row."""
+
+
+def get_column_names(camel_case: bool = False) -> List[str]:
+    """
+    Get the column names of the current supported meteor/trajectory summary schema.
+
+    :param camel_case: Whether to return the column names in camel case or verbose
+    :return: The column names of the current supported meteor/trajectory summary model.
+    """
+    dataframe = gmn_python_api.meteor_summary_reader.read_meteor_summary_csv_as_dataframe(
+        _MODEL_TRAJECTORY_SUMMARY_FILE_ONE_ROW_PATH, camel_case_column_names=camel_case)
+    dataframe = dataframe.reset_index()
+    return list(dataframe.columns.to_list())
+
+
+def get_model_meteor_summary_dataframe(camel_case: bool = False) -> pd.DataFrame:
+    """
+    Get the current supported model meteor/trajectory summary file as a dataframe.
+
+    :param camel_case: Whether to return the column names in camel case or verbose
+    :return: The model meteor/trajectory summary file as a dataframe.
+    """
+    return gmn_python_api.read_meteor_summary_csv_as_dataframe(  # type: ignore
+        _MODEL_TRAJECTORY_SUMMARY_FILE_PATH,
+        camel_case_column_names=camel_case,
+    )
 
 
 def get_verbose_and_camel_case_column_name_bidict() -> Dict[str, str]:
