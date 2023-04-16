@@ -209,7 +209,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
 
         :param actual_dataframe: The dataframe to test.
         """
-        self.assertEqual(False, actual_dataframe.empty)
+        self.assertFalse(actual_dataframe.empty)
         self.assertEqual((534, 86), actual_dataframe.shape)
         self.assertEqual(
             ["20220304220741_yrPTs", "20220304221458_vpeSU", "20220304221734_ii908"],
@@ -227,7 +227,7 @@ class TestGmnMeteorSummaryReader(unittest.TestCase):
 
         :param actual_dataframe: The dataframe to test.
         """
-        self.assertEqual(False, actual_dataframe.empty)
+        self.assertFalse(actual_dataframe.empty)
         self.assertEqual((100, 86), actual_dataframe.shape)
         self.assertEqual(
             ["20220304220741_yrPTs", "20220401012310_f5I2M", "20220401012318_BIAD6"],
