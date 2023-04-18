@@ -21,12 +21,12 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
 def read_meteor_summary_csv_as_dataframe(
-    filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]],
-    camel_case_column_names: Optional[bool] = False,
-    rest_format: Optional[bool] = False,
+        filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]],
+        camel_case_column_names: Optional[bool] = False,
+        rest_format: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
-    Reads meteor summary REST API or trajectory summary data directory CSV data into a
+    Reads trajectory summary or meteor summary REST API data directory CSV data into a
      Pandas DataFrame. Columns available in the DataFrame can be found here:
      https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html
 
@@ -63,62 +63,27 @@ def read_meteor_summary_csv_as_dataframe(
             header=[0, 1],
             na_values=["nan", "...", "None"],
         )
-        # Clean header text
+
+        def extract_header(text: str) -> str:
+            return " ".join(text.replace("#", "").split())
+
         meteor_summary_df.columns = meteor_summary_df.columns.map(
-            lambda h: f"{_clean_header(h[0])}{_clean_header(h[1], is_unit=True)}"
+            lambda h: extract_header(h[0]) + (
+                f" ({extract_header(h[1])})" if "Unnamed" not in h[1] else "")
         )
 
-    # Set data types
-    meteor_summary_df["Beginning (UTC Time)"] = pd.to_datetime(
-        meteor_summary_df["Beginning (UTC Time)"], format=DATETIME_FORMAT
-    )
-    meteor_summary_df["IAU (code)"] = meteor_summary_df["IAU (code)"].astype("string")
-    meteor_summary_df["IAU (No)"] = (
-        meteor_summary_df["IAU (No)"].fillna(-1).astype("int64")
-    )
-    meteor_summary_df["Beg in (FOV)"] = meteor_summary_df["Beg in (FOV)"].map(
-        {"True": True, "False": False}
-    )
-    meteor_summary_df["Beg in (FOV)"] = meteor_summary_df["Beg in (FOV)"].astype("bool")
-    meteor_summary_df["End in (FOV)"] = meteor_summary_df["End in (FOV)"].map(
-        {"True": True, "False": False}
-    )
-    meteor_summary_df["End in (FOV)"] = meteor_summary_df["End in (FOV)"].astype("bool")
-    meteor_summary_df["Participating (stations)"] = meteor_summary_df[
-        "Participating (stations)"
-    ].astype("string")
-    meteor_summary_df["Participating (stations)"] = meteor_summary_df[
-        "Participating (stations)"
-    ].apply(lambda x: x[1:-1].split(","))
-
-    meteor_summary_df[
-        "Schema (version)"
-    ] = gmn_python_api.meteor_summary_schema.SCHEMA_VERSION
-    meteor_summary_df["Schema (version)"] = meteor_summary_df[
-        "Schema (version)"
-    ].astype("string")
-
-    meteor_summary_df.set_index("Unique trajectory (identifier)", inplace=True)
+    _set_data_types(meteor_summary_df)
 
     if camel_case_column_names:
-        meteor_summary_df.columns = meteor_summary_df.columns.str.replace(
-            "[^0-9a-zA-Z]+", "_", regex=True
-        )
-        meteor_summary_df.columns = meteor_summary_df.columns.str.rstrip("_")
-        meteor_summary_df.columns = meteor_summary_df.columns.str.lstrip("_")
-        meteor_summary_df.columns = meteor_summary_df.columns.str.replace(
-            "Q_AU", "q_au_"
-        )
-        meteor_summary_df.columns = meteor_summary_df.columns.str.lower()
-        meteor_summary_df.index.name = "unique_trajectory_identifier"
+        set_camel_case_column_names(meteor_summary_df)
 
     return meteor_summary_df
 
 
 def read_meteor_summary_csv_as_numpy_array(
-    filepath_or_buffer: FilePathOrBuffer,
-    camel_case_column_names: Optional[bool] = False,
-    rest_format: Optional[bool] = False,
+        filepath_or_buffer: FilePathOrBuffer,
+        camel_case_column_names: Optional[bool] = False,
+        rest_format: Optional[bool] = False,
 ) -> npt.NDArray[Any]:
     """
     Reads meteor summary REST API or trajectory summary data directory CSV data into a
@@ -146,8 +111,70 @@ def read_meteor_summary_csv_as_numpy_array(
     return data_frame.to_numpy()  # type: ignore
 
 
+def set_camel_case_column_names(dataframe: pd.DataFrame) -> None:
+    """
+    Sets the column names in a dataframe containing meteor/trajectory summary data to
+     camel case e.g. m_deg.
+
+    :param dataframe: The meteor summary dataframe to set the column names for.
+    :return: None.
+    """
+    dataframe.columns = dataframe.columns.str.replace(
+        "[^0-9a-zA-Z]+", "_", regex=True
+    )
+    dataframe.columns = dataframe.columns.str.rstrip("_")
+    dataframe.columns = dataframe.columns.str.lstrip("_")
+    dataframe.columns = dataframe.columns.str.replace("Q_AU", "q_au_")
+    dataframe.columns = dataframe.columns.str.lower()
+    dataframe.index.name = "unique_trajectory_identifier"
+
+
+def _set_data_types(dataframe: pd.DataFrame) -> None:
+    """
+    Sets the data types and index column in a dataframe containing raw trajectory
+     summary data. The input dataframe must have the column names in verbose format e.g.
+     "Beginning (UTC Time)".
+
+    :param dataframe: The meteor summary dataframe to set the data types for.
+    :return: None.
+    """
+    dataframe["Beginning (UTC Time)"] = pd.to_datetime(
+        dataframe["Beginning (UTC Time)"], format=DATETIME_FORMAT
+    )
+    dataframe["IAU (code)"] = dataframe[
+        "IAU (code)"].astype("string")
+    dataframe["IAU (No)"] = (
+        dataframe["IAU (No)"].fillna(-1).astype("int64")
+    )
+    dataframe["Beg in (FOV)"] = dataframe[
+        "Beg in (FOV)"].map(
+        {"True": True, "False": False}
+    )
+    dataframe["Beg in (FOV)"] = dataframe[
+        "Beg in (FOV)"].astype("bool")
+    dataframe["End in (FOV)"] = dataframe[
+        "End in (FOV)"].map(
+        {"True": True, "False": False}
+    )
+    dataframe["End in (FOV)"] = dataframe[
+        "End in (FOV)"].astype("bool")
+    dataframe["Participating (stations)"] = dataframe[
+        "Participating (stations)"
+    ].astype("string")
+    dataframe["Participating (stations)"] = dataframe[
+        "Participating (stations)"
+    ].apply(lambda x: x[1:-1].split(","))
+    dataframe[
+        "Schema (version)"
+    ] = gmn_python_api.meteor_summary_schema.SCHEMA_VERSION
+    dataframe["Schema (version)"] = dataframe[
+        "Schema (version)"
+    ].astype("string")
+
+    dataframe.set_index("Unique trajectory (identifier)", inplace=True)
+
 def _join_filepath_or_buffer(  # noqa: C901
-    filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]]
+        filepath_or_buffer: Union[FilePathOrBuffer, List[FilePathOrBuffer]]
 ) -> str:
     """
     Join data provided in the reader filepath_or_buffer parameter into a single CSV
@@ -208,24 +235,3 @@ def _join_filepath_or_buffer(  # noqa: C901
         i += 1
 
     return joined_data
-
-
-def _clean_header(text: str, is_unit: bool = False) -> str:
-    """
-    Extract header text from each raw trajectory summary csv file header.
-
-    :param text: Raw trajectory summary csv column header text.
-    :param is_unit: If True, return text with brackets for units.
-
-    :returns: Formatted text.
-    """
-    # Return an empty string if there is no header found
-    if "Unnamed" in text:
-        return ""
-
-    # Removes additional spaces and hashtags from text. Add brackets optionally.
-    clean_header = " ".join(text.replace("#", "").split())
-    if is_unit:
-        clean_header = f" ({clean_header})"
-
-    return clean_header
