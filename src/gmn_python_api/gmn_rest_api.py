@@ -1,5 +1,5 @@
 """
-This module contains functions to read meteor summary data from the GMN REST API.
+This module contains functions to read meteor trajectory data from the GMN REST API.
  The REST API uses the Datasette API endpoint. More info:
  https://docs.datasette.io/en/stable/json_api.html
 """
@@ -44,7 +44,7 @@ def get_meteor_summary_data_reader_compatible(
     next_page: Optional[str] = None,
 ) -> Tuple[str, Optional[str]]:
     """
-    Get meteor summary data from the GMN REST API in a format that is compatible with
+    Get meteor trajectory data from the GMN REST API in a format that is compatible with
      the meteor_summary_reader functions.
 
     :param where_sql: An optional SQL WHERE clause to filter the data (e.g. iau_no='4').
@@ -68,7 +68,7 @@ def get_meteor_summary_data(
     next_page: Optional[str] = None,
 ) -> Tuple[str, Optional[str]]:
     """
-    Get meteor summary data from the GMN REST API.
+    Get meteor trajectory data from the GMN REST API.
 
     :param table_arguments: An optional dictionary of arguments to filter the data.
      A full list of arguments can be found here:
