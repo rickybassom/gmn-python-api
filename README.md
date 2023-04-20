@@ -24,24 +24,18 @@ library.
 
 ## Features
 
-- Listing available daily and monthly csv trajectory summary files from the 
-  [GMN data directory](https://globalmeteornetwork.org/data/traj_summary_data/).
+- Listing available daily and monthly meteor trajectory files from the 
+  [GMN Data Directory](https://globalmeteornetwork.org/data/traj_summary_data/).
 
-- Downloading specific daily and monthly csv trajectory summary files from the data
-  directory.
+- Downloading specific daily and monthly CSV meteor trajectory files from the GMN Data
+  Directory or GMN REST API.
 
-- Functions for loading the data directory trajectory summary data into 
-  [Pandas](https://pandas.pydata.org/) DataFrames or [Numpy](https://numpy.org/) arrays.
-
-- Functions for retrieving meteor summary data from the future GMN Data Store using the
-  GMN REST API.
-
-- Functions for loading REST API meteor summary data
-  into [Pandas](https://pandas.pydata.org/) DataFrames or [Numpy](https://numpy.org/)
-  arrays.
+- Functions for loading meteor trajectory data into [Pandas](https://pandas.pydata.org/)
+  DataFrames.
 
 - Functions for retrieving available 
-  [IAU](https://www.ta3.sk/IAUC22DB/MDC2007/Roje/roje_lista.php) registered meteor showers.
+  [IAU](https://www.ta3.sk/IAUC22DB/MDC2007/Roje/roje_lista.php) registered meteor
+  showers.
 
 ## Requirements
 
@@ -79,21 +73,22 @@ Simple meteor analysis example:
 
 ```python
 from gmn_python_api import data_directory as dd
-from gmn_python_api import meteor_summary_reader as reader
+from gmn_python_api import meteor_trajectory_reader
 
 # Analyse recorded meteor data for the 24th of July 2019
-traj_sum_file_content = dd.get_daily_file_content_by_date("2019-07-24")
+traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
 
 # Read data as a Pandas DataFrame
-traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(traj_sum_file_content)
+traj_df = meteor_trajectory_reader.read_csv(traj_file_content)
 
-print(f"{traj_sum_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity")
+print(f"{traj_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity")
 # Output: 65.38499 km/s was the fastest geostationary velocity
 
-print(f"{traj_sum_df.loc[traj_sum_df['IAU (code)'] == 'PER'].shape[0]} Perseid meteors")
+print(f"{traj_df.loc[traj_df['IAU (code)'] == 'PER'].shape[0]} Perseid meteors")
 # Output: 8 Perseid meteors
 
-print(f"Station #{traj_sum_df['Num (stat)'].mode().values[0]} recorded the most meteors")
+print(
+  f"Station #{traj_df['Num (stat)'].mode().values[0]} recorded the most meteors")
 # Output: Station #2 recorded the most meteors
 ```
 
