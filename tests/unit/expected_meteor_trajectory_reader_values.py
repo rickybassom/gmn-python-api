@@ -1,5 +1,5 @@
 """
-This module stores constant expected properties for testing the model data file.
+This module stores expected properties for regression testing the meteor summary reader.
 """
 import pandas as pd  # type: ignore
 from numpy import dtype
@@ -90,7 +90,6 @@ EXPECTED_COLUMN_NAMES = [
     "End in (FOV)",
     "Num (stat)",
     "Participating (stations)",
-    "Schema (version)",
 ]
 EXPECTED_COLUMN_NAMES_CAMEL_CASE = [
     "beginning_julian_date",
@@ -178,7 +177,6 @@ EXPECTED_COLUMN_NAMES_CAMEL_CASE = [
     "end_in_fov",
     "num_stat",
     "participating_stations",
-    "schema_version",
 ]
 EXPECTED_DTYPES = [
     dtype("float64"),
@@ -266,5 +264,4 @@ EXPECTED_DTYPES = [
     dtype("bool"),
     dtype("int64"),
     dtype("O"),
-    pd.StringDtype(),
 ]

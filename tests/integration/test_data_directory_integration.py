@@ -7,7 +7,7 @@ import requests
 from gmn_python_api import data_directory as dd
 from gmn_python_api.data_directory import DAILY_DATE_INPUT_FORMAT, \
     MONTHLY_DATE_INPUT_FORMAT
-from gmn_python_api import meteor_summary_reader as msr
+from gmn_python_api import meteor_trajectory_reader as mtr
 
 
 class TestDataDirectoryIntegration(unittest.TestCase):
@@ -22,7 +22,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
         """
         trajectory_summary_file_content = dd.get_daily_file_content_by_date(
             date.today().strftime(DAILY_DATE_INPUT_FORMAT))
-        msr.read_meteor_summary_csv_as_dataframe(trajectory_summary_file_content)
+        mtr.read_csv(trajectory_summary_file_content)
 
     def test_load_daily_file(self) -> None:
         """
@@ -34,7 +34,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
         trajectory_summary_file_content = dd.get_daily_file_content_by_date(
             date(2018, 12, 10).strftime(DAILY_DATE_INPUT_FORMAT)
         )
-        msr.read_meteor_summary_csv_as_dataframe(trajectory_summary_file_content)
+        mtr.read_csv(trajectory_summary_file_content)
 
     def test_load_monthly_file(self) -> None:
         """
@@ -46,7 +46,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
         trajectory_summary_file_content = dd.get_monthly_file_content_by_date(
             date(2019, 1, 1).strftime(MONTHLY_DATE_INPUT_FORMAT)
         )
-        msr.read_meteor_summary_csv_as_dataframe(trajectory_summary_file_content)
+        mtr.read_csv(trajectory_summary_file_content)
 
     def test_load_all_file_100_lines(self) -> None:
         """
@@ -62,7 +62,7 @@ class TestDataDirectoryIntegration(unittest.TestCase):
             if len(lines) == 100:
                 break
 
-        msr.read_meteor_summary_csv_as_dataframe("\n".join(lines))
+        mtr.read_csv("\n".join(lines))
 
 
 if __name__ == "__main__":
