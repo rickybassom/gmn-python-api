@@ -25,7 +25,7 @@ _MODEL_METEOR_TRAJECTORY_FILE_ONE_ROW_PATH = Path(os.path.join(
     "data_models",
     "traj_summary_20220304_solrange_344.0-345.0_one_row.txt",
 ))
-"""Model trajectory file, just one data row."""
+"""Model meteor trajectory file, just one data row."""
 
 
 @lru_cache(maxsize=None)
