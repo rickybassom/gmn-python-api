@@ -1,6 +1,6 @@
 """
-This module contains functions to read trajectory summary files from the GMN data
-directory.
+This module contains functions to read meteor trajectory files from the GMN Data
+ Directory.
 """
 from datetime import date, datetime
 from datetime import timedelta
@@ -11,41 +11,43 @@ import requests
 from bs4 import BeautifulSoup  # type: ignore
 
 BASE_URL: str = "https://globalmeteornetwork.org/data/traj_summary_data/"
-"""The base URL for trajectory summary files in the GMN data directory."""
+"""The base URL for meteor trajectory files in the GMN Data Directory."""
 
 DATA_START_DATE: date = date(2018, 12, 9)
-"""The date of the earliest trajectory summary file in the GMN data directory."""
+"""The date of the earliest meteor trajectory file in the GMN Data Directory."""
 
 DAILY_DIRECTORY: str = "daily/"
-"""The name of the directory containing daily trajectory summary files in the
-base URL."""
+"""The name of the directory containing daily meteor trajectory files in the base
+ URL."""
 
 MONTHLY_DIRECTORY: str = "monthly/"
-"""The name of the directory containing monthly trajectory summary files in
-# the base URL."""
+"""The name of the directory containing monthly meteor trajectory files in the base
+ URL."""
 
 SUMMARY_FILE_EXTENSION: str = "txt"
-"""The extension of the trajectory summary files in the GMN data directory"""
+"""The extension of the meteor trajectory files in the GMN Data Directory"""
 
 SUMMARY_TODAY_FILENAME: str = "traj_summary_latest_daily.txt"
-"""The filename of the most recent trajectory summary file."""
+"""The filename of the most recent meteor trajectory file."""
 
 SUMMARY_YESTERDAY_FILENAME: str = "traj_summary_yesterday.txt"
-"""The filename of the trajectory summary file from yesterday."""
+"""The filename of the meteo trajectory file from yesterday."""
 
 SUMMARY_ALL_FILENAME: str = "traj_summary_all.txt"
-"""The filename of the trajectory summary file containing all data."""
+"""The filename of the meteor trajectory file containing all data."""
 
 DAILY_DATE_INPUT_FORMAT: str = "%Y-%m-%d"
-"""The daily string date format that should be passed into the functions in this."""
+"""The daily string date format that should be passed in as a parameter to the
+ functions in this module."""
 
 MONTHLY_DATE_INPUT_FORMAT: str = "%Y-%m"
-"""The monthly string date format that should be passed into the functions in this."""
+"""The monthly string date format that should be passed in as a parameter to the
+ functions in this module."""
 
 
 def get_all_daily_file_urls() -> List[str]:
     """
-    Get all daily trajectory summary file urls from the GMN data directory.
+    Get all daily meteor trajectory file urls from the GMN Data Directory.
 
     :return: A list of all daily file urls.
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
@@ -55,7 +57,7 @@ def get_all_daily_file_urls() -> List[str]:
 
 def get_all_monthly_file_urls() -> List[str]:
     """
-    Get all monthly trajectory summary file urls from the GMN data directory.
+    Get all monthly meteor trajectory file urls from the GMN Data Directory.
 
     :return: A list of all monthly file urls.
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
@@ -65,7 +67,7 @@ def get_all_monthly_file_urls() -> List[str]:
 
 def get_all_file_url() -> str:
     """
-    Get the URL of the trajectory summary file containing all data.
+    Get the URL of the meteor trajectory file containing all data.
 
     :return: The URL of the file containing all data.
     """
@@ -76,7 +78,7 @@ def get_daily_file_url_by_date(
         date_str: str, current_date: Optional[date] = None
 ) -> str:
     """
-    Get the URL of the daily trajectory summary file for a given date.
+    Get the URL of the daily meteor trajectory file for a given date.
 
     :param date_str: The date of the daily file to get in the format YYYY-MM-DD.
     :param current_date: The current date. Defaults to datetime.now().
@@ -104,7 +106,7 @@ def get_daily_file_url_by_date(
     ]
 
     if len(files_containing_date) == 0:
-        raise FileNotFoundError(f"Trajectory summary file not found for date "
+        raise FileNotFoundError(f"Meteor trajectory file not found for date "
                                 f"{date.strftime(DAILY_DATE_INPUT_FORMAT)}")
 
     return files_containing_date[0]
@@ -112,7 +114,7 @@ def get_daily_file_url_by_date(
 
 def get_monthly_file_url_by_month(date_str: str) -> str:
     """
-    Get the URL of the monthly trajectory summary file for a given month.
+    Get the URL of the monthly meteor trajectory file for a given month.
 
     :param date_str: The date of the monthly file to get in the format YYYY-MM.
 
@@ -128,7 +130,7 @@ def get_monthly_file_url_by_month(date_str: str) -> str:
 
     if len(files_containing_date) == 0:
         raise FileNotFoundError(
-            f"Trajectory summary file not found for month in date "
+            f"Meteor trajectory file not found for month in date "
             f"{date.strftime(MONTHLY_DATE_INPUT_FORMAT)}"
         )
 
@@ -137,9 +139,9 @@ def get_monthly_file_url_by_month(date_str: str) -> str:
 
 def get_file_content_from_url(file_url: str) -> str:
     """
-    Get the content of a trajectory summary file from a given URL.
+    Get the content of a meteor trajectory file from a given URL.
 
-    :param url: The URL of the trajectory summary file.
+    :param url: The URL of the meteor trajectory file.
 
     :return: The content of the file.
     :raises: requests.HTTPError If the file url doesn't return a 200 response.
@@ -156,7 +158,7 @@ def get_daily_file_content_by_date(
         date_str: str, current_date: Optional[date] = None
 ) -> str:
     """
-    Get the content of the daily trajectory summary file for a given date.
+    Get the content of the daily meteo trajectory file for a given date.
 
     :param date_str: The date of the daily file to get in the format YYYY-MM-DD.
     :param current_date: The current date. Defaults to datetime.now().
@@ -170,7 +172,7 @@ def get_daily_file_content_by_date(
 
 def get_monthly_file_content_by_date(date_str: str) -> str:
     """
-    Get the content of the monthly trajectory summary file for a given date.
+    Get the content of the monthly meteor trajectory file for a given date.
 
     :param date_str: The date to get the monthly file for in the format YYYY-MM.
 
@@ -183,7 +185,7 @@ def get_monthly_file_content_by_date(date_str: str) -> str:
 
 def get_all_file_content() -> str:
     """
-    Get the content of the trajectory summary file containing all data.
+    Get the content of the meteor trajectory file containing all data.
 
     :return: The content of the file containing all data.
     :raises: requests.HTTPError if the data directory url doesn't return a 200 response.
