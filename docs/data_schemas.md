@@ -2,39 +2,38 @@
 
 GMN data fields are accessible through Pandas DataFrames produced by the
 `gmn-python-api` library. See the
-[meteor_summary_schema API Reference section](autoapi/gmn_python_api/meteor_summary_schema/index)
+[meteor_trajectory_schema API Reference section](autoapi/gmn_python_api/meteor_trajectory_schema/index)
 for function and variable details.
 
-## Accessing meteor trajectory summary fields code example
+## Accessing meteor trajectory fields code example
 
 ```python
 from gmn_python_api import data_directory as dd
-from gmn_python_api import meteor_summary_reader as reader
+from gmn_python_api import meteor_trajectory_reader
 
 # Access column names (verbose)
-traj_sum_file_content = dd.get_daily_file_content_by_date("2019-07-24")
-traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
-    traj_sum_file_content,
-    rest_format=True,
-    camel_case_column_names=False,
+traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
+traj_df = meteor_trajectory_reader.read_csv(
+    traj_file_content,
+    output_camel_case=False,
 )
 
-traj_sum_df.iloc[0]['Vgeo (km/s)']
+traj_df.iloc[0]['Vgeo (km/s)']
 # 63.95235
 
 # Access column names (camel case)
-traj_sum_file_content = dd.get_daily_file_content_by_date("2019-07-24")
-traj_sum_df = reader.read_meteor_summary_csv_as_dataframe(
-    traj_sum_file_content,
-    camel_case_column_names=True,
+traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
+traj_df = meteor_trajectory_reader.read_csv(
+    traj_file_content,
+    output_camel_case=True,
 )
 
-traj_sum_df.iloc[0]['vgeo_km_s']
+traj_df.iloc[0]['vgeo_km_s']
 # 63.952355
 ```
 
-The model data file is `meteor_summary_schema._MODEL_TRAJECTORY_SUMMARY_FILE_PATH`. The
-one line version of the file is `meteor_summary_schema._MODEL_TRAJECTORY_SUMMARY_FILE_ONE_ROW_PATH`.
+The model data file is `meteor_trajectory_schema._MODEL_METEOR_TRAJECTORY_FILE_PATH`. The
+one line version of the file is `meteor_summary_schema._MODEL_METEOR_TRAJECTORY_FILE_ONE_ROW_PATH`.
 
 Verbose and camel case column names can be found below.
 
@@ -97,6 +96,5 @@ Listing of current data schema (version 1.0).
 | End in \(FOV\)                        | end\_in\_fov                     | Ending of the meteor observed by at least one camera\.                                                                                            |
 | Num \(stat\)                          | num\_stat                        | Number of stations which observed the meteor\.                                                                                                    |
 | Participating \(stations\)            | participating\_stations          | Station codes of stations which observed the meteor\.                                                                                             |
-| Schema \(version\)                    | schema\_version                  | The data format version for this row\. Null values will be placed if the format does support the column\.                                         |
 
 Source: https://globalmeteornetwork.org/data/media/GMN_orbit_data_columns.pdf
