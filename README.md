@@ -27,8 +27,8 @@ library.
 - Listing available daily and monthly meteor trajectory files from the 
   [GMN Data Directory](https://globalmeteornetwork.org/data/traj_summary_data/).
 
-- Downloading specific daily and monthly CSV meteor trajectory files from the GMN Data
-  Directory or GMN REST API.
+- Downloading specific CSV meteor trajectory data from the GMN Data Directory or GMN 
+  REST API.
 
 - Functions for loading meteor trajectory data into [Pandas](https://pandas.pydata.org/)
   DataFrames.
