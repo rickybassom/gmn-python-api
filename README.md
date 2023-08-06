@@ -87,8 +87,7 @@ print(f"{traj_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary veloci
 print(f"{traj_df.loc[traj_df['IAU (code)'] == 'PER'].shape[0]} Perseid meteors")
 # Output: 8 Perseid meteors
 
-print(
-  f"Station #{traj_df['Num (stat)'].mode().values[0]} recorded the most meteors")
+print(f"Station #{traj_df['Num (stat)'].mode().values[0]} recorded the most meteors")
 # Output: Station #2 recorded the most meteors
 ```
 
