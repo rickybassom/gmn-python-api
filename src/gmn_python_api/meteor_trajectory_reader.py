@@ -121,6 +121,6 @@ def _set_data_types(dataframe: pd.DataFrame) -> None:
     ].astype("string")
     dataframe["Participating (stations)"] = dataframe[
         "Participating (stations)"
-    ].apply(lambda x: x[1:-1].split(","))
+    ].apply(lambda x: x.split(","))
 
     dataframe.set_index("Unique trajectory (identifier)", inplace=True)
