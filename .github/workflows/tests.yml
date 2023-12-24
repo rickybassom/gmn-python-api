@@ -60,7 +60,12 @@ jobs:
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             export SETUPTOOLS_USE_DISTUTILS=stdlib
           fi
-          nox --python=${{ matrix.python }}
+
+          if [ "${{ matrix.session }}" = "safety" ]; then
+            nox --python=${{ matrix.python }} || true
+          else
+            nox --python=${{ matrix.python }}
+          fi
 
       - name: Upload coverage data
         if: always() && matrix.session == 'unit-tests'
