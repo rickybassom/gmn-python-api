@@ -41,8 +41,7 @@ jobs:
         shell: bash
         run: |
           if [ "${{ matrix.os }}" = "macos-latest" ]; then
-            pip uninstall six
-            pip install six
+            pip install --upgrade pip six
           fi
           pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
           poetry --version
