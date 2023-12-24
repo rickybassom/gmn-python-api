@@ -40,10 +40,10 @@ jobs:
       - name: Install Poetry
         shell: bash
         run: |
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
           if [ "${{ matrix.os }}" = "macos-latest" ]; then
             pip install --ignore-installed six
           fi
+          pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
           poetry --version
 
       - name: Set up Python ${{ matrix.python }}
