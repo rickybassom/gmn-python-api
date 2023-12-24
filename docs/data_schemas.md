@@ -43,7 +43,7 @@ Listing of current data schema (version 1.0).
 
 | Verbose Name                          | Camel Case Name                  | Description                                                                                                                                       |
 |---------------------------------------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| Unique trajectory identifier          | Unique trajectory \(identifier\) | \(Index\) A 20\-character string containing the beginning time \(rounded to seconds\) and a truncated MD5 hash encoding the trajectory position\. |
+| Unique trajectory \(identifier\)      | unique_trajectory_identifier     | \(Index\) A 20\-character string containing the beginning time \(rounded to seconds\) and a truncated MD5 hash encoding the trajectory position\. |
 | Beginning Julian date                 | beginning\_julian\_date          | Julian date of the beginning of the meteor\.                                                                                                      |
 | Beginning \(UTC Time\)                | beginning\_utc\_time             | UTC time of the beginning of the meteor\.                                                                                                         |
 | IAU \(No\)                            | iau\_no                          | IAU shower number, see https://www.ta3.sk/IAUC22DB/MDC2007/Roje/roje_lista.php. Sporadic meteors have a code -1.                                  |
