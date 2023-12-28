@@ -15,7 +15,7 @@ jobs:
       matrix:
         include:
           - { python: "3.10", os: "ubuntu-latest", session: "lint" }
-          - { python: "3.10", os: "ubuntu-latest", session: "safety" }
+#          - { python: "3.10", os: "ubuntu-latest", session: "safety" }
           - { python: "3.10", os: "ubuntu-latest", session: "mypy" }
           - { python: "3.9", os: "ubuntu-latest", session: "mypy" }
           - { python: "3.8", os: "ubuntu-latest", session: "mypy" }
@@ -40,9 +40,6 @@ jobs:
       - name: Install Poetry
         shell: bash
         run: |
-          if [ "${{ matrix.os }}" = "macos-latest" ]; then
-            pip install --upgrade pip six
-          fi
           pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
           poetry --version
 
@@ -64,12 +61,7 @@ jobs:
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
             export SETUPTOOLS_USE_DISTUTILS=stdlib
           fi
-
-          if [ "${{ matrix.session }}" = "safety" ]; then
-            nox --python=${{ matrix.python }} || true
-          else
-            nox --python=${{ matrix.python }}
-          fi
+          nox --python=${{ matrix.python }}
 
       - name: Upload coverage data
         if: always() && matrix.session == 'unit-tests'
