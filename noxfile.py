@@ -20,7 +20,7 @@ except ImportError:
     raise SystemExit(dedent(message)) from None
 
 package = "gmn_python_api"
-python_versions = ["3.10", "3.9", "3.8", "3.7"]
+python_versions = ["3.10", "3.9", "3.8"]
 nox.needs_version = ">= 2021.6.6"
 nox.options.sessions = (
     # "safety",
@@ -81,7 +81,7 @@ def unit_tests(session: Session) -> None:
             session.notify("coverage", posargs=[])
 
 
-@session(python=python_versions[0])
+@session(python="3.10")
 def coverage(session: Session) -> None:
     """Produce the coverage report."""
     args = session.posargs or ["report"]

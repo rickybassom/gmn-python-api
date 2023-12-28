@@ -39,7 +39,7 @@ library.
 
 ## Requirements
 
-- Python 3.7.1+, 3.8, 3.9 or 3.10
+- Python 3.8, 3.9, or 3.10
 
 ## Installation
 

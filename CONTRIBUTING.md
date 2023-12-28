@@ -30,7 +30,7 @@ Request features on the [Issue Tracker](https://github.com/rickybassom/gmn-pytho
 
 ## How to set up your development environment
 
-You need Python 3.7, 3.8, 3.9, and 3.10. 
+You need Python 3.8, 3.9, and 3.10. 
 Follow this [guide](https://cookiecutter-hypermodern-python.readthedocs.io/en/2022.6.3.post1/guide.html#getting-python-mac-linux-unix) to install [pyenv](https://github.com/pyenv/pyenv) and the required Python versions.
 
 And the following tools:

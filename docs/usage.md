@@ -41,5 +41,5 @@ trajectory data using the future
 See the [Data Schemas](data_schemas.md) section for meteor trajectory DataFrame 
 features.
 
-See the [API Reference](autoapi/gmn_python_api/index.md) section for function and 
+See the [API Reference](autoapi/gmn_python_api/index) section for function and 
 variable definitions.
