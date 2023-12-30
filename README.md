@@ -7,8 +7,6 @@
 [![Tests](https://github.com/rickybassom/gmn-python-api/workflows/Tests/badge.svg)](https://github.com/rickybassom/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain)
 [![Codecov](https://codecov.io/gh/rickybassom/gmn-python-api/branch/main/graph/badge.svg)](https://codecov.io/gh/rickybassom/gmn-python-api)
 
-[![Demo on Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/gist/rickybassom/74d2c99ebbd612b88861038a5b33e021/gmn_data_analysis_template.ipynb)
-
 # gmn-python-api
 
 This library provides a Python API for accessing open 
@@ -19,8 +17,6 @@ orbits, magnitudes and masses) are produced by the GMN and are available through
 library.
 
 ![Screenshot of GMN data](docs/screenshot.png)
-
-[Demo on Google Colab](https://colab.research.google.com/gist/rickybassom/74d2c99ebbd612b88861038a5b33e021/gmn_data_analysis_template.ipynb)
 
 ## Features
 
