@@ -15,7 +15,7 @@ from gmn_python_api import meteor_trajectory_reader
 
 # Get meteor data from the 2019-07-24
 traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
-traj_df = meteor_trajectory_reader.read_csv(traj_file_content)
+traj_df = meteor_trajectory_reader.read_data(traj_file_content)
 ```
 
 ## Example 2
@@ -27,8 +27,10 @@ from gmn_python_api import meteor_trajectory_reader
 import pandas as pd
 
 # Get meteor data from the 2019-07-24 and 2019-07-25, and combine into a single dataframe
-traj_file_content_1 = meteor_trajectory_reader.read_csv(dd.get_daily_file_content_by_date("2019-07-24"))
-traj_file_content_2 = meteor_trajectory_reader.read_csv(dd.get_daily_file_content_by_date("2019-07-25"))
+traj_file_content_1 = meteor_trajectory_reader.read_data(
+    dd.get_daily_file_content_by_date("2019-07-24"))
+traj_file_content_2 = meteor_trajectory_reader.read_data(
+    dd.get_daily_file_content_by_date("2019-07-25"))
 traj_df = pd.concat([traj_file_content_1, traj_file_content_2])
 ```
 
@@ -40,7 +42,7 @@ from gmn_python_api import meteor_trajectory_reader
 
 # Get meteor data from July 2019
 traj_file_content = dd.get_monthly_file_content_by_date("2019-07")
-traj_sum_df = meteor_trajectory_reader.read_csv(traj_file_content)
+traj_sum_df = meteor_trajectory_reader.read_data(traj_file_content)
 ```
 
 Fields available in the Pandas Dataframes can be found in the 

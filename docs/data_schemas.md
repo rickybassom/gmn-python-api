@@ -13,7 +13,7 @@ from gmn_python_api import meteor_trajectory_reader
 
 # Access column names (verbose)
 traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
-traj_df = meteor_trajectory_reader.read_csv(
+traj_df = meteor_trajectory_reader.read_data(
     traj_file_content,
     output_camel_case=False,
 )
@@ -23,7 +23,7 @@ traj_df.iloc[0]['Vgeo (km/s)']
 
 # Access column names (camel case)
 traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
-traj_df = meteor_trajectory_reader.read_csv(
+traj_df = meteor_trajectory_reader.read_data(
     traj_file_content,
     output_camel_case=True,
 )

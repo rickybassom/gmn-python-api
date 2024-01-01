@@ -75,13 +75,13 @@ from gmn_python_api import meteor_trajectory_reader
 traj_file_content = dd.get_daily_file_content_by_date("2019-07-24")
 
 # Read data as a Pandas DataFrame
-traj_df = meteor_trajectory_reader.read_csv(traj_file_content)
+traj_df = meteor_trajectory_reader.read_data(traj_file_content)
 
 print(f"{traj_df['Vgeo (km/s)'].max()} km/s was the fastest geostationary velocity")
 # Output: 65.38499 km/s was the fastest geostationary velocity
 
 print(f"{traj_df.loc[traj_df['IAU (code)'] == 'PER'].shape[0]} Perseid meteors")
-# Output: 8 Perseid meteors
+# Output: 3 Perseid meteors
 
 print(f"Station #{traj_df['Num (stat)'].mode().values[0]} recorded the most meteors")
 # Output: Station #2 recorded the most meteors
