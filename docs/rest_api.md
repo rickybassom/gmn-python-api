@@ -52,7 +52,7 @@ You can use this when making subsequent requests to the endpoint to ensure you a
 
 The response will also include the header `Link` with the `rel="next"` attribute to indicate the next page of results. E.g.
 ```
-(</gmn_rest_api?page=4&order_by=&data_format=&data_shape=&where=iau_code+%3D+%27DSA%27>; rel="next")
+(</gmn_rest_api/meteor_summary?page=4&order_by=&data_format=&data_shape=&where=iau_code+%3D+%27DSA%27>; rel="next")
 ```
 The final page of results will include no data.
 
