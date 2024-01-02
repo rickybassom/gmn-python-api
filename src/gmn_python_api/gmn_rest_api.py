@@ -1,7 +1,7 @@
 """
 This module contains functions to read data from the GMN REST API.
 The REST API uses the Datasette API endpoint. More info:
-https://gmn-python-api.readthedocs.io/en/0.64.6/rest_api.html
+https://gmn-python-api.readthedocs.io/en/latest/rest_api.html
 """
 
 import json

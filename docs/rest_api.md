@@ -1,6 +1,8 @@
 # GMN REST API
 
-The GMN REST API provides an interface to query and retrieve meteor trajectory data by constructing read-only SQL queries on the GMN Data Store database.
+The GMN REST API provides an interface to query and retrieve meteor trajectory data by constructing read-only SQL queries on the [GMN Data Store](https://explore.globalmeteornetwork.org/gmn_data_store) database.
+
+We use [Datasette](https://docs.datasette.io/en/0.64.6/json_api.html) to provide the REST API.
 
 ## HTTP GET Requests
 
@@ -26,6 +28,8 @@ The response will include the header "last-modified" with the last modified time
 You can use this when making subsequent requests to the endpoint to ensure you are using the same version of the database. E.g. when paginating results.
 
 Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes which usually run twice a day.
+
+Queries are blocked if they take longer than 3 seconds to execute. I recommend using [EXPLAIN QUERY PLAN](https://www.sqlite.org/eqp.html) to check the query execution plan before running a query. If you need to run a long-running query, please contact us.
 
 ### The Meteor Summary REST API Endpoint
 
@@ -58,6 +62,8 @@ The response will also include the header `Link` with the `rel="next"` attribute
 The final page of results will include no data.
 
 Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes.
+
+Queries are blocked if they take longer than 3 seconds to execute. I recommend using [EXPLAIN QUERY PLAN](https://www.sqlite.org/eqp.html) to check the query execution plan before running a query. If you need to run a long-running query, please contact us.
 
 ### Examples
 
