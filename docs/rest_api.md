@@ -20,7 +20,7 @@ The endpoint supports the following query parameters:
 
 The structure of the response body is described [here](https://docs.datasette.io/en/0.64.6/json_api.html).
 
-The endpoint has a maximum limit of 1000 rows. I suggest using `LIMIT` and `OFFSET` in your SQL query to paginate results.
+The endpoint has a maximum limit of 1000 rows. I suggest using `LIMIT` and `OFFSET` in your SQL query to paginate results. The truncated attribute in the response body will be set to true if the results have been truncated.
 
 The response will include the header "last-modified" with the last modified time of the database in nanoseconds.
 You can use this when making subsequent requests to the endpoint to ensure you are using the same version of the database. E.g. when paginating results.
@@ -45,7 +45,7 @@ The API supports the following query parameters:
 - `data_format`: The format of the data to return. Default is `json`. `csv` is also supported.
 - `page`: The page number of the results to return. Default is 1. A maximum of 1000 results are returned per page. 0 rows are returned if the page number is greater than the number of pages of results.
 
-The structure of the response body is described [here](https://docs.datasette.io/en/0.64.6/json_api.html).
+The structure of the response body is described [here](https://docs.datasette.io/en/0.64.6/json_api.html). Ignore the truncated attribute in the response body which should always be false. The truncated attribute comes from the underlying Datasette library.
 
 The response will include the header "last-modified" with the last modified time of the database in nanoseconds.
 You can use this when making subsequent requests to the endpoint to ensure you are using the same version of the database. E.g. when paginating results.
@@ -141,7 +141,7 @@ from gmn_python_api import gmn_rest_api
 from gmn_python_api import meteor_trajectory_reader
 
 data = gmn_rest_api.get_meteor_summary_data_all(where="iau_code = 'SCC' and beginning_utc_time > '2019-01-01' and beginning_utc_time < '2019-04-05'")
-df = meteor_trajectory_reader.read_data(data)
+df = meteor_trajectory_reader.read_data(data, input_camel_case=True)
 #                                 Beginning (Julian date)  ... Participating (stations)
 # Unique trajectory (identifier)                           ...                         
 # 20190105074710_89UEE                       2.458489e+06  ...         [US0003, US0009]
