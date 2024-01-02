@@ -2,38 +2,36 @@
 This module contains functions to load meteor trajectory data into Pandas DataFrames.
 """
 from io import StringIO
-from typing import Optional
+from typing import Optional, Any, Union, Dict, List
 import pandas as pd  # type: ignore
 
 from gmn_python_api.meteor_trajectory_schema import \
-    get_verbose_camel_case_column_name_bidict
+    get_verbose_camel_case_column_name_bidict, \
+    _MODEL_METEOR_TRAJECTORY_FILE_ONE_ROW_PATH
 
 """The format of dates in meteor trajectory data."""
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 
-def read_csv(
-        csv: str,
-        rest_format: Optional[bool] = False,
+def read_data(
+        data: Union[str, List[Dict[str, Any]]],
         output_camel_case: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
-    Reads CSV meteor trajectory data from the GMN data directory or GMN REST API into a
+    Reads meteor trajectory data from the GMN Data Directory or GMN REST API into a
      Pandas DataFrame. Columns available in the DataFrame can be found here:
      https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html
 
-    :param csv: The CSV meteor trajectory data. Either from the GMN data directory or
-     GMN REST API.
+    :param data: The meteor trajectory data. Either a CSV string from the GMN data
+     directory or a JSON from the GMN REST API.
     :param output_camel_case: If True, column names will be camel cased e.g. m_deg
-    :param rest_format: If True, the CSV headers will be treated as a GMN REST API CSV.
-     If False, the CSV headers will be treated as a GMN Data Directory CSV.
 
     :return: Pandas DataFrame of the meteor trajectory data.
     """
-    if rest_format:
-        meteor_trajectory_df = pd.read_csv(
-            StringIO(csv, newline="\r"), engine="python"
-        )
+    rest_format = type(data) == list
+
+    if rest_format and data:
+        meteor_trajectory_df = pd.DataFrame.from_records(data)
         # Convert camel case column names to verbose names
         for column in meteor_trajectory_df.columns:
             meteor_trajectory_df.rename(
@@ -41,13 +39,18 @@ def read_csv(
                 inplace=True)
     else:
         meteor_trajectory_df = pd.read_csv(
-            StringIO(csv, newline="\r"),
+            StringIO(data, newline="\r") if data  # type: ignore
+            else _MODEL_METEOR_TRAJECTORY_FILE_ONE_ROW_PATH,
             engine="python",
             sep=r"\s*;\s*",
             skiprows=[0, 5, 6],
             header=[0, 1],
             na_values=["nan", "...", "None"],
         )
+
+        if not data:
+            # Remove first example row
+            meteor_trajectory_df = meteor_trajectory_df.iloc[1:]
 
         def extract_header(text: str) -> str:
             return " ".join(text.replace("#", "").split())
@@ -59,7 +62,7 @@ def read_csv(
 
     _set_data_types(meteor_trajectory_df)
 
-    if output_camel_case and not rest_format:  # REST data is already camel cased
+    if output_camel_case:
         _set_camel_case_column_names(meteor_trajectory_df)
 
     return meteor_trajectory_df

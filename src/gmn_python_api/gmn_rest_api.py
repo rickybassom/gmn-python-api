@@ -1,181 +1,199 @@
 """
-This module contains functions to read meteor trajectory data from the GMN REST API.
- The REST API uses the Datasette API endpoint. More info:
- https://docs.datasette.io/en/stable/json_api.html
+This module contains functions to read data from the GMN REST API.
+The REST API uses the Datasette API endpoint. More info:
+https://gmn-python-api.readthedocs.io/en/0.64.6/rest_api.html
 """
-from enum import Enum
-from typing import Dict
-from typing import Optional
-from typing import Tuple
+
+import json
 from urllib.parse import urlencode
-
 import requests
+from typing import Optional, Tuple, Iterable, Any, List, Dict
 
-QUERY_URL = (
-    "https://globalmeteornetwork.org/gmn_data_store"
-    "{table}.{data_format}?_shape={data_shape}"
-)
-"""
-URL template of GMN REST API endpoint. Note that the GMN REST API currently isn't live,
- so this URL should be replaced with a local instance of the GMN REST API to use
- functions in this module (e.g
- http:0.0.0.0:8001/gmn_data_store{table}.{data_format}?_shape={data_shape}).
-"""
+# GMN_REST_API_DOMAIN = "http://0.0.0.0:8001"  # For local testing
+GMN_REST_API_DOMAIN = "https://explore.globalmeteornetwork.org"
+QUERY_URL = GMN_REST_API_DOMAIN + "/gmn_rest_api?{args}"
+METEOR_SUMMARY_QUERY_URL = GMN_REST_API_DOMAIN + "/gmn_rest_api/meteor_summary?{args}"
 
 
-class DataFormat(str, Enum):
-    """REST data format."""
-
-    JSON = "json"
-    CSV = "csv"
-
-
-class DataShape(str, Enum):
-    """REST data shape."""
-
-    ARRAYS = "arrays"
-    OBJECTS = "objects"
-    ARRAY = "array"
-    OBJECT = "object"
-
-
-def get_meteor_summary_data_reader_compatible(
-    where_sql: Optional[str] = None,
-    next_page: Optional[str] = None,
-) -> Tuple[str, Optional[str]]:
+class LastModifiedError(Exception):
     """
-    Get meteor trajectory data from the GMN REST API in a format that is compatible with
-     the meteor_summary_reader functions.
-
-    :param where_sql: An optional SQL WHERE clause to filter the data (e.g. iau_no='4').
-    :param next_page: An optional URL to access more paginated data provided by the api.
-
-    :return: The data returned from the GMN REST API in CSV format.
-    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
+    Raised when the data has modified since the last request.
     """
-    return get_meteor_summary_data(
-        table_arguments={"_where": where_sql} if where_sql else None,
-        data_format=DataFormat.CSV,
-        data_shape=DataShape.ARRAY,
-        next_page=next_page,
-    )
+    pass
+
+
+def get_meteor_summary_data_all(
+        where: Optional[str] = None,
+        order_by: Optional[str] = None,
+        last_modified_error_retries: int = 3,
+) -> List[Dict[str, Any]]:
+    """
+    Get all meteor summary data from the Meteor Summary GMN REST API endpoint.
+
+    :param where: Optional parameter to filter data via a SQL WHERE clause e.g.
+     meteor.unique_trajectory_identifier = '20190103131723_6dnE3'.
+    :param order_by: Optional parameter to specify the order of results via a SQL ORDER
+     BY clause e.g. meteor.unique_trajectory_identifier DESC.
+    :param last_modified_error_retries: Number of times to retry if the data has
+     modified since the last request.
+    :raises: LastModifiedError: If the data has modified since the last request too many
+     times.
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :return: A list of json data.
+    """
+    try_num = 0
+    while try_num <= last_modified_error_retries:
+        try_num += 1
+        try:
+            data = []
+            for data_iter in get_meteor_summary_data_iter(where, order_by):
+                data.extend(data_iter)
+        except LastModifiedError:
+            # Data has modified since last request, so we need to start from the
+            # beginning again.
+            continue
+        else:
+            return data
+
+    raise LastModifiedError("Data has modified since last request too many times.")
+
+
+def get_meteor_summary_data_iter(
+        where: Optional[str] = None,
+        order_by: Optional[str] = None,
+) -> Iterable[List[Dict[str, Any]]]:
+    """
+    An iterator for fetching meteor summary data from the Meteor Summary GMN REST API
+     endpoint in pages. This is useful for processing large amounts of data. The data is
+     returned in pages of 1000 rows.
+
+    :param where: Optional parameter to filter data via a SQL WHERE clause e.g.
+     meteor.unique_trajectory_identifier = '20190103131723_6dnE3'.
+    :param order_by: Optional parameter to specify the order of results via a SQL ORDER
+     BY clause e.g. meteor.unique_trajectory_identifier DESC.
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :raises: LastModifiedError: If the data has modified since the last request.
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :return: An iterable of json data.
+    """
+    data, next_url, initial_last_modified = get_meteor_summary_data(where, order_by)
+    yield data
+
+    while data and next_url:
+        data, next_url, last_modified = get_data_from_url(next_url)
+        if last_modified != initial_last_modified:
+            raise LastModifiedError("Data has modified since last request.")
+        yield data
 
 
 def get_meteor_summary_data(
-    table_arguments: Optional[Dict[str, str]] = None,
-    data_format: DataFormat = DataFormat.JSON,
-    data_shape: DataShape = DataShape.ARRAY,
-    next_page: Optional[str] = None,
-) -> Tuple[str, Optional[str]]:
+        where: Optional[str] = None,
+        order_by: Optional[str] = None,
+) -> Tuple[List[Dict[str, Any]], Optional[str], Optional[str]]:
     """
-    Get meteor trajectory data from the GMN REST API.
+    Get meteor summary data from the Meteor Summary GMN REST API endpoint starting from
+     the first page.
 
-    :param table_arguments: An optional dictionary of arguments to filter the data.
-     A full list of arguments can be found here:
-     https://docs.datasette.io/en/stable/json_api.html#table-arguments
-    :param data_format: The data format of the meteor summary data using DataFormat
-     enum.
-    :param data_shape: The data shape of the meteor summary data using the DataShape
-     enum.
-    :param next_page: An optional URL to access more paginated data provided by the api.
-
-    :return: The data returned from the GMN REST API.
-    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
+    :param where: Optional parameter to filter data via a SQL WHERE clause e.g.
+     meteor.unique_trajectory_identifier = '20190103131723_6dnE3'.
+    :param order_by: Optional parameter to specify the order of results via a SQL ORDER
+     BY clause e.g. meteor.unique_trajectory_identifier DESC.
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :return: Tuple of json data, next URL for pagination, and the last modified date of
+     the GMN data store. If iterating through pages, last_modified should be checked
+     against the last_modified of the previous page. If they are different, then the
+     data has modified since the last request, and the pagination is invalid.
     """
-    return get_data(
-        table="meteor_summary",
-        table_arguments=table_arguments,
-        data_format=data_format,
-        data_shape=data_shape,
-        next_page=next_page,
+    args = {
+        "page": 1,
+        "data_format": "json",
+        "data_shape": "objects",
+    }
+
+    if order_by:
+        args["order_by"] = order_by
+    if where:
+        args["where"] = where
+
+    query_url = METEOR_SUMMARY_QUERY_URL.format(args=urlencode(args))
+    return get_data_from_url(query_url)
+
+
+def get_data(sql: str) -> Tuple[List[Dict[str, Any]], Optional[str]]:
+    """
+    Get data from the General GMN REST API endpoint using a custom SQL query.
+
+    :param sql: SQL query to execute (read-only).
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :return: Tuple containing a list of dictionaries containing meteor trajectory data
+     and the last modified date of the GMN data store. If iterating through pages,
+     last_modified should be checked against the last_modified of the previous page. If
+     they are different, then the data has modified since the last request, and the
+     pagination is invalid.
+    """
+    data, _, last_modified = get_data_from_url(
+        QUERY_URL.format(args=urlencode({
+            "sql": sql,
+            "data_format": "json",
+            "data_shape": "objects",
+        }))
     )
 
+    return data, last_modified
 
-def get_data_with_sql(
-    sql: str,
-    data_format: DataFormat = DataFormat.JSON,
-    data_shape: DataShape = DataShape.ARRAY,
-    next_page: Optional[str] = None,
-) -> Tuple[str, Optional[str]]:
+
+def get_data_from_url(query_url: str) -> Tuple[List[Dict[str, Any]],
+                                               Optional[str], Optional[str]]:
     """
-    Get any available data from the GMN REST API using a readonly SQL query.
+    Get data from a specified GMN REST API endpoint URL.
 
-    :param sql: The SQL query to perform against the open access GMN Data Store database.
-    :param data_format: The data format of the data using the DataFormat enum.
-    :param data_shape: The data shape of the data using the DataShape enum.
-    :param next_page: An optional URL to access more paginated data provided by the api.
-
-    :return: The data returned from the GMN REST API.
-    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
+    :param query_url: URL for querying data from the GMN REST API.
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :return: Tuple of json data, next URL for pagination, and the last modified date of
+     the GMN data store. If iterating through pages, last_modified should be checked
+     against the last_modified of the previous page. If they are different, then the
+     data has modified since the last request, and the pagination is invalid.
     """
-    return get_data(
-        table_arguments={"sql": sql},
-        data_format=data_format,
-        data_shape=data_shape,
-        next_page=next_page,
-    )
+    data, next_page, gmn_data_store_last_modified = _http_get_response(query_url)
 
-
-def get_data(
-    table: Optional[str] = None,
-    table_arguments: Optional[Dict[str, str]] = None,
-    data_format: DataFormat = DataFormat.JSON,
-    data_shape: DataShape = DataShape.OBJECTS,
-    next_page: Optional[str] = None,
-) -> Tuple[str, Optional[str]]:
-    """
-    Get any data from the GMN REST API.
-
-    :param table: The table to query in the GMN Data Store.
-    :param table_arguments: An optional dictionary of arguments to filter the data. A
-     full list of arguments can be found here:
-     https://docs.datasette.io/en/stable/json_api.html#table-arguments
-    :param data_format: The data format of the data using the DataFormat enum.
-    :param data_shape: The data shape of the data using the DataShape enum.
-
-    :return: The data returned from the GMN REST API.
-    :raises: requests.HTTPError If GMN REST API doesn't return a 200 response.
-    """
-    if table_arguments is None:
-        table_arguments = {}
-
-    if next_page:
-        query_url = next_page
+    data_json = json.loads(data)
+    if data_json.get("ok"):
+        return data_json.get("rows"), next_page, gmn_data_store_last_modified
     else:
-        query_url = QUERY_URL.format(
-            table="/" + table if table else None,
-            data_format=data_format.value,
-            data_shape=data_shape.value,
-        )
-        query_url += "&" + urlencode(table_arguments)
-
-    data = _http_get_response(query_url)
-    return data
+        raise ValueError(data_json.get("error"))
 
 
-def _http_get_response(url: str) -> Tuple[str, Optional[str]]:
+def _http_get_response(url: str) -> Tuple[str, Optional[str], Optional[str]]:
     """
-    Get resultant data from a given GMN REST API URL.
+    Perform an HTTP GET request and return the response.
 
-    :param url: A query URL of the GMN REST API.
-
-    :return: Data, and a URL to access more paginated data if required.
-    :raises: requests.HTTPError If URL doesn't return a 200 response.
+    :param url: URL for the HTTP GET request.
+    :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
+     OK.
+    :return: Tuple containing the response text, the next URL for pagination, and the
+     last modified date of the GMN data store.
     """
-    response = requests.get(url, timeout=200)
+    response = requests.get(url, timeout=200, allow_redirects=True)
+
+    try:
+        next_url = GMN_REST_API_DOMAIN + response.links.get("next").get(  # type: ignore
+            "url")
+    except AttributeError:
+        next_url = None
+
+    try:
+        gmn_data_store_last_modified = response.headers.get("last-modified")
+    except AttributeError:
+        gmn_data_store_last_modified = None
+
     if response.ok:
-        try:
-            next_url = response.links.get("next").get("url")  # type: ignore
-        except AttributeError:
-            # next_url somtimes is not given even when paginated (for example with CSVs)
-            if str(response.text).count("\n") == 101 and (
-                requests.head(url + "&_next=100", timeout=200).ok
-                or requests.head(url + "?_next=100", timeout=200).ok
-            ):  # pragma: no cover
-                next_url = url + "&_next=100" if "?" in url else url + "?_next=100"
-            else:
-                next_url = None
-        return str(response.text), next_url
+        return str(response.text), next_url, gmn_data_store_last_modified
     else:
         response.raise_for_status()
-        return "", ""  # pragma: no cover
+        return "", None, None

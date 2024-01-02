@@ -36,7 +36,7 @@ def get_column_names(output_camel_case: bool = False) -> List[str]:
     :param output_camel_case: Whether to return the column names in camel case or verbose
     :return: The column names of the current supported meteor trajectory model.
     """
-    dataframe = meteor_trajectory_reader.read_csv(
+    dataframe = meteor_trajectory_reader.read_data(
         _MODEL_METEOR_TRAJECTORY_FILE_ONE_ROW_PATH.read_text(),
         output_camel_case=output_camel_case
     )
@@ -52,7 +52,7 @@ def get_model_meteor_trajectory_dataframe(output_camel_case: bool = False) -> pd
     :param output_camel_case: Whether to return the column names in camel case or verbose
     :return: The model meteor trajectory file as a DataFrame.
     """
-    return meteor_trajectory_reader.read_csv(
+    return meteor_trajectory_reader.read_data(
         _MODEL_METEOR_TRAJECTORY_FILE_PATH.read_text(),
         output_camel_case=output_camel_case,
     )
@@ -68,11 +68,11 @@ def get_verbose_camel_case_column_name_bidict() -> Dict[str, str]:
     """
     model = _MODEL_METEOR_TRAJECTORY_FILE_ONE_ROW_PATH.read_text()
     bidict = {}
-    df_verbose = meteor_trajectory_reader.read_csv(
+    df_verbose = meteor_trajectory_reader.read_data(
         model,
         output_camel_case=False,
     )
-    df_camel_case = meteor_trajectory_reader.read_csv(
+    df_camel_case = meteor_trajectory_reader.read_data(
         model,
         output_camel_case=True,
     )

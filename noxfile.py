@@ -91,7 +91,9 @@ def coverage(session: Session) -> None:
     if not session.posargs and any(Path().glob(".coverage.*")):
         session.run("coverage", "combine")
 
-    session.run("coverage", *args)
+    # Set the minimum coverage threshold to 50%
+    coverage_threshold = 50
+    session.run("coverage", *args, f"--fail-under={coverage_threshold}")
 
 
 @session(name="integration-tests", python="3.10")

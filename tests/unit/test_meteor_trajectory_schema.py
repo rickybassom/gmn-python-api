@@ -44,13 +44,13 @@ class TestMeteorTrajectorySchema(unittest.TestCase):
         )
         self.test_camel_case_dataframe.set_index("trajectory_id", inplace=True)
 
-    @mock.patch("gmn_python_api.meteor_trajectory_reader.read_csv")
-    def test_get_column_names(self, mock_read_csv: mock.Mock) -> None:
+    @mock.patch("gmn_python_api.meteor_trajectory_reader.read_data")
+    def test_get_column_names(self, mock_read_data: mock.Mock) -> None:
         """
         Test: get_column_names returns correct column names.
         When: get_column_names is called with mocked model dataframe.
         """
-        mock_read_csv.return_value = self.test_verbose_dataframe
+        mock_read_data.return_value = self.test_verbose_dataframe
 
         meteor_trajectory_schema.get_column_names.cache_clear()
         self.assertEqual(
@@ -64,14 +64,14 @@ class TestMeteorTrajectorySchema(unittest.TestCase):
             ],
         )
 
-    @mock.patch("gmn_python_api.meteor_trajectory_reader.read_csv")
-    def test_get_column_names_camel_case(self, mock_read_csv: mock.Mock) -> None:
+    @mock.patch("gmn_python_api.meteor_trajectory_reader.read_data")
+    def test_get_column_names_camel_case(self, mock_read_data: mock.Mock) -> None:
         """
         Test: get_column_names returns correct column names.
         When: get_column_names is called with mocked model dataframe and
          output_camel_case=True.
         """
-        mock_read_csv.return_value = self.test_camel_case_dataframe
+        mock_read_data.return_value = self.test_camel_case_dataframe
 
         meteor_trajectory_schema.get_column_names.cache_clear()
         self.assertEqual(
@@ -107,15 +107,15 @@ class TestMeteorTrajectorySchema(unittest.TestCase):
         )
         self.assertFalse(dataframe_camelcase.empty)
 
-    @mock.patch("gmn_python_api.meteor_trajectory_reader.read_csv")
+    @mock.patch("gmn_python_api.meteor_trajectory_reader.read_data")
     def test_get_verbose_and_camel_case_column_name_bidict(
-            self, read_csv: mock.Mock
+            self, read_data: mock.Mock
     ) -> None:
         """
         Test: get_verbose_and_camel_case_column_name_bidict produces correct dictionary.
         When: get_verbose_and_camel_case_column_name_bidict is called with mocked dataframes.
         """
-        read_csv.side_effect = [
+        read_data.side_effect = [
             self.test_verbose_dataframe,
             self.test_camel_case_dataframe,
         ]
