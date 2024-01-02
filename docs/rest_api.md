@@ -13,7 +13,7 @@ The endpoint is available at:
 https://explore.globalmeteornetwork.org/gmn_rest_api?<query_parameters>
 
 The endpoint supports the following query parameters:
-- `sql`: An SQL query to execute. This is required.
+- `sql`: An SQL SELECT query to execute. This is required.
 - `data_shape`: The [shape](https://docs.datasette.io/en/0.64.6/json_api.html#different-shapes) of the data to return. Default is `objects`.
 - `data_format`: The format of the data to return. Default is `json`. `csv` is also supported.
 
@@ -39,7 +39,7 @@ The Meteor Summary REST API endpoint is available at:
 https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?<query_parameters>
 
 The API supports the following query parameters:
-- `where`: A SQL WHERE clause to filter the results. Default is no filter. E.g. `iau_code = 'PER'`.
+- `where`: A SQL SELECT WHERE clause to filter the results. Default is no filter. E.g. `iau_code = 'PER'`.
 - `order_by`: A SQL ORDER BY clause to order the results. Default is no order. E.g. `meteor.unique_trajectory_identifier DESC`.
 - `data_shape`: The [shape](https://docs.datasette.io/en/0.64.6/json_api.html#different-shapes) of the data to return. Default is `objects`.
 - `data_format`: The format of the data to return. Default is `json`. `csv` is also supported.
@@ -104,7 +104,7 @@ GET https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?where=me
 }
 ```
 
-#### Get all recorded meteors on the 24th of July 2019 ordered by velocity
+#### Get all recorded meteors on the 26th of December 2018 ordered by geostationary velocity
 
 ```sh
 GET https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?where=date(beginning_utc_time)='2018-12-26'&order_by=vgeo_km_s DESC
