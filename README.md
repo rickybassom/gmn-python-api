@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/pypi/l/gmn-python-api)](https://pypi.org/project/gmn-python-api/)
 
 [![Read the Docs](https://img.shields.io/readthedocs/gmn-python-api)](https://gmn-python-api.readthedocs.io/en/latest/)
-[![Tests](https://github.com/rickybassom/gmn-python-api/workflows/Tests/badge.svg)](https://github.com/rickybassom/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain)
+[![Tests](https://github.com/rickybassom/gmn-python-api/actions/workflows/tests.yml/badge.svg)](https://github.com/rickybassom/gmn-python-api/actions?query=workflow%3ATests+branch%3Amain)
 [![Codecov](https://codecov.io/gh/rickybassom/gmn-python-api/branch/main/graph/badge.svg)](https://codecov.io/gh/rickybassom/gmn-python-api)
 
 # gmn-python-api
@@ -23,8 +23,8 @@ library.
 - Listing available daily and monthly meteor trajectory files from the 
   [GMN Data Directory](https://globalmeteornetwork.org/data/traj_summary_data/).
 
-- Downloading specific CSV meteor trajectory data from the GMN Data Directory or GMN 
-  REST API.
+- Downloading specific meteor trajectory data from the GMN Data Directory or GMN REST
+  API.
 
 - Functions for loading meteor trajectory data into [Pandas](https://pandas.pydata.org/)
   DataFrames.
