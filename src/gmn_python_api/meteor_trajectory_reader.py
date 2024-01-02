@@ -15,28 +15,30 @@ DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 
 def read_data(
         data: Union[str, List[Dict[str, Any]]],
+        input_camel_case: Optional[bool] = False,
         output_camel_case: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
-    Reads meteor trajectory data from the GMN Data Directory or GMN REST API into a
-     Pandas DataFrame. Columns available in the DataFrame can be found here:
+    Reads meteor trajectory data either as a CSV string or a list of dicts into a Pandas
+     DataFrame. Columns available in the DataFrame can be found here:
      https://gmn-python-api.readthedocs.io/en/latest/data_schemas.html
 
     :param data: The meteor trajectory data. Either a CSV string from the GMN data
      directory or a JSON from the GMN REST API.
-    :param output_camel_case: If True, column names will be camel cased e.g. m_deg
+    :param input_camel_case: If True, the input data is assumed to have camel case
+        column names e.g. m_deg
+    :param output_camel_case: If True, DataFrame column names will be camel cased e.g.
+     m_deg
 
     :return: Pandas DataFrame of the meteor trajectory data.
     """
-    rest_format = type(data) == list
-
-    if rest_format and data:
+    if type(data) == list and data:
         meteor_trajectory_df = pd.DataFrame.from_records(data)
-        # Convert camel case column names to verbose names
-        for column in meteor_trajectory_df.columns:
-            meteor_trajectory_df.rename(
-                columns={column: get_verbose_camel_case_column_name_bidict()[column]},
-                inplace=True)
+
+        if input_camel_case:
+            meteor_trajectory_df = _convert_camel_case_to_verbose_column_names(
+                meteor_trajectory_df)
+
     else:
         meteor_trajectory_df = pd.read_csv(
             StringIO(data, newline="\r") if data  # type: ignore
@@ -51,6 +53,9 @@ def read_data(
         if not data:
             # Remove first example row
             meteor_trajectory_df = meteor_trajectory_df.iloc[1:]
+        elif input_camel_case:
+            meteor_trajectory_df = _convert_camel_case_to_verbose_column_names(
+                meteor_trajectory_df)
 
         def extract_header(text: str) -> str:
             return " ".join(text.replace("#", "").split())
@@ -66,6 +71,22 @@ def read_data(
         _set_camel_case_column_names(meteor_trajectory_df)
 
     return meteor_trajectory_df
+
+
+def _convert_camel_case_to_verbose_column_names(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    Converts the column names in a DataFrame containing meteor trajectory data to verbose
+     e.g. beginning_utc_time to Beginning (UTC Time).
+
+    :param dataframe: The meteor trajectory dataframe to convert the column names for.
+    :return: The meteor trajectory dataframe with verbose column names.
+    """
+    for column in dataframe.columns:
+        dataframe.rename(
+            columns={column: get_verbose_camel_case_column_name_bidict()[column]},
+            inplace=True)
+
+    return dataframe
 
 
 def _set_camel_case_column_names(dataframe: pd.DataFrame) -> None:
