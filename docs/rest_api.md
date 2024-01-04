@@ -11,7 +11,7 @@ We use [Datasette](https://docs.datasette.io/en/0.64.6/json_api.html) to provide
 The General REST API Endpoint allows you to make custom read-only SQL queries on the GMN Data Store. The database structure can be found [here](https://explore.globalmeteornetwork.org/gmn_data_store).
 
 The endpoint is available at:
-https://explore.globalmeteornetwork.org/gmn_rest_api?<query_parameters>
+`https://explore.globalmeteornetwork.org/gmn_rest_api?<query_parameters>`
 
 The endpoint supports the following query parameters:
 - `sql`: An SQL SELECT query to execute. This is required.
@@ -22,7 +22,7 @@ The structure of the response body is described [here](https://docs.datasette.io
 
 The endpoint has a maximum limit of 1000 rows. I suggest using `LIMIT` and `OFFSET` in your SQL query to paginate results. The truncated attribute in the response body will be set to true if the results have been truncated.
 
-The response will include the header "last-modified" with the last modified time of the database in nanoseconds.
+The response will include the header `last-modified` with the last modified time of the database in nanoseconds.
 You can use this when making subsequent requests to the endpoint to ensure you are using the same version of the database. E.g. when paginating results.
 
 Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes which usually run twice a day.
@@ -36,7 +36,7 @@ The Meteor Summary REST API Endpoint allows you to retrieve meteor properties fr
 It does this by substituting parts of this SQL SELECT [query](https://explore.globalmeteornetwork.org/gmn_data_store/meteor_summary).
 
 The Meteor Summary REST API endpoint is available at:
-https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?<query_parameters>
+`https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?<query_parameters>`
 
 The API supports the following query parameters:
 - `where`: A SQL SELECT WHERE clause to filter the results. Default is no filter. E.g. `iau_code = 'PER'`.
@@ -47,7 +47,7 @@ The API supports the following query parameters:
 
 The structure of the response body is described [here](https://docs.datasette.io/en/0.64.6/json_api.html). Ignore the truncated attribute in the response body which should always be false. The truncated attribute comes from the underlying Datasette library.
 
-The response will include the header "last-modified" with the last modified time of the database in nanoseconds.
+The response will include the header `last-modified` with the last modified time of the database in nanoseconds.
 You can use this when making subsequent requests to the endpoint to ensure you are using the same version of the database. E.g. when paginating results.
 
 The response will also include the header `Link` with the `rel="next"` attribute to indicate the next page of results. E.g.
@@ -133,7 +133,7 @@ GET https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?where=da
 
 ## Python API
 
-The gmn_rest_api Python module provides a Python interface to query and retrieve meteor trajectory data from the General REST API Endpoint and Meteor Summary REST API Endpoint.
+The `gmn_rest_api` Python module provides a Python interface to query and retrieve meteor trajectory data from the General REST API Endpoint and Meteor Summary REST API Endpoint.
 
 Data returned from the Meteor Summary endpoint can be loaded into a [Pandas](https://pandas.pydata.org/) DataFrame using the `meteor_trajectory_reader.read_data` function:
 ```python
