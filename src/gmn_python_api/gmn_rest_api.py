@@ -24,6 +24,7 @@ class LastModifiedError(Exception):
 
 def get_meteor_summary_data_all(
         where: Optional[str] = None,
+        having: Optional[str] = None,
         order_by: Optional[str] = None,
         last_modified_error_retries: int = 3,
 ) -> List[Dict[str, Any]]:
@@ -32,6 +33,8 @@ def get_meteor_summary_data_all(
 
     :param where: Optional parameter to filter data via a SQL WHERE clause e.g.
      meteor.unique_trajectory_identifier = '20190103131723_6dnE3'.
+    :param having: Optional parameter to filter data via a SQL HAVING clause e.g.
+     participating_stations LIKE '%US0003%'.
     :param order_by: Optional parameter to specify the order of results via a SQL ORDER
      BY clause e.g. meteor.unique_trajectory_identifier DESC.
     :param last_modified_error_retries: Number of times to retry if the data has
@@ -47,7 +50,7 @@ def get_meteor_summary_data_all(
         try_num += 1
         try:
             data = []
-            for data_iter in get_meteor_summary_data_iter(where, order_by):
+            for data_iter in get_meteor_summary_data_iter(where, having, order_by):
                 data.extend(data_iter)
         except LastModifiedError:
             # Data has modified since last request, so we need to start from the
@@ -61,6 +64,7 @@ def get_meteor_summary_data_all(
 
 def get_meteor_summary_data_iter(
         where: Optional[str] = None,
+        having: Optional[str] = None,
         order_by: Optional[str] = None,
 ) -> Iterable[List[Dict[str, Any]]]:
     """
@@ -70,6 +74,8 @@ def get_meteor_summary_data_iter(
 
     :param where: Optional parameter to filter data via a SQL WHERE clause e.g.
      meteor.unique_trajectory_identifier = '20190103131723_6dnE3'.
+    :param having: Optional parameter to filter data via a SQL HAVING clause e.g.
+     participating_stations LIKE '%US0003%'.
     :param order_by: Optional parameter to specify the order of results via a SQL ORDER
      BY clause e.g. meteor.unique_trajectory_identifier DESC.
     :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
@@ -79,7 +85,7 @@ def get_meteor_summary_data_iter(
      OK.
     :return: An iterable of json data.
     """
-    data, next_url, initial_last_modified = get_meteor_summary_data(where, order_by)
+    data, next_url, initial_last_modified = get_meteor_summary_data(where, having, order_by)
     yield data
 
     while data and next_url:
@@ -91,6 +97,7 @@ def get_meteor_summary_data_iter(
 
 def get_meteor_summary_data(
         where: Optional[str] = None,
+        having: Optional[str] = None,
         order_by: Optional[str] = None,
 ) -> Tuple[List[Dict[str, Any]], Optional[str], Optional[str]]:
     """
@@ -99,6 +106,8 @@ def get_meteor_summary_data(
 
     :param where: Optional parameter to filter data via a SQL WHERE clause e.g.
      meteor.unique_trajectory_identifier = '20190103131723_6dnE3'.
+    :param having: Optional parameter to filter data via a SQL HAVING clause e.g.
+     participating_stations LIKE '%US0003%'.
     :param order_by: Optional parameter to specify the order of results via a SQL ORDER
      BY clause e.g. meteor.unique_trajectory_identifier DESC.
     :raises: requests.exceptions.HTTPError: If the HTTP response status code is not 200
@@ -114,10 +123,12 @@ def get_meteor_summary_data(
         "data_shape": "objects",
     }
 
-    if order_by:
-        args["order_by"] = order_by
     if where:
         args["where"] = where
+    if having:
+        args["having"] = having
+    if order_by:
+        args["order_by"] = order_by
 
     query_url = METEOR_SUMMARY_QUERY_URL.format(args=urlencode(args))
     return get_data_from_url(query_url)

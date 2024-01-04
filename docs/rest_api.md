@@ -40,6 +40,7 @@ The Meteor Summary REST API endpoint is available at:
 
 The API supports the following query parameters:
 - `where`: A SQL SELECT WHERE clause to filter the results. Default is no filter. E.g. `iau_code = 'PER'`.
+- `having`: A SQL HAVING clause to filter the results. Default is no filter. E.g. `participating_stations LIKE '%US0001%'`.
 - `order_by`: A SQL ORDER BY clause to order the results. Default is no order. E.g. `meteor.unique_trajectory_identifier DESC`.
 - `data_shape`: The [shape](https://docs.datasette.io/en/0.64.6/json_api.html#different-shapes) of the data to return. Default is `objects`.
 - `data_format`: The format of the data to return. Default is `json`. `csv` is also supported.
@@ -130,6 +131,30 @@ GET https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?where=da
 }
 ```
 
+#### Get all recorded meteors on the 2nd of January 2019 recorded by station US0001
+
+```sh
+GET https://explore.globalmeteornetwork.org/gmn_rest_api/meteor_summary?where=date(beginning_utc_time)='2019-01-02'&having=participating_stations LIKE '%US0001%'
+{
+    "ok": true,
+    "rows": [
+        {
+            "unique_trajectory_identifier": "20190102091919_1KtJa",
+            ...
+        },
+        {
+            "unique_trajectory_identifier": "20190102092322_UkbbD",
+            ...
+        },
+        {
+            "unique_trajectory_identifier": "20190102101547_tcvE4",
+            ...
+        },
+        ...
+    ],
+    "truncated": false
+}
+```
 
 ## Python API
 
@@ -140,14 +165,15 @@ Data returned from the Meteor Summary endpoint can be loaded into a [Pandas](htt
 from gmn_python_api import gmn_rest_api
 from gmn_python_api import meteor_trajectory_reader
 
-data = gmn_rest_api.get_meteor_summary_data_all(where="iau_code = 'SCC' and beginning_utc_time > '2019-01-01' and beginning_utc_time < '2019-04-05'")
-df = meteor_trajectory_reader.read_data(data, input_camel_case=True)
+data = gmn_rest_api.get_meteor_summary_data_all(where="iau_code = 'SCC' and beginning_utc_time > '2019-01-01' and beginning_utc_time < '2019-04-05'", 
+                                                having="participating_stations LIKE '%US0003%'", 
+                                                order_by="sol_lon_deg DESC")
+df = meteor_trajectory_reader.read_data(data, input_camel_case=True)  # input_camel_case=True is required for the Meteor Summary endpoint
 #                                 Beginning (Julian date)  ... Participating (stations)
 # Unique trajectory (identifier)                           ...                         
-# 20190105074710_89UEE                       2.458489e+06  ...         [US0003, US0009]
-# 20190127130446_CEjBA                       2.458511e+06  ...         [US0001, US0009]
 # 20190128121133_bmAQL                       2.458512e+06  ...         [US0002, US0003]
-# [3 rows x 85 columns]
+# 20190105074710_89UEE                       2.458489e+06  ...         [US0003, US0009]
+# [2 rows x 85 columns]
 ```
 
 See the [gmn_rest_api API Reference section](autoapi/gmn_python_api/gmn_rest_api/index) for more information.
