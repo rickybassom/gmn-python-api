@@ -25,7 +25,7 @@ The endpoint has a maximum limit of 1000 rows. I suggest using `LIMIT` and `OFFS
 The response will include the header `last-modified` with the last modified time of the database in nanoseconds.
 You can use this when making subsequent requests to the endpoint to ensure you are using the same version of the database. E.g. when paginating results.
 
-Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes which usually run twice a day.
+Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes which usually run once a day at 04:00 UTC.
 
 Queries are blocked if they take longer than 3 seconds to execute. I recommend using [EXPLAIN QUERY PLAN](https://www.sqlite.org/eqp.html) to check the query execution plan before running a query. If you need to run a long-running query, please contact us.
 
@@ -57,7 +57,7 @@ The response will also include the header `Link` with the `rel="next"` attribute
 ```
 The final page of results will include no data.
 
-Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes.
+Queries are cached for 1 hour with a maximum size of 1GB on the server. The cache is invalidated if the GMN Data Store database has been modified by our data ingestion processes which usually run once a day at 04:00 UTC.
 
 Queries are blocked if they take longer than 3 seconds to execute. I recommend using [EXPLAIN QUERY PLAN](https://www.sqlite.org/eqp.html) to check the query execution plan before running a query. If you need to run a long-running query, please contact us.
 
